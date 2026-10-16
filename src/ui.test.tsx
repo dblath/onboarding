@@ -77,6 +77,9 @@ async function submitApplication() {
   await user.click(
     screen.getByRole("button", { name: "Submit application →" }),
   );
+  await screen.findByRole("heading", { name: "Application submitted" });
+  await user.type(screen.getByLabelText("Demo password"), "123");
+  await user.click(screen.getByRole("button", { name: "Sign In" }));
   await screen.findByRole("heading", { name: "Summit UI Demo" });
 }
 async function proceed() {
@@ -272,6 +275,9 @@ describe("participant UI acceptance", () => {
     );
     await waitFor(() => expect(t.isConnected).toBe(false));
     await persona("Workflow Monitor");
+    await user.click(
+      screen.getByRole("button", { name: "Timer & escalation lab" }),
+    );
     await user.click(screen.getByRole("button", { name: "Advance 3 days" }));
     await user.click(screen.getByRole("button", { name: "Advance 2 days" }));
     await go("Outbox");
@@ -281,6 +287,9 @@ describe("participant UI acceptance", () => {
     await training();
     await activate();
     await persona("Workflow Monitor");
+    await user.click(
+      screen.getByRole("button", { name: "Event ingress demonstrations" }),
+    );
     await user.click(
       screen.getByRole("button", { name: "Redeliver last event" }),
     );

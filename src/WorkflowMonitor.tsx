@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { DiagnosticPanel } from "./DiagnosticPanel";
 import {
   activityDefinitions,
   companyLifecycleCorrelation,
@@ -100,82 +101,6 @@ export function WorkflowMonitor({
           </strong>
         </div>
       </div>
-      <div className="monitor-columns">
-        <div>
-          <h3>Expected events & owners</h3>
-          {w.awaitedEvents.length ? (
-            w.awaitedEvents.map((wait, i) => {
-              const t = tasks.find((t) => t.id === wait.workItemId);
-              return (
-                <div className="wait-row" key={i}>
-                  <span className="live-dot" />
-                  <div>
-                    <strong>{wait.eventType}</strong>
-                    <small>
-                      {t
-                        ? `${activityDefinitions[t.activity].label} → ${t.owner}`
-                        : "Readiness policy waits for company and skill facts"}
-                    </small>
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <p className="muted">
-              No pending waits. This execution has completed.
-            </p>
-          )}
-          <h3>Correlation</h3>
-          <dl className="correlation">
-            <dt>Instance</dt>
-            <dd>{w.id}</dd>
-            <dt>Company</dt>
-            <dd>{w.companyId}</dd>
-            <dt>Application</dt>
-            <dd>{w.applicationId ?? "None — company-owned skill"}</dd>
-            <dt>Qualification</dt>
-            <dd>{w.qualificationId ?? "Company scope"}</dd>
-            <dt>Correlation</dt>
-            <dd>{w.correlationId}</dd>
-          </dl>
-        </div>
-        <div>
-          <h3>Activity attempts</h3>
-          {attempts.length ? (
-            attempts.map((a) => (
-              <div className={"attempt " + a.status} key={a.id}>
-                <strong>{activityDefinitions[a.activity].label}</strong>
-                <span className="pill neutral">
-                  Attempt {a.attempt} · {a.status}
-                </span>
-                <p>{a.technicalError ?? a.businessOutcome}</p>
-              </div>
-            ))
-          ) : (
-            <p className="muted">
-              Simulated integration attempts appear here. Human work completion
-              is recorded separately below.
-            </p>
-          )}
-        </div>
-      </div>
-      <h3>Completed & pending work</h3>
-      <div className="work-list">
-        {tasks.map((t) => (
-          <div key={t.id}>
-            <span className={"work-symbol " + t.status}>
-              {t.status === "Completed" ? "✓" : "○"}
-            </span>
-            <div>
-              <strong>{activityDefinitions[t.activity].label}</strong>
-              <small>
-                {t.owner} · {t.outcome ?? t.expectedOutcome}
-              </small>
-            </div>
-            <span className="pill neutral">{t.status}</span>
-          </div>
-        ))}
-      </div>
       <div className="section-heading history-heading">
         <h3>Execution history</h3>
         <label className="sr-only" htmlFor="history-filter">
@@ -253,9 +178,85 @@ export function WorkflowMonitor({
           </details>
         ))}
       </section>
+
+      <div className="diagnostic-panels">
+        <DiagnosticPanel title="Expected events & owners">
+          {w.awaitedEvents.length ? (
+            w.awaitedEvents.map((wait, i) => {
+              const t = tasks.find((t) => t.id === wait.workItemId);
+              return (
+                <div className="wait-row" key={i}>
+                  <span className="live-dot" />
+                  <div>
+                    <strong>{wait.eventType}</strong>
+                    <small>
+                      {t
+                        ? `${activityDefinitions[t.activity].label} → ${t.owner}`
+                        : "Readiness policy waits for company and skill facts"}
+                    </small>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <p className="muted">
+              No pending waits. This execution has completed.
+            </p>
+          )}
+        </DiagnosticPanel>
+        <DiagnosticPanel title="Correlation">
+          <dl className="correlation">
+            <dt>Instance</dt>
+            <dd>{w.id}</dd>
+            <dt>Company</dt>
+            <dd>{w.companyId}</dd>
+            <dt>Application</dt>
+            <dd>{w.applicationId ?? "None — company-owned skill"}</dd>
+            <dt>Qualification</dt>
+            <dd>{w.qualificationId ?? "Company scope"}</dd>
+            <dt>Correlation</dt>
+            <dd>{w.correlationId}</dd>
+          </dl>
+        </DiagnosticPanel>
+        <DiagnosticPanel title="Activity attempts">
+          {attempts.length ? (
+            attempts.map((a) => (
+              <div className={"attempt " + a.status} key={a.id}>
+                <strong>{activityDefinitions[a.activity].label}</strong>
+                <span className="pill neutral">
+                  Attempt {a.attempt} · {a.status}
+                </span>
+                <p>{a.technicalError ?? a.businessOutcome}</p>
+              </div>
+            ))
+          ) : (
+            <p className="muted">
+              Simulated integration attempts appear here. Human work completion
+              is recorded separately below.
+            </p>
+          )}
+        </DiagnosticPanel>
+        <DiagnosticPanel title="Completed & pending work">
+          <div className="work-list">
+            {tasks.map((t) => (
+              <div key={t.id}>
+                <span className={"work-symbol " + t.status}>
+                  {t.status === "Completed" ? "✓" : "○"}
+                </span>
+                <div>
+                  <strong>{activityDefinitions[t.activity].label}</strong>
+                  <small>
+                    {t.owner} · {t.outcome ?? t.expectedOutcome}
+                  </small>
+                </div>
+                <span className="pill neutral">{t.status}</span>
+              </div>
+            ))}
+          </div>
+        </DiagnosticPanel>
+      </div>
       {last && (
-        <div className="ingress-test">
-          <h3>Event ingress demonstrations</h3>
+        <DiagnosticPanel title="Event ingress demonstrations">
           <p className="muted">
             Redelivery should be ignored. An unrelated correlation must leave
             this instance unchanged.
@@ -292,7 +293,7 @@ export function WorkflowMonitor({
               Deliver unrelated correlation
             </button>
           </div>
-        </div>
+        </DiagnosticPanel>
       )}
     </section>
   );

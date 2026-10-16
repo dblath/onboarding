@@ -21,6 +21,8 @@ import {
 import { TaskCard, type Run } from "./TaskCard";
 import { WorkflowMonitor } from "./WorkflowMonitor";
 import { LifecycleStatus } from "./LifecycleStatus";
+import { ContractorAccess, useContractorSession } from "./ContractorAccess";
+import { DiagnosticPanel } from "./DiagnosticPanel";
 import "./style.css";
 let browserService: OnboardingService | undefined;
 function getDefaultService() {
@@ -33,6 +35,12 @@ export function App({
   const experience = useExperience();
   const { state, refresh, loading, error, setError, refreshing } =
     useWorkspace(service);
+  const contractorSession = useContractorSession(state.companies);
+  const anonymous = experience === "contractor" && !contractorSession.company;
+  const [submitted, setSubmitted] = useState<{
+    name: string;
+    email: string;
+  } | null>(null);
   const [internalPersona, setInternalPersona] = useState<InternalPersona>(
     () => {
       const saved = sessionStorage.getItem("fieldwork:operations:role");
@@ -109,7 +117,10 @@ export function App({
     }
   };
   const c =
-      state.companies.find((c) => c.id === selected) ?? state.companies[0],
+      experience === "contractor"
+        ? contractorSession.company
+        : (state.companies.find((c) => c.id === selected) ??
+          state.companies[0]),
     a = state.applications.find((a) => a.companyId === c?.id),
     qualifications = state.qualifications.filter((q) => q.companyId === c?.id),
     tasks = state.workItems.filter(
@@ -131,7 +142,10 @@ export function App({
         (experience !== "contractor" || m.recipient === "Contractor"),
     ),
     allMyTasks = state.workItems.filter(
-      (t) => t.status === "Open" && t.owner === persona,
+      (t) =>
+        t.status === "Open" &&
+        t.owner === persona &&
+        (experience !== "contractor" || t.companyId === c?.id),
     );
   function selectCompany(companyId: string) {
     setSelected(companyId);
@@ -148,16 +162,26 @@ export function App({
         email: String(f.get("email")),
         skill: String(f.get("skill")),
       });
-      const s = await service.getState();
-      selectCompany(
-        s.applications.find((a) => a.id === applicationId)!.companyId,
-      );
+      if (experience === "contractor") {
+        contractorSession.signOut();
+        setSubmitted({
+          name: String(f.get("name")),
+          email: String(f.get("email")),
+        });
+      } else {
+        const s = await service.getState();
+        selectCompany(
+          s.applications.find((a) => a.id === applicationId)!.companyId,
+        );
+      }
       setCreating(false);
       setView("Overview");
     }, "Application submitted. Recruitment review is ready.");
   }
   return (
-    <div className="shell">
+    <div
+      className={`shell experience-${experience}${anonymous ? " anonymous" : ""}`}
+    >
       <aside>
         <a className="brand" href={`#/${experience}`}>
           <span className="brand-icon">f</span> fieldwork
@@ -167,29 +191,51 @@ export function App({
           {experienceNames[experience].toUpperCase()}
         </div>
         <nav>
-          {views.map((v, i) => (
-            <button
-              key={v}
-              aria-label={viewName(v)}
-              aria-current={view === v && !creating ? "page" : undefined}
-              className={view === v && !creating ? "nav-active" : ""}
-              onClick={() => {
-                setView(v);
-                setCreating(false);
-                setNotice("");
-              }}
-            >
-              <span>{["▦", "☷", "◎", "↗"][i]}</span>
-              <span>{viewName(v)}</span>
-              {v === "Work queue" && (
-                <span className="nav-count">{allMyTasks.length}</span>
-              )}
-            </button>
-          ))}
+          {anonymous ? (
+            <>
+              <button
+                onClick={() => {
+                  setCreating(true);
+                  setNotice("");
+                }}
+              >
+                New application
+              </button>
+              <button
+                aria-label="Open Sign In"
+                onClick={() => {
+                  setCreating(false);
+                  setNotice("");
+                }}
+              >
+                Sign In
+              </button>
+            </>
+          ) : (
+            views.map((v, i) => (
+              <button
+                key={v}
+                aria-label={viewName(v)}
+                aria-current={view === v && !creating ? "page" : undefined}
+                className={view === v && !creating ? "nav-active" : ""}
+                onClick={() => {
+                  setView(v);
+                  setCreating(false);
+                  setNotice("");
+                }}
+              >
+                <span>{["▦", "☷", "◎", "↗"][i]}</span>
+                <span>{viewName(v)}</span>
+                {v === "Work queue" && (
+                  <span className="nav-count">{allMyTasks.length}</span>
+                )}
+              </button>
+            ))
+          )}
         </nav>
         <div className="aside-bottom">
           <span className="live-dot" /> Browser-local workspace
-          <p>Iteration 3.1 · Lifecycle corrections</p>
+          <p>Iteration 3.2 · Portal UX</p>
         </div>
       </aside>
       <div className="main">
@@ -216,6 +262,23 @@ export function App({
                 ))}
               </select>
             </div>
+          ) : experience === "contractor" && !anonymous ? (
+            <div className="session-controls">
+              <span className="experience-badge">{c?.name}</span>
+              <button
+                className="text-button"
+                onClick={() => {
+                  contractorSession.signOut();
+                  setSubmitted(null);
+                  setCreating(false);
+                  setView("Overview");
+                  setNotice("");
+                  setError("");
+                }}
+              >
+                Sign Out
+              </button>
+            </div>
           ) : (
             <span className="experience-badge">
               {experienceNames[experience]}
@@ -228,7 +291,9 @@ export function App({
               <div className="eyebrow">A STRONG NETWORK STARTS HERE</div>
               <h1>
                 {persona === "Contractor"
-                  ? "Your next chapter starts here."
+                  ? anonymous
+                    ? "Your next chapter starts here."
+                    : "Your company. Your next step."
                   : persona === "Workflow Monitor"
                     ? "Every step, in view."
                     : "Good people. Great partnerships."}
@@ -270,71 +335,73 @@ export function App({
               · Revision {state.revision}
             </span>
           </div>
-          <div className="stats">
-            <div>
-              <span>
-                {experience === "contractor"
-                  ? "Your onboarding"
-                  : "Contractor companies"}
-              </span>
-              <strong>
-                {experience === "contractor"
-                  ? (a?.status ?? "Not started")
-                  : String(state.companies.length).padStart(2, "0")}
-              </strong>
+          {!anonymous && (
+            <div className="stats">
+              <div>
+                <span>
+                  {experience === "contractor"
+                    ? "Your onboarding"
+                    : "Contractor companies"}
+                </span>
+                <strong>
+                  {experience === "contractor"
+                    ? (a?.status ?? "Not started")
+                    : String(state.companies.length).padStart(2, "0")}
+                </strong>
+              </div>
+              <div>
+                <span>
+                  {experience === "monitor"
+                    ? "Business events"
+                    : "Your open work"}
+                </span>
+                <strong>
+                  {String(
+                    experience === "contractor"
+                      ? myTasks.length
+                      : experience === "monitor"
+                        ? state.events.length
+                        : allMyTasks.length,
+                  ).padStart(2, "0")}
+                  <small>
+                    {experience === "monitor" ? "Persisted" : persona}
+                  </small>
+                </strong>
+              </div>
+              <div>
+                <span>
+                  {experience === "contractor"
+                    ? "Approved skills"
+                    : "Running workflows"}
+                </span>
+                <strong>
+                  {String(
+                    experience === "contractor"
+                      ? c
+                        ? approvedSkills(c.id, state.qualifications).length
+                        : 0
+                      : state.workflows.filter((w) => w.status === "Running")
+                          .length,
+                  ).padStart(2, "0")}
+                </strong>
+              </div>
+              <div>
+                <span>Eligible for jobs</span>
+                <strong>
+                  {experience === "contractor"
+                    ? eligible
+                      ? "Eligible"
+                      : "Not eligible"
+                    : String(
+                        state.companies.filter((c) =>
+                          isJobEligible(c, state.qualifications),
+                        ).length,
+                      ).padStart(2, "0")}
+                  {experience !== "contractor" && <small>Ready + Active</small>}
+                </strong>
+              </div>
             </div>
-            <div>
-              <span>
-                {experience === "monitor"
-                  ? "Business events"
-                  : "Your open work"}
-              </span>
-              <strong>
-                {String(
-                  experience === "contractor"
-                    ? myTasks.length
-                    : experience === "monitor"
-                      ? state.events.length
-                      : allMyTasks.length,
-                ).padStart(2, "0")}
-                <small>
-                  {experience === "monitor" ? "Persisted" : persona}
-                </small>
-              </strong>
-            </div>
-            <div>
-              <span>
-                {experience === "contractor"
-                  ? "Approved skills"
-                  : "Running workflows"}
-              </span>
-              <strong>
-                {String(
-                  experience === "contractor"
-                    ? c
-                      ? approvedSkills(c.id, state.qualifications).length
-                      : 0
-                    : state.workflows.filter((w) => w.status === "Running")
-                        .length,
-                ).padStart(2, "0")}
-              </strong>
-            </div>
-            <div>
-              <span>Eligible for jobs</span>
-              <strong>
-                {experience === "contractor"
-                  ? eligible
-                    ? "Eligible"
-                    : "Not eligible"
-                  : String(
-                      state.companies.filter((c) =>
-                        isJobEligible(c, state.qualifications),
-                      ).length,
-                    ).padStart(2, "0")}
-                {experience !== "contractor" && <small>Ready + Active</small>}
-              </strong>
-            </div>
-          </div>
+          )}
           {error && (
             <div role="alert" className="alert">
               {error}
@@ -416,81 +483,96 @@ export function App({
                 </button>
               </form>
             </section>
+          ) : anonymous ? (
+            <ContractorAccess
+              key={submitted?.email ?? "welcome"}
+              companies={state.companies}
+              submitted={submitted}
+              loading={loading}
+              onSignIn={(companyId) => {
+                contractorSession.signIn(companyId);
+                setSubmitted(null);
+                setView("Overview");
+                setNotice("");
+                setError("");
+              }}
+            />
           ) : (
-            <div className="content-grid">
-              <section className="panel applications">
-                <div className="section-heading">
-                  <h2>Contractor network</h2>
-                  <span className="pill neutral">{state.companies.length}</span>
-                </div>
-                {!state.companies.length ? (
-                  <div className="empty">
-                    <div className="empty-icon">↗</div>
-                    <h3>A fresh start.</h3>
+            <div
+              className={`content-grid${experience === "contractor" ? " contractor-workspace" : ""}`}
+            >
+              {experience !== "contractor" && (
+                <section className="panel applications">
+                  <div className="section-heading">
+                    <h2>Contractor network</h2>
+                    <span className="pill neutral">
+                      {state.companies.length}
+                    </span>
+                  </div>
+                  {!state.companies.length ? (
+                    <div className="empty">
+                      <div className="empty-icon">↗</div>
+                      <h3>A fresh start.</h3>
+                      <p>
+                        Apply as Contractor to begin an end-to-end onboarding
+                        journey.
+                      </p>
+                    </div>
+                  ) : (
+                    state.companies.map((company) => {
+                      const app = state.applications.find(
+                          (a) => a.companyId === company.id,
+                        ),
+                        count = allMyTasks.filter(
+                          (t) => t.companyId === company.id,
+                        ).length;
+                      return (
+                        <button
+                          className={
+                            "application-row " +
+                            (c?.id === company.id ? "selected" : "")
+                          }
+                          key={company.id}
+                          onClick={() => selectCompany(company.id)}
+                        >
+                          <div className="avatar">
+                            {company.name.slice(0, 2).toUpperCase()}
+                          </div>
+                          <div>
+                            <strong>{company.name}</strong>
+                            <span>
+                              {app?.skill} · {count} task
+                              {count === 1 ? "" : "s"} for you
+                            </span>
+                            <span
+                              className={
+                                "pill " +
+                                (app?.status === "Declined" ? "red" : "")
+                              }
+                            >
+                              {app?.status === "Completed"
+                                ? "Onboarding complete"
+                                : app?.status}{" "}
+                              ·{" "}
+                              {isJobEligible(company, state.qualifications)
+                                ? "Eligible"
+                                : "Not eligible"}
+                            </span>
+                          </div>
+                          <span className="arrow">↗</span>
+                        </button>
+                      );
+                    })
+                  )}
+                  <div className="queue-help">
+                    <strong>One state, three experiences.</strong>
                     <p>
-                      Apply as Contractor to begin an end-to-end onboarding
-                      journey.
+                      Keep Contractor Portal, Operations and Monitor open
+                      together. Saved actions update every tab.
                     </p>
                   </div>
-                ) : (
-                  state.companies.map((company) => {
-                    const app = state.applications.find(
-                        (a) => a.companyId === company.id,
-                      ),
-                      count = allMyTasks.filter(
-                        (t) => t.companyId === company.id,
-                      ).length;
-                    return (
-                      <button
-                        className={
-                          "application-row " +
-                          (c?.id === company.id ? "selected" : "")
-                        }
-                        key={company.id}
-                        onClick={() => selectCompany(company.id)}
-                      >
-                        <div className="avatar">
-                          {company.name.slice(0, 2).toUpperCase()}
-                        </div>
-                        <div>
-                          <strong>{company.name}</strong>
-                          <span>
-                            {app?.skill} · {count} task{count === 1 ? "" : "s"}{" "}
-                            for you
-                          </span>
-                          <span
-                            className={
-                              "pill " +
-                              (app?.status === "Declined" ? "red" : "")
-                            }
-                          >
-                            {app?.status === "Completed"
-                              ? "Onboarding complete"
-                              : app?.status}{" "}
-                            ·{" "}
-                            {isJobEligible(company, state.qualifications)
-                              ? "Eligible"
-                              : "Not eligible"}
-                          </span>
-                        </div>
-                        <span className="arrow">↗</span>
-                      </button>
-                    );
-                  })
-                )}
-                <div className="queue-help">
-                  <strong>
-                    {experience === "contractor"
-                      ? "Your company, your next step."
-                      : "One state, three experiences."}
-                  </strong>
-                  <p>
-                    {experience === "contractor"
-                      ? "Select your demo company to follow progress and complete your actions."
-                      : "Keep Contractor Portal, Operations and Monitor open together. Saved actions update every tab."}
-                  </p>
-                </div>
-              </section>
+                </section>
+              )}
               <section className="panel details">
                 {c && a ? (
                   <>
@@ -842,8 +924,9 @@ export function App({
                           </span>
                         </div>
                         <p className="muted">
-                          Tasks for the selected company. Switch companies on
-                          the left to see their work.
+                          {experience === "contractor"
+                            ? "Required actions for your signed-in company."
+                            : "Tasks for the selected company. Switch companies on the left to see their work."}
                         </p>
                         {myTasks.map((t) => (
                           <TaskCard
@@ -955,8 +1038,7 @@ export function App({
                     )}
                     {experience === "monitor" &&
                       view === "Workflow monitor" && (
-                        <div className="time-console">
-                          <h3>Timer & escalation lab</h3>
+                        <DiagnosticPanel title="Timer & escalation lab">
                           <p>
                             Current demo time:{" "}
                             {new Date(state.clock).toLocaleString()}
@@ -992,7 +1074,7 @@ export function App({
                               Advance 2 days
                             </button>
                           </div>
-                        </div>
+                        </DiagnosticPanel>
                       )}
                   </>
                 ) : (

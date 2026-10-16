@@ -1455,3 +1455,201 @@ summary {
     font-size: 11px;
   }
 }
+
+/* Iteration 3.2: working surfaces, compact shared chrome. */
+header {
+  height: 30px;
+  min-height: 30px;
+  padding: 0 26px;
+}
+header .persona select {
+  padding: 3px 8px;
+}
+main {
+  padding: 8px 26px 20px;
+}
+.title-row {
+  gap: 12px;
+}
+.title-row > div {
+  line-height: 22px;
+}
+.title-row .eyebrow {
+  display: inline-block;
+  font-size: 8px;
+  margin: 0 10px 0 0;
+  letter-spacing: 1px;
+}
+.title-row h1 {
+  display: inline;
+  font-size: 20px;
+  line-height: 22px;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+.title-row .subtitle {
+  font-size: 11px;
+  line-height: 12px;
+  margin-top: 0;
+}
+.title-row .primary {
+  padding: 7px 12px;
+}
+.demo-banner {
+  margin: 6px 0 0;
+  padding: 3px 9px;
+  gap: 8px;
+  align-items: center;
+  font-size: 9px;
+}
+.stats {
+  margin: 4px 0 10px;
+  padding: 6px 0;
+}
+.stats > div {
+  padding: 0 16px;
+}
+.stats span {
+  font-size: 10px;
+}
+.stats strong {
+  margin-top: 2px;
+  font-size: 19px;
+  line-height: 22px;
+  letter-spacing: -0.4px;
+  gap: 10px;
+}
+.experience-links {
+  margin: 6px 0 10px;
+}
+.session-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+}
+.session-controls .experience-badge {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 250px;
+}
+.contractor-workspace {
+  grid-template-columns: minmax(0, 1fr);
+}
+.portal-access {
+  max-width: 840px;
+  margin: 14px auto;
+  padding: 24px 28px;
+}
+.portal-access p {
+  font-size: 12px;
+  line-height: 1.65;
+  color: #657669;
+}
+.portal-access h2 {
+  margin-top: 8px;
+}
+.portal-access h3 {
+  margin: 18px 0 12px;
+}
+.portal-access .demo-auth-note {
+  border-block: 1px solid #e0e5da;
+  padding: 10px 0;
+  font-size: 11px;
+}
+.portal-access form > .primary,
+.portal-access .button-row {
+  margin-top: 14px;
+}
+.diagnostic-panel {
+  border: 1px solid #e0e5da;
+  border-radius: 6px;
+  margin: 8px 0;
+  overflow: hidden;
+}
+.diagnostic-panel > h3 {
+  margin: 0;
+}
+.diagnostic-panel > h3 > button {
+  border: 0;
+  background: #f6f8f1;
+  color: #294d3d;
+  padding: 11px 12px;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+.diagnostic-chevron {
+  display: inline-block;
+  font-family: monospace;
+  font-size: 16px;
+  line-height: 16px;
+}
+[aria-expanded="true"] > .diagnostic-chevron {
+  transform: rotate(90deg);
+}
+.diagnostic-content {
+  padding: 12px;
+}
+.diagnostic-content[hidden] {
+  display: none;
+}
+.diagnostic-content > :first-child {
+  margin-top: 0;
+}
+.diagnostic-content > :last-child {
+  margin-bottom: 0;
+}
+@media (max-width: 1100px) {
+  .demo-banner {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .title-row .eyebrow {
+    display: block;
+    margin-bottom: 2px;
+  }
+}
+@media (max-width: 800px) {
+  header {
+    height: auto;
+    padding: 6px 16px;
+    min-height: 34px;
+    gap: 6px;
+  }
+  main {
+    padding: 10px 16px 20px;
+  }
+  .title-row {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .title-row h1 {
+    font-size: 19px;
+  }
+  .title-row .eyebrow {
+    display: block;
+    margin-bottom: 3px;
+  }
+  .stats {
+    gap: 12px 0;
+  }
+  .stats strong {
+    font-size: 17px;
+  }
+  .stats > div {
+    padding: 0 10px;
+  }
+  .portal-access {
+    padding: 20px;
+  }
+  .session-controls .experience-badge {
+    max-width: 180px;
+    display: inline-block;
+  }
+}

@@ -32,7 +32,7 @@ test("three simultaneous experiences complete correction, independent branches a
   ).toHaveCount(0);
   await expect(
     contractor.getByRole("navigation").getByRole("button"),
-  ).toHaveText(["▦Your journey", "☷Required actions0", "◎Messages"]);
+  ).toHaveText(["New application", "Sign In"]);
   await application(contractor);
   await expect(card(operations, "Review application")).toBeVisible();
   await expect(
@@ -246,6 +246,9 @@ test("near-simultaneous commands preserve both changes and a contested transitio
   await expect(second.getByLabel("Internal role")).toHaveValue("Finance");
   await expect(second.getByTestId("sync-status")).toContainText("Live");
   const before = await synchronized([contractor, first, second, monitor]);
+  await monitor
+    .getByRole("button", { name: "Event ingress demonstrations" })
+    .click();
   await monitor.getByRole("button", { name: "Redeliver last event" }).click();
   await expect(
     monitor.getByText(
@@ -293,6 +296,7 @@ test("failed activities retry from Monitor, persist on refresh and resume every 
   await expect(card(monitor, "Verify license")).toHaveCount(0);
   await role(operations, "Field Manager");
   await expect(card(operations, "Approve skill qualification")).toBeVisible();
+  await monitor.getByRole("button", { name: "Timer & escalation lab" }).click();
   await monitor.getByRole("button", { name: "Advance 3 days" }).click();
   await monitor.getByRole("button", { name: "Advance 2 days" }).click();
   await nav(monitor, "Outbox");

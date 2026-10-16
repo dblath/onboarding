@@ -32,14 +32,40 @@ export function card(page: Page, name: string): Locator {
     .getByRole("article")
     .filter({ has: page.getByRole("heading", { name, exact: true }) });
 }
-export async function application(page: Page, name = "Summit Three Tabs") {
+export async function application(
+  page: Page,
+  name = "Summit Three Tabs",
+  email = "alex@example.com",
+) {
   await page.getByRole("button", { name: "＋ New application" }).click();
   await page.getByLabel("Fictional company name").fill(name);
   await page.getByLabel("Demo contact name").fill("Alex Demo");
-  await page.getByLabel("Demo email").fill("alex@example.com");
+  await page.getByLabel("Demo email").fill(email);
   await page.getByLabel("Initial requested skill").selectOption("HVAC");
   await page.getByRole("button", { name: "Submit application →" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Application submitted" }),
+  ).toBeVisible();
+  await signIn(page, email, name);
   await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
+}
+export async function signIn(page: Page, email: string, companyName?: string) {
+  await page.getByLabel("Application email").fill(email);
+  await page.getByLabel("Demo password", { exact: true }).fill("123");
+  await page.getByRole("button", { name: "Sign In", exact: true }).click();
+  if (
+    await page.getByRole("heading", { name: "Choose your company" }).isVisible()
+  ) {
+    const option = page
+      .getByLabel("Company for this sign in")
+      .locator("option")
+      .filter({ hasText: companyName! });
+    await page
+      .getByLabel("Company for this sign in")
+      .selectOption((await option.getAttribute("value"))!);
+    await page.getByRole("button", { name: "Continue to company" }).click();
+  }
+  await expect(page.getByRole("button", { name: "Sign Out" })).toBeVisible();
 }
 export async function proceed(page: Page) {
   await role(page, "Recruitment");
