@@ -8,6 +8,8 @@ Actual verification: **52 regression tests passed, 0 failed; 11 Chromium multi-t
 
 **Iteration 4 has not been implemented.** First-skill recovery, requalification after losing the only approval, post-activation administrative requests and suspension removal remain explicitly unavailable. The future suspension-removal process must include a separate administrative request and approval; no shortcut exists in 3.1.
 
+**GitHub publication:** Iteration 3.1 implementation commit `04567dc532b0a509c6ae94e91fd4ff47f5843c25` is published on [dblath/onboarding](https://github.com/dblath/onboarding). The existing main history was preserved; origin/main tracking is configured. This report receives a separate documentation commit and push. Publishing the repository does not deploy the application or constitute manual acceptance.
+
 ## 1. Current capabilities
 
 | Capability                                                      | Status          | Current behavior                                                                                                                                                                                                    |
@@ -76,7 +78,7 @@ Waiting, fixture verification, immediate injected timeouts, manual retry and man
 
 ## 5. Actual test evidence
 
-Verification executed for this delivery on Windows, Node v24.13.1 and npm 11.8.0:
+Verification executed for this delivery on Windows, Node v24.13.1 and npm 11.8.0, and repeated during GitHub publication on 2026-10-16:
 
 | Command                                      | Actual result                                                                                                 |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
@@ -146,15 +148,18 @@ Initial completion remains recorded at initial activation acknowledgement to pre
 ## 8. Repository and reporting continuity
 
 - Repository: onboarding, `C:\Users\david\Documents\Repositories\onboarding`.
-- Branch: main. Prior implementation baseline: `0ac0987bf910502b82f6e0daf2c03a2fc83624aa`.
-- Iteration 3.1 delivery is the commit containing this report; use `git rev-parse HEAD` for its final SHA. The final handoff includes that SHA. No Git remotes are configured; no push/deployment is part of this delivery.
-- This report was previously untracked from the audit and is included in the 3.1 commit. Application, test, migration, UI and documentation changes are intentional release changes; ignored build/test artifacts are not committed.
+- Branch: main, tracking origin/main. Prior implementation baseline: `0ac0987bf910502b82f6e0daf2c03a2fc83624aa`.
+- Origin (fetch and push): `https://github.com/dblath/onboarding.git`. Repository: [dblath/onboarding](https://github.com/dblath/onboarding).
+- Iteration 3.1 implementation: `04567dc532b0a509c6ae94e91fd4ff47f5843c25` (Fix contractor lifecycle separation and preserve completed onboarding). This commit already included docs/STATUS.md; no uncommitted report was left when publication began.
+- Publication on 2026-10-16: `git push -u origin main` succeeded. `git ls-remote origin refs/heads/main` confirmed the implementation SHA above. Existing commit history was preserved without reinitialization or force-push. No application deployment was performed.
+- The publication update to this report is a separate documentation commit. Its final SHA and verification of local HEAD against origin/main are reported in the delivery message; use `git rev-parse HEAD` for the current tip. The working tree was clean before this update; build/test artifacts remain ignored.
 - Run: `npm install` if needed, then `npm run dev`. Test prerequisites on a fresh machine: `npx playwright install chromium`. Production build: `npm run build`. Static assets remain in dist; no backend/authentication/hosted data was introduced.
 - Other docs: README, domain UML, processes, event/rule catalogs, assumptions, shared-browser architecture and acceptance-3.1.md. Current STATUS takes precedence over historical Iteration 3 conclusions.
 
-At each iteration close, update this report from actual source and executed checks, keeping current state, changes, evidence, defects, decisions, manual-acceptance status and next boundary explicit. Do not claim product acceptance from automated tests alone.
+At each iteration close, update this report from actual source and executed checks, keeping current state, changes, evidence, defects, decisions, manual-acceptance status and next boundary explicit. Commit the completed iteration and report, push to GitHub, verify remote/local SHA agreement and a clean working tree, and include the SHA, actual tests/build results and manual testing instructions in the handoff. Do not claim product acceptance from automated tests alone. Share the updated report with Chet through the user-confirmed destination; do not infer a contact address.
 
 | Date       | Handoff                                                                                                                                                                                                                                                                              |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 2026-10-16 | Iteration 3 audit: 42 regression and 8 browser tests passed; identified blocked only-skill recovery, ambiguous application status, completed-workflow reactivation and absent ongoing administration.                                                                                |
 | 2026-10-16 | Iteration 3.1: historical completion separated from readiness/operations/eligibility; closed execution protected; suspension retained; schema 4 repairs legacy work/history projections. 52 regression and 11 browser tests pass. Ready for manual acceptance; Iteration 4 deferred. |
+| 2026-10-16 | GitHub publication: origin connected to dblath/onboarding; existing main history pushed with upstream tracking. Iteration 3.1 implementation remains 04567dc; publication report is a separate documentation commit. |
