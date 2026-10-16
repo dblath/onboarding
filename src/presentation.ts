@@ -37,6 +37,7 @@ export function monitorContext() {
   const params = new URLSearchParams(query);
   return {
     automation: path === "/monitor" && params.get("view") === "automations",
+    journey: path === "/monitor" && params.get("view") === "journey",
     companyId: params.get("company") ?? "",
     activityId: params.get("activity") ?? "",
   };

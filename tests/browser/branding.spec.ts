@@ -24,6 +24,18 @@ test("Unity branding preserves the original proportions and complete logo in pro
       `Unity fieldwork / ${titles[experience as keyof typeof titles]}`,
     );
     await expect(page.locator(".brand-caption")).toHaveText("Unityfieldwork");
+    for (const wordmark of [
+      page.locator(".brand-caption strong"),
+      page.locator(".product-name strong"),
+    ]) {
+      const font = await wordmark.evaluate((element) => ({
+        family: getComputedStyle(element).fontFamily,
+        weight: Number(getComputedStyle(element).fontWeight),
+      }));
+      expect(font.family).toContain("sans-serif");
+      expect(font.family).not.toContain("Georgia");
+      expect(font.weight).toBeGreaterThanOrEqual(700);
+    }
     const logo = page
       .getByRole("link", { name: "Unity fieldwork" })
       .getByRole("img");

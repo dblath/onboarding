@@ -1,3 +1,5 @@
+import type { VizState } from "./viz/types";
+
 export const personas = [
   "Contractor",
   "Recruitment",
@@ -360,6 +362,8 @@ export type BusinessEvent = {
   };
 }[EventType];
 export interface State {
+  /** Optional auxiliary visual recording; no domain rule reads it. Schema 4 remains compatible. */
+  viz?: VizState;
   schemaVersion: 4;
   revision: number;
   clock: string;

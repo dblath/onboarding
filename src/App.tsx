@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { lazy, Suspense, useEffect, useState, type FormEvent } from "react";
 
 import type { OnboardingService } from "./application";
 import { createBrowserService } from "./runtime";
@@ -38,6 +38,8 @@ import {
   simulationMessage,
 } from "./presentation";
 import "./style.css";
+import { VizBoundary } from "./viz/VizBoundary";
+const JourneyMap = lazy(() => import("./viz/JourneyMap"));
 let browserService: OnboardingService | undefined;
 function getDefaultService() {
   return (browserService ??= createBrowserService());
@@ -45,6 +47,7 @@ function getDefaultService() {
 type View =
   | "Overview"
   | "Work queue"
+  | "Journey Map"
   | "Workflow monitor"
   | "Automations & Integrations"
   | "Outbox";
@@ -113,6 +116,8 @@ export function App({
     setNotice("");
   }, [experience]);
   useEffect(() => {
+    if (experience === "monitor" && routeContext.journey)
+      setView("Journey Map");
     if (experience === "monitor" && routeContext.automation) {
       setView("Automations & Integrations");
       if (routeContext.companyId) {
@@ -126,7 +131,12 @@ export function App({
   }, [experience, routeContext]);
   const views: View[] =
     experience === "monitor"
-      ? ["Automations & Integrations", "Workflow monitor", "Outbox"]
+      ? [
+          "Automations & Integrations",
+          "Journey Map",
+          "Workflow monitor",
+          "Outbox",
+        ]
       : ["Overview", "Work queue", "Outbox"];
   const viewName = (v: View) =>
     experience === "contractor"
@@ -321,7 +331,7 @@ export function App({
         </nav>
         <div className="aside-bottom">
           <span className="live-dot" /> Browser-local workspace
-          <p>Iteration 3.4 · Automations</p>
+          <p>Iteration 3.5 · Journey Map</p>
         </div>
       </aside>
       <div className="main">
@@ -604,6 +614,21 @@ export function App({
                 setError("");
               }}
             />
+          ) : experience === "monitor" && view === "Journey Map" ? (
+            <VizBoundary>
+              <Suspense
+                fallback={
+                  <div className="panel empty">Opening Journey Map...</div>
+                }
+              >
+                <JourneyMap
+                  state={state}
+                  service={service}
+                  run={run}
+                  busy={writeDisabled}
+                />
+              </Suspense>
+            </VizBoundary>
           ) : experience === "monitor" &&
             view === "Automations & Integrations" ? (
             <AutomationQueue

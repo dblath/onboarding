@@ -1,4 +1,4 @@
-# Unity fieldwork - Contractor onboarding, Iteration 3.4
+# Unity fieldwork - Contractor onboarding, Iteration 3.5
 
 End-to-end product discovery prototype: contractor application, screening, administrative approvals, independent skill qualification, vendor provisioning, portal, training, readiness and activation. Browser-only persistence and simulated integrations. Simulated company sign-in uses the application email and password 123. No backend, real authentication or live services.
 
@@ -6,20 +6,26 @@ Unity branding uses the complete original logo across all three experiences. The
 
 Historical onboarding completion, current readiness and operational status are separate. Job eligibility requires Ready AND Active. Restoring qualifications never removes a suspension. [Operations queue acceptance](docs/acceptance-3.3.md) / [Iteration 3.2 UX acceptance](docs/acceptance-3.2.md) / [Lifecycle acceptance](docs/acceptance-3.1.md) · [Current status](docs/STATUS.md).
 
+## Viz - Journey Map
+
+Workflow Monitor now includes Journey Map: select an application or skill-request event, then Track journey to capture its current state as Frame 0. Recording continues inside committed commands when Monitor is closed; one origin records at a time. Group/expand the real company and initial-skill lanes, inspect blockers, pan/zoom, or use presentation view. Playback is read-only; it never changes live work. Previous recordings remain archived when tracking switches. The v2 company adapter has 37 map nodes, including 16 activity types and their decisions/joins/routes; a standalone skill map has 9. No earlier visual history is synthesized.
+
+Shared Unity wordmark text is bold sans-serif; the original logo/favicons are unchanged. Recording metadata/frames persist in optional State.viz in the existing locked IndexedDB snapshot, not a second workflow engine. React Flow and Dagre are presentation/layout dependencies. See STATUS for scope, test results, atomic frame semantics and limitations. Chet review instructions/screenshots remain local-only in docs/chet.
+
 ## Run
 
 Node.js 24 recommended (validated with 24.13.1).
 
 ```sh
 npm install
-npm run dev
+npm run dev -- --port 5174 --strictPort
 npm test
 npm run build
 npx playwright install chromium
 npm run test:browser
 ```
 
-Vite prints the local URL, normally http://127.0.0.1:5173/. Deploy `dist/` on any static host; relative asset paths support subdirectories and hash routes need no SPA rewrite. No environment variables or backend. Target Chrome on localhost or HTTPS; Web Locks and BroadcastChannel are required. Missing capabilities disable writes with an explanation.
+Vite prints the local URL, for this review http://127.0.0.1:5174/. Deploy `dist/` on any static host; relative asset paths support subdirectories and hash routes need no SPA rewrite. No environment variables or backend. Target Chrome on localhost or HTTPS; Web Locks and BroadcastChannel are required. Missing capabilities disable writes with an explanation.
 
 `npm test` retains domain, workflow and React UI regressions using jsdom/fake-indexeddb. `npm run test:browser` builds production assets and runs Playwright with a temporary preview server on port 4173. Multiple pages in one Chromium context share the origin and IndexedDB. Install the Chromium test binary once as above. Screenshots and failure traces go to ignored `test-results/`.
 
@@ -29,9 +35,9 @@ Open these in three Chrome tabs in the same profile and exact origin (do not mix
 
 | Tab | URL                                | Experience                                                                |
 | --- | ---------------------------------- | ------------------------------------------------------------------------- |
-| 1   | http://127.0.0.1:5173/#/contractor | Contractor Portal: Your journey, Required actions, Messages               |
-| 2   | http://127.0.0.1:5173/#/operations | Onboarding Operations: internal role, human work queues, automation discovery |
-| 3   | http://127.0.0.1:5173/#/monitor    | Workflow Monitor: automations, integrations, execution diagnostics                 |
+| 1   | http://127.0.0.1:5174/#/contractor | Contractor Portal: Your journey, Required actions, Messages               |
+| 2   | http://127.0.0.1:5174/#/operations | Onboarding Operations: internal role, human work queues, automation discovery |
+| 3   | http://127.0.0.1:5174/#/monitor    | Workflow Monitor: automations, integrations, execution diagnostics                 |
 
 Operations and Monitor have links to open the other experiences in new tabs. Internal role and company selection are in sessionStorage for that tab/experience. Contractor and Monitor have no role selector. Contractor has no worker controls, monitor tools, ingress tests, timers or internal outbox.
 

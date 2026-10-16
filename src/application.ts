@@ -22,6 +22,7 @@ import {
   type OrchestrationPort,
 } from "./orchestration";
 import { migrateState } from "./migration";
+import { safelyCaptureVisuals, startRecording } from "./viz/recorder";
 import {
   UnavailableCoordinator,
   type CommandCoordinator,
@@ -135,6 +136,7 @@ export class OnboardingService {
         const before = JSON.stringify(raw);
         const s = migrateState(raw);
         const value = action(s);
+        safelyCaptureVisuals(s);
         if (forceSave || JSON.stringify(s) !== before) {
           s.revision += 1;
           await this.repository.save(s);
@@ -157,6 +159,9 @@ export class OnboardingService {
   }
   getState() {
     return this.repository.load();
+  }
+  startVizRecording(originEventId: string) {
+    return this.change((s) => startRecording(s, originEventId));
   }
   async getApplication(applicationId: string) {
     return (await this.getState()).applications.find(
