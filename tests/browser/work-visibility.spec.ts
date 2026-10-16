@@ -46,7 +46,6 @@ test("role and company filters preserve global totals, and completed work update
     "Field Manager",
     "Training",
     "Contractor",
-    "System Activities",
   ]) {
     await participant(first, role);
     await expect(first.getByTestId("queue-total")).toHaveText("2");
@@ -70,7 +69,7 @@ test("role and company filters preserve global totals, and completed work update
     queue.getByRole("link", { name: "Open Contractor Portal ↗" }),
   ).toHaveCount(4);
   await expect(
-    queue.getByRole("button", { name: "Submit demo evidence →" }),
+    queue.getByRole("button", { name: "Submit evidence →" }),
   ).toHaveCount(0);
   await first.getByLabel("Work queue company").selectOption("");
   await participant(first, "All participants");
@@ -98,7 +97,7 @@ test("role and company filters preserve global totals, and completed work update
   );
 });
 
-test("vendor and activation are discoverable Operations actions; Ready stays ineligible until explicit publication", async ({
+test("vendor and activation are discovered in Operations and executed in Monitor; Ready stays ineligible until explicit publication", async ({
   context,
 }, testInfo) => {
   const contractor = await workspace(context, "contractor"),
@@ -110,7 +109,7 @@ test("vendor and activation are discoverable Operations actions; Ready stays ine
   for (const label of [
     "Submit insurance evidence",
     "Submit fictional tax / banking pack",
-    "Submit demo agreement",
+    "Submit simulated agreement",
     "Submit license evidence",
   ])
     await evidence(contractor, label);
@@ -125,7 +124,7 @@ test("vendor and activation are discoverable Operations actions; Ready stays ine
     operations.getByText("No open work for this participant", { exact: false }),
   ).toBeVisible();
   await expect(
-    operations.getByRole("button", { name: "Show pending System Activities" }),
+    operations.getByRole("link", { name: "Open Automations & Integrations" }),
   ).toBeVisible();
   await nav(contractor, "Your journey");
   await expect(contractor.getByTestId("eligibility-guidance")).toContainText(
@@ -134,17 +133,15 @@ test("vendor and activation are discoverable Operations actions; Ready stays ine
   await expect(contractor.getByTestId("eligibility-guidance")).toContainText(
     "Operations",
   );
-  await operations
-    .getByRole("button", { name: "Show pending System Activities" })
-    .click();
-  await expect(operations.getByTestId("queue-count-Simulation")).toHaveText(
-    "1",
-  );
-  await expect(operations.getByTestId("queue-item")).toContainText(
+  const vendorLink = operations.getByRole("link", {
+    name: "Open Automations & Integrations",
+  });
+  await monitor.goto("/" + (await vendorLink.getAttribute("href")));
+  await expect(monitor.getByTestId("automation-item")).toContainText(
     "Activation Visibility Demo",
   );
-  await card(operations, "Provision simulated vendor")
-    .getByRole("button", { name: "Run vendor provisioning →" })
+  await card(monitor, "Create vendor record")
+    .getByRole("button", { name: "Create vendor record →" })
     .click();
   await expect(operations.getByTestId("queue-count-Simulation")).toHaveText(
     "0",
@@ -156,7 +153,7 @@ test("vendor and activation are discoverable Operations actions; Ready stays ine
   await nav(contractor, "Required actions");
   await completion(
     contractor,
-    "Complete demo portal setup",
+    "Complete simulated portal setup",
     "Complete portal setup →",
   );
   await completion(
@@ -190,13 +187,11 @@ test("vendor and activation are discoverable Operations actions; Ready stays ine
   );
   await expect(operations.getByTestId("queue-total")).toHaveText("1");
   await nav(operations, "Overview");
-  await operations
+  const activationLink = operations
     .getByTestId("eligibility-guidance")
-    .getByRole("button", { name: "View Operations action" })
-    .click();
-  await expect(
-    operations.getByRole("button", { name: "System Activities work" }),
-  ).toHaveAttribute("aria-pressed", "true");
+    .getByRole("link", { name: "Open Automations & Integrations" });
+  await monitor.goto("/" + (await activationLink.getAttribute("href")));
+  await expect(monitor.getByTestId("automation-item")).toBeFocused();
   const before = await snapshot(operations);
   expect(
     before.workItems
@@ -218,10 +213,11 @@ test("vendor and activation are discoverable Operations actions; Ready stays ine
     path: testInfo.outputPath("contractor-activation-blocker.png"),
     fullPage: true,
   });
-  await card(operations, "Publish activation to demo contractor management")
-    .getByRole("button", { name: "Run activation publication →" })
+  await card(monitor, "Publish contractor activation")
+    .getByRole("button", { name: "Publish contractor activation →" })
     .click();
   await expect(operations.getByTestId("queue-total")).toHaveText("0");
+  await nav(monitor, "Workflow monitor");
   for (const page of [contractor, operations, monitor])
     await expect(page.getByTestId("lifecycle-eligibility")).toHaveText(
       "Eligible",

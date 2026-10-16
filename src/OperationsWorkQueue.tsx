@@ -1,12 +1,9 @@
 import type { OnboardingService } from "./application";
-import {
-  activityDefinitions,
-  type Role,
-  type State,
-  type WorkItem,
-} from "./domain";
+import { type Role, type State, type WorkItem } from "./domain";
 import { internalPersonas } from "./experiences";
 import { TaskCard, type Run } from "./TaskCard";
+
+import { activityLabel, automationLink } from "./presentation";
 
 export const queueParticipants: Role[] = [
   ...internalPersonas,
@@ -16,7 +13,7 @@ export const queueParticipants: Role[] = [
 export type QueueParticipant = Role | "All";
 export const participantName = (owner: QueueParticipant) =>
   owner === "Simulation"
-    ? "System Activities"
+    ? "Automations & Integrations"
     : owner === "All"
       ? "All participants"
       : owner;
@@ -99,7 +96,6 @@ export function OperationsWorkQueue({
   busy,
   onCompanyChange,
   onOverview,
-  onParticipantChange,
 }: {
   state: State;
   participant: QueueParticipant;
@@ -109,7 +105,6 @@ export function OperationsWorkQueue({
   busy: boolean;
   onCompanyChange: (companyId: string) => void;
   onOverview: (companyId: string) => void;
-  onParticipantChange: (participant: QueueParticipant) => void;
 }) {
   const tasks = openWork(state);
   const scoped = tasks.filter(
@@ -148,11 +143,23 @@ export function OperationsWorkQueue({
             Company overview
           </button>
         </div>
-        {task.owner === "Contractor" ? (
+        {task.owner === "Simulation" ? (
+          <article className="task-card">
+            <span className="pill neutral">Simulation</span>
+            <h3>{activityLabel(task.activity)}</h3>
+            <p>
+              Pending simulated integration. Run this action in Workflow
+              Monitor.
+            </p>
+            <a href={automationLink(task.companyId, task.id)}>
+              Open automation action
+            </a>
+          </article>
+        ) : task.owner === "Contractor" ? (
           <article className="task-card">
             <span className="pill neutral">Contractor action</span>
-            <h3>{activityDefinitions[task.activity].label}</h3>
-            <p>{task.instructions}</p>
+            <h3>{activityLabel(task.activity)}</h3>
+            <p>{task.instructions.replace(/\bdemo\b/g, "simulated")}</p>
             <p className="muted">
               The contractor completes this action in their signed-in company
               portal.
@@ -215,23 +222,12 @@ export function OperationsWorkQueue({
         </p>
       )}
       {system.length > 0 && (
-        <section
-          className="system-console"
-          aria-label="Pending system activities"
-        >
-          <h3>Pending System Activities · Operations</h3>
-          <p>
-            {system.length} open action(s) still need Operations, even when this
-            participant has no work left. Vendor setup and activation
-            publication are completed explicitly.
-          </p>
-          <button
-            className="secondary"
-            onClick={() => onParticipantChange("Simulation")}
-          >
-            Show pending System Activities
-          </button>
-        </section>
+        <p className="automation-signpost">
+          {system.length} pending automation(s).{" "}
+          <a href={automationLink(companyId)}>
+            Open Automations & Integrations
+          </a>
+        </p>
       )}
     </section>
   );

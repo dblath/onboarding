@@ -44,7 +44,7 @@ export function ContractorAccess({
     event.preventDefault();
     setError("");
     if (password !== "123") {
-      setError("Incorrect demo password. Use 123.");
+      setError("Incorrect simulation password. Use 123.");
       return;
     }
     const normalized = email.trim().toLowerCase();
@@ -75,8 +75,8 @@ export function ContractorAccess({
             Recruitment.
           </p>
           <p>
-            Sign in with <strong>{submitted.email}</strong> and demo password{" "}
-            <strong>123</strong> to follow your journey.
+            Sign in with <strong>{submitted.email}</strong> and simulation
+            password <strong>123</strong> to follow your journey.
           </p>
         </div>
       ) : (
@@ -90,8 +90,8 @@ export function ContractorAccess({
         </div>
       )}
       <p className="demo-auth-note">
-        Demonstration-only sign in. Any application email + password 123. No
-        real authentication, password storage or security boundary.
+        Simulation-only sign in. Any application email + password 123. No real
+        authentication, password storage or security boundary.
       </p>
       {error && (
         <div className="alert" role="alert">
@@ -158,7 +158,7 @@ export function ContractorAccess({
               />
             </label>
             <label>
-              Demo password
+              Simulation password
               <input
                 type="password"
                 required

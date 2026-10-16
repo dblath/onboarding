@@ -1,13 +1,13 @@
 import { useState, type FormEvent } from "react";
 import type { OnboardingService } from "./application";
 import {
-  activityDefinitions,
   latestEvidence,
   type Decision,
   type EvidenceFixture,
   type State,
   type WorkItem,
 } from "./domain";
+import { activityLabel, automationLink } from "./presentation";
 export type Run = (
   action: () => Promise<unknown>,
   message: string,
@@ -26,12 +26,14 @@ export function TaskCard({
   service,
   run,
   busy,
+  automationExecution = false,
 }: {
   task: WorkItem;
   state: State;
   service: OnboardingService;
   run: Run;
   busy: boolean;
+  automationExecution?: boolean;
 }) {
   const [fail, setFail] = useState(false),
     [fixture, setFixture] = useState<EvidenceFixture>("Valid demo document");
@@ -55,13 +57,13 @@ export function TaskCard({
           {q ? `${q.skill} qualification` : "Company onboarding"}
         </span>
         <span className="pill neutral">
-          {t.owner === "Simulation"
-            ? "Operations · System Activities"
-            : t.owner}
+          {t.owner === "Simulation" ? "Automations & Integrations" : t.owner}
         </span>
       </div>
-      <h3>{activityDefinitions[t.activity].label}</h3>
-      <p className="task-instructions">{t.instructions}</p>
+      <h3>{activityLabel(t.activity)}</h3>
+      <p className="task-instructions">
+        {t.instructions.replace(/\bdemo\b/g, "simulated")}
+      </p>
       <div className="task-due">
         Due {new Date(t.dueAt).toLocaleDateString()}{" "}
         {t.escalatedAt ? (
@@ -72,7 +74,7 @@ export function TaskCard({
       </div>
       {evidence && (
         <div className="evidence-chip">
-          ▤ {evidence.fixture}{" "}
+          ▤ {evidence.fixture.replace(/\bdemo\b/g, "simulated")}{" "}
           <small>
             v{evidence.version} · {evidence.verificationState}
           </small>
@@ -149,9 +151,15 @@ export function TaskCard({
               value={fixture}
               onChange={(e) => setFixture(e.target.value as EvidenceFixture)}
             >
-              <option>Valid demo document</option>
-              <option>Expired demo document</option>
-              <option>Incomplete demo document</option>
+              <option value="Valid demo document">
+                Valid simulated document
+              </option>
+              <option value="Expired demo document">
+                Expired simulated document
+              </option>
+              <option value="Incomplete demo document">
+                Incomplete simulated document
+              </option>
             </select>
           </label>
           <p className="muted">
@@ -168,7 +176,7 @@ export function TaskCard({
               )
             }
           >
-            Submit demo evidence →
+            Submit evidence →
           </button>
         </div>
       )}
@@ -192,28 +200,38 @@ export function TaskCard({
               Inject a simulated timeout on this attempt
             </label>
           )}
-          <button
-            disabled={busy}
-            className={failed ? "retry-button" : "primary"}
-            onClick={() =>
-              run(
-                () =>
+          {(failed || t.owner === "Simulation") && !automationExecution ? (
+            <a href={automationLink(t.companyId, t.id)}>
+              Open Automations & Integrations
+            </a>
+          ) : (
+            <button
+              disabled={busy}
+              className={failed ? "retry-button" : "primary"}
+              onClick={() =>
+                run(
+                  () =>
+                    failed
+                      ? service.retryActivity(t.id)
+                      : service.executeActivity(t.id, fail),
                   failed
-                    ? service.retryActivity(t.id)
-                    : service.executeActivity(t.id, fail),
-                failed
-                  ? "Retry completed. See the activity result and next work."
-                  : fail
-                    ? "Timeout recorded. The workflow is waiting for a retry."
-                    : "Simulated outcome delivered to the workflow.",
-              )
-            }
-          >
-            {failed
-              ? "↻ Retry activity"
-              : `Run ${t.activity === "CreateVendor" ? "vendor provisioning" : t.activity === "PublishActivation" ? "activation publication" : "simulated verification"}`}{" "}
-            →
-          </button>
+                    ? "Retry completed. See the activity result and next work."
+                    : fail
+                      ? "Timeout recorded. The workflow is waiting for a retry."
+                      : "Simulated outcome delivered to the workflow.",
+                )
+              }
+            >
+              {failed
+                ? "↻ Retry activity"
+                : t.activity === "CreateVendor"
+                  ? "Create vendor record"
+                  : t.activity === "PublishActivation"
+                    ? "Publish contractor activation"
+                    : "Run simulated verification"}{" "}
+              →
+            </button>
+          )}
         </div>
       )}
       {t.activity === "ApproveSkill" && (
@@ -267,7 +285,7 @@ export function TaskCard({
             {t.activity === "SetupPortal"
               ? "I have configured the fictional portal profile."
               : t.activity === "CompleteTraining"
-                ? "I have completed the demo safety, job acceptance and network induction."
+                ? "I have completed the simulated safety, job acceptance and network induction."
                 : "I confirm the contractor completed the initial induction."}
           </label>
           <button disabled={busy} className="primary">

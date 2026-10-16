@@ -16,15 +16,22 @@ export async function workspace(
   await expect(
     page.getByText("Restoring your browser-local workspace…"),
   ).toHaveCount(0);
+  if (route === "monitor") await nav(page, "Workflow monitor");
   return page;
 }
 export async function nav(page: Page, name: string) {
+  if (
+    ["Overview", "Work queue"].includes(name) &&
+    page.url().includes("#/monitor")
+  )
+    await page.goto("/#/operations");
   await page
     .getByRole("navigation")
     .getByRole("button", { name, exact: true })
     .click();
 }
 export async function role(page: Page, name: string) {
+  if (!page.url().includes("#/operations")) await page.goto("/#/operations");
   await page.getByLabel("Internal role").selectOption(name);
 }
 export function card(page: Page, name: string): Locator {
@@ -33,14 +40,24 @@ export function card(page: Page, name: string): Locator {
     .filter({ has: page.getByRole("heading", { name, exact: true }) });
 }
 export async function systemActivities(page: Page) {
+  if (page.url().includes("#/monitor")) {
+    await nav(page, "Automations & Integrations");
+    return;
+  }
   const parent = page
     .getByRole("navigation")
     .getByRole("button", { name: "Work queue", exact: true });
   if ((await parent.getAttribute("aria-expanded")) !== "true")
     await parent.click();
   await page
-    .getByRole("button", { name: "System Activities work", exact: true })
+    .getByRole("button", {
+      name: "Automations & Integrations work",
+      exact: true,
+    })
     .click();
+  await expect(
+    page.getByRole("region", { name: "Automations & Integrations" }),
+  ).toBeVisible();
 }
 export async function application(
   page: Page,
@@ -49,8 +66,8 @@ export async function application(
 ) {
   await page.getByRole("button", { name: "＋ New application" }).click();
   await page.getByLabel("Fictional company name").fill(name);
-  await page.getByLabel("Demo contact name").fill("Alex Demo");
-  await page.getByLabel("Demo email").fill(email);
+  await page.getByLabel("Contact name").fill("Alex Demo");
+  await page.getByLabel("Application email").fill(email);
   await page.getByLabel("Initial requested skill").selectOption("HVAC");
   await page.getByRole("button", { name: "Submit application →" }).click();
   await expect(
@@ -61,7 +78,7 @@ export async function application(
 }
 export async function signIn(page: Page, email: string, companyName?: string) {
   await page.getByLabel("Application email").fill(email);
-  await page.getByLabel("Demo password", { exact: true }).fill("123");
+  await page.getByLabel("Simulation password", { exact: true }).fill("123");
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   if (
     await page.getByRole("heading", { name: "Choose your company" }).isVisible()
@@ -90,7 +107,7 @@ export async function evidence(
 ) {
   const task = card(page, activity);
   await task.getByLabel("Fictional evidence fixture").selectOption(fixture);
-  await task.getByRole("button", { name: "Submit demo evidence →" }).click();
+  await task.getByRole("button", { name: "Submit evidence →" }).click();
   await expect(task).toHaveCount(0);
 }
 export async function verify(page: Page, activity: string) {
@@ -153,7 +170,7 @@ export async function initialReadiness(
   for (const name of [
     "Submit insurance evidence",
     "Submit fictional tax / banking pack",
-    "Submit demo agreement",
+    "Submit simulated agreement",
     "Submit license evidence",
   ])
     await evidence(contractor, name);
@@ -165,10 +182,10 @@ export async function initialReadiness(
   await role(operations, "Contractor Relations");
   await verify(operations, "Execute simulated agreement");
   await systemActivities(operations);
-  await card(operations, "Provision simulated vendor")
-    .getByRole("button", { name: "Run vendor provisioning →" })
+  await card(operations, "Create vendor record")
+    .getByRole("button", { name: "Create vendor record →" })
     .click();
-  await expect(card(operations, "Provision simulated vendor")).toHaveCount(0);
+  await expect(card(operations, "Create vendor record")).toHaveCount(0);
   await role(operations, "Field Manager");
   const decision = card(operations, "Approve skill qualification");
   if (!approveSkill) {
@@ -183,7 +200,7 @@ export async function initialReadiness(
   await expect(decision).toHaveCount(0);
   await completion(
     contractor,
-    "Complete demo portal setup",
+    "Complete simulated portal setup",
     "Complete portal setup →",
   );
   await completion(
@@ -200,12 +217,15 @@ export async function initialReadiness(
 }
 export async function publishInitialActivation(operations: Page) {
   await systemActivities(operations);
-  const task = card(
-    operations,
-    "Publish activation to demo contractor management",
-  );
+  const task = card(operations, "Publish contractor activation");
   await task
-    .getByRole("button", { name: "Run activation publication →" })
+    .getByRole("button", { name: "Publish contractor activation →" })
     .click();
   await expect(task).toHaveCount(0);
+  await pageReturnToOperations(operations);
+}
+
+async function pageReturnToOperations(page: Page) {
+  await page.goto("/#/operations");
+  await expect(page.getByLabel("Internal role")).toBeVisible();
 }

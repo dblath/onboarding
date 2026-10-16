@@ -39,6 +39,7 @@ async function persona(p: Persona) {
   });
   if (route === "operations")
     await user.selectOptions(screen.getByLabelText("Internal role"), p);
+  else if (route === "monitor") await go("Workflow monitor");
   else if (route === "contractor") await go("Work queue");
 }
 async function go(name: string) {
@@ -68,8 +69,11 @@ async function submitApplication() {
     screen.getByLabelText("Fictional company name"),
     "Summit UI Demo",
   );
-  await user.type(screen.getByLabelText("Demo contact name"), "Alex Demo");
-  await user.type(screen.getByLabelText("Demo email"), "alex@example.com");
+  await user.type(screen.getByLabelText("Contact name"), "Alex Demo");
+  await user.type(
+    screen.getByLabelText("Application email"),
+    "alex@example.com",
+  );
   await user.selectOptions(
     screen.getByLabelText("Initial requested skill"),
     "HVAC",
@@ -78,7 +82,7 @@ async function submitApplication() {
     screen.getByRole("button", { name: "Submit application →" }),
   );
   await screen.findByRole("heading", { name: "Application submitted" });
-  await user.type(screen.getByLabelText("Demo password"), "123");
+  await user.type(screen.getByLabelText("Simulation password"), "123");
   await user.click(screen.getByRole("button", { name: "Sign In" }));
   await screen.findByRole("heading", { name: "Summit UI Demo" });
 }
@@ -97,7 +101,7 @@ async function submitEvidence(label: string, fixture = "Valid demo document") {
     fixture,
   );
   await user.click(
-    within(t).getByRole("button", { name: "Submit demo evidence →" }),
+    within(t).getByRole("button", { name: "Submit evidence →" }),
   );
   await waitFor(() => expect(t.isConnected).toBe(false));
 }
@@ -141,7 +145,7 @@ async function submitAdmin() {
   for (const label of [
     "Submit insurance evidence",
     "Submit fictional tax / banking pack",
-    "Submit demo agreement",
+    "Submit simulated agreement",
   ])
     await submitEvidence(label);
 }
@@ -154,23 +158,23 @@ async function reviewAdmin() {
   await runReview("Execute simulated agreement");
 }
 async function systemActivities() {
-  const parent = screen.getByRole("button", { name: "Work queue" });
-  if (parent.getAttribute("aria-expanded") !== "true") await user.click(parent);
-  await user.click(
-    screen.getByRole("button", { name: "System Activities work" }),
-  );
+  await persona("Workflow Monitor");
+  await go("Automations & Integrations");
 }
 async function vendor() {
   await systemActivities();
-  const t = card("Provision simulated vendor");
+  const t = card("Create vendor record");
   await user.click(
-    within(t).getByRole("button", { name: "Run vendor provisioning →" }),
+    within(t).getByRole("button", { name: "Create vendor record →" }),
   );
   await waitFor(() => expect(t.isConnected).toBe(false));
 }
 async function training() {
   await persona("Contractor");
-  await completeTask("Complete demo portal setup", "Complete portal setup →");
+  await completeTask(
+    "Complete simulated portal setup",
+    "Complete portal setup →",
+  );
   await completeTask(
     "Complete initial training",
     "Complete initial training →",
@@ -180,9 +184,9 @@ async function training() {
 }
 async function activate() {
   await systemActivities();
-  const t = card("Publish activation to demo contractor management");
+  const t = card("Publish contractor activation");
   await user.click(
-    within(t).getByRole("button", { name: "Run activation publication →" }),
+    within(t).getByRole("button", { name: "Publish contractor activation →" }),
   );
   await waitFor(() => expect(t.isConnected).toBe(false));
 }
@@ -195,6 +199,7 @@ async function happy() {
   await qualify();
   await training();
   await activate();
+  await persona("Training");
   await go("Overview");
   expect(
     await screen.findByRole("heading", { name: "Eligible to receive jobs" }),
@@ -207,7 +212,7 @@ describe("participant UI acceptance", () => {
     await qualify();
     await persona("Contractor");
     await submitEvidence("Submit insurance evidence");
-    await submitEvidence("Submit demo agreement");
+    await submitEvidence("Submit simulated agreement");
     await persona("Compliance");
     await runReview("Review insurance");
     await persona("Contractor Relations");
@@ -224,11 +229,11 @@ describe("participant UI acceptance", () => {
       ),
     ).not.toBeNull();
     expect(
-      screen.queryByRole("heading", { name: "Provision simulated vendor" }),
+      screen.queryByRole("heading", { name: "Create vendor record" }),
     ).toBeNull();
     expect(
       screen.queryByRole("heading", {
-        name: "Publish activation to demo contractor management",
+        name: "Publish contractor activation",
       }),
     ).toBeNull();
     const s = await service.getState();
@@ -269,10 +274,10 @@ describe("participant UI acceptance", () => {
     await submitAdmin();
     await reviewAdmin();
     await systemActivities();
-    let t = card("Provision simulated vendor");
+    let t = card("Create vendor record");
     await user.click(within(t).getByRole("checkbox"));
     await user.click(
-      within(t).getByRole("button", { name: "Run vendor provisioning →" }),
+      within(t).getByRole("button", { name: "Create vendor record →" }),
     );
     expect(
       await within(t).findByText("Technical failure · attempt 1"),

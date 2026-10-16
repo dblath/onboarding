@@ -58,9 +58,9 @@ test("initial rejection leaves consistent onboarding and no activation or recove
   await expect(
     contractor.getByText(/The initial skill was rejected/),
   ).toBeVisible();
-  await expect(
-    card(operations, "Publish activation to demo contractor management"),
-  ).toHaveCount(0);
+  await expect(card(operations, "Publish contractor activation")).toHaveCount(
+    0,
+  );
   const s = await snapshot(monitor),
     root = s.workflows.find((w) => w.definitionId === "CompanyOnboarding")!;
   expect(root.status).toBe("Running");
@@ -142,9 +142,9 @@ test("completed onboarding stays frozen through last-skill invalidation and late
   await expect(
     contractor.getByRole("button", { name: "＋ Request qualification" }),
   ).toHaveCount(0);
-  await expect(
-    card(operations, "Publish activation to demo contractor management"),
-  ).toHaveCount(0);
+  await expect(card(operations, "Publish contractor activation")).toHaveCount(
+    0,
+  );
   await expect(
     monitor.getByText("Completed · Onboarding complete"),
   ).toBeVisible();
@@ -163,6 +163,7 @@ test("completed onboarding stays frozen through last-skill invalidation and late
     s.events.filter((e) => e.eventType === "ContractorActivated"),
   ).toHaveLength(1);
   await Promise.all(pages.map((page) => page.reload()));
+  await nav(monitor, "Workflow monitor");
   await states(pages, "Completed", "Ready", "Suspended", "Not eligible");
   s = await snapshot(monitor);
   expect(s.workflows.find((w) => w.id === completed.id)).toEqual(completed);
@@ -194,9 +195,9 @@ test("readiness loss before first activation cancels the pending activity and do
     "0",
   );
   await states(pages, "In progress", "Not ready", "Pending", "Not eligible");
-  await expect(
-    card(operations, "Publish activation to demo contractor management"),
-  ).toHaveCount(0);
+  await expect(card(operations, "Publish contractor activation")).toHaveCount(
+    0,
+  );
   const s = await snapshot(monitor);
   expect(
     s.workItems.find((t) => t.activity === "PublishActivation")!.status,

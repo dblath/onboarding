@@ -38,6 +38,7 @@ test("missed background notifications recover when the inactive tab becomes visi
     ).dropDemoNotifications = true;
   });
   await monitor.goto("/#/monitor");
+  await nav(monitor, "Workflow monitor");
   await expect(monitor.getByTestId("sync-status")).toContainText("Live");
   await expect(
     monitor.getByText("Restoring your browser-local workspace…"),

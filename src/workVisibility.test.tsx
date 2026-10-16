@@ -1,11 +1,21 @@
 // @vitest-environment jsdom
 import "fake-indexeddb/auto";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
-import { cleanup, render, screen, within } from "@testing-library/react";
+import {
+  cleanup,
+  render,
+  screen,
+  within,
+  waitFor,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { App } from "./App";
 import { EligibilityGuidance } from "./EligibilityGuidance";
-import { OperationsQueueNavigation } from "./OperationsWorkQueue";
+import {
+  OperationsQueueNavigation,
+  OperationsWorkQueue,
+} from "./OperationsWorkQueue";
+import { AutomationQueue } from "./AutomationQueue";
 import { IndexedDbRepository } from "./application";
 import {
   emptyState,
@@ -100,7 +110,7 @@ it("counts only open WorkItems, including system activities, and exposes every p
     "Field Manager",
     "Training",
     "Contractor",
-    "System Activities",
+    "Automations & Integrations",
   ])
     expect(screen.getByRole("button", { name: `${role} work` })).not.toBeNull();
 });
@@ -146,7 +156,9 @@ it("keeps the global parent count during role/company filtering and reloads coun
   await user.click(
     within(queue).getByRole("button", { name: "Record decision →" }),
   );
-  expect(screen.getByTestId("queue-count-Recruitment").textContent).toBe("0");
+  await waitFor(() =>
+    expect(screen.getByTestId("queue-count-Recruitment").textContent).toBe("0"),
+  );
   expect(screen.getByTestId("queue-count-Contractor").textContent).toBe("8");
   expect(screen.getByTestId("queue-total").textContent).toBe("8");
   const after = await service.getState();
@@ -157,9 +169,97 @@ it("keeps the global parent count during role/company filtering and reloads coun
   expect(parent.getAttribute("aria-expanded")).toBe("false");
   expect(screen.getByTestId("queue-total").textContent).toBe("8");
 }, 30000);
+it("Operations exposes system work as deep links without execution or retry controls", () => {
+  const state = readyState();
+  state.workItems = [
+    work("CreateVendor", "Simulation"),
+    work("PublishActivation", "Simulation"),
+  ];
+  const before = structuredClone(state),
+    run = vi.fn();
+  render(
+    <OperationsWorkQueue
+      state={state}
+      participant="All"
+      companyId=""
+      service={testService(new IndexedDbRepository(`links-${id()}`))}
+      run={run}
+      busy={false}
+      onCompanyChange={vi.fn()}
+      onOverview={vi.fn()}
+    />,
+  );
+  expect(
+    screen
+      .getAllByRole("link", { name: "Open automation action" })
+      .map((link) => link.getAttribute("href")),
+  ).toEqual(
+    state.workItems.map(
+      (t) => `#/monitor?view=automations&company=company&activity=${t.id}`,
+    ),
+  );
+  expect(
+    screen.queryByRole("button", {
+      name: /Create vendor record|Publish contractor activation|Retry activity/,
+    }),
+  ).toBeNull();
+  expect(run).not.toHaveBeenCalled();
+  expect(state).toEqual(before);
+});
+it("Monitor separates pending automations and failed human verifications from historical work without changing state", () => {
+  const state = readyState();
+  const vendor = work("CreateVendor", "Simulation"),
+    verification = work("VerifyLicense", "Compliance");
+  state.workItems = [
+    vendor,
+    verification,
+    work("PublishActivation", "Simulation", "Cancelled"),
+    work("ReviewFinancial", "Finance", "Completed"),
+  ];
+  state.attempts = [
+    {
+      id: id(),
+      workItemId: verification.id,
+      workflowId: verification.workflowId,
+      activity: verification.activity,
+      attempt: 1,
+      at: state.clock,
+      status: "Failed",
+      technicalError: "Simulated timeout",
+    },
+  ];
+  const before = structuredClone(state),
+    run = vi.fn();
+  const props = {
+    state,
+    service: testService(new IndexedDbRepository(`automations-${id()}`)),
+    run,
+    busy: false,
+    companyId: "company",
+    activityId: vendor.id,
+    onCompanyChange: vi.fn(),
+  };
+  const view = render(<AutomationQueue {...props} />);
+  expect(screen.getAllByTestId("automation-item")).toHaveLength(2);
+  expect(
+    screen.getByText("Verification failed — retry available"),
+  ).not.toBeNull();
+  expect(
+    screen.getByRole("button", { name: "↻ Retry activity →" }),
+  ).not.toBeNull();
+  expect(document.activeElement).toBe(
+    screen.getAllByTestId("automation-item")[0],
+  );
+  view.rerender(<AutomationQueue {...props} companyId="unavailable" />);
+  expect(screen.queryAllByTestId("automation-item")).toHaveLength(0);
+  expect(screen.getByRole("alert").textContent).toContain(
+    "linked company is unavailable",
+  );
+  expect(run).not.toHaveBeenCalled();
+  expect(state).toEqual(before);
+});
 it("explains pending activation and missing publication separately without changing state", async () => {
-  const user = userEvent.setup(),
-    onOpenWork = vi.fn(),
+  const onOpenWork = vi.fn(),
     state = readyState();
   state.workItems = [work("PublishActivation", "Simulation")];
   const before = structuredClone(state);
@@ -176,10 +276,13 @@ it("explains pending activation and missing publication separately without chang
       "All requirements are complete. Contractor activation is awaiting publication by Operations.",
     ),
   ).not.toBeNull();
-  await user.click(
-    screen.getByRole("button", { name: "View Operations action" }),
+  const link = screen.getByRole("link", {
+    name: "Open Automations & Integrations",
+  });
+  expect(link.getAttribute("href")).toContain(
+    "company=company&activity=" + state.workItems[0].id,
   );
-  expect(onOpenWork).toHaveBeenCalledWith("Simulation");
+  expect(onOpenWork).not.toHaveBeenCalled();
   expect(state).toEqual(before);
   const cancelled = {
     ...state,

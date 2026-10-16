@@ -1,5 +1,5 @@
+import { activityLabel, automationLink } from "./presentation";
 import {
-  activityDefinitions,
   isJobEligible,
   isReady,
   readinessChecks,
@@ -44,7 +44,7 @@ export function EligibilityGuidance({
   state: State;
   company: ContractorCompany;
   application: OnboardingApplication;
-  onOpenWork?: (owner: Role) => void;
+  onOpenWork?: (owner: Role, activityId?: string) => void;
   contractorView?: boolean;
 }) {
   if (isJobEligible(company, state.qualifications)) return null;
@@ -73,13 +73,23 @@ export function EligibilityGuidance({
   const action = (task: (typeof tasks)[number]) => (
     <li key={task.id}>
       <span>
-        {actionNames[task.activity] ?? activityDefinitions[task.activity].label}{" "}
-        — <strong>{ownerName(task.owner)}</strong>
+        {actionNames[task.activity] ?? activityLabel(task.activity)} —{" "}
+        <strong>{ownerName(task.owner)}</strong>
       </span>
-      {onOpenWork && (!contractorView || task.owner === "Contractor") && (
-        <button className="text-button" onClick={() => onOpenWork(task.owner)}>
-          View {ownerName(task.owner)} action
-        </button>
+      {!contractorView && task.owner === "Simulation" ? (
+        <a className="text-button" href={automationLink(company.id, task.id)}>
+          Open Automations & Integrations
+        </a>
+      ) : (
+        onOpenWork &&
+        (!contractorView || task.owner === "Contractor") && (
+          <button
+            className="text-button"
+            onClick={() => onOpenWork(task.owner, task.id)}
+          >
+            View {ownerName(task.owner)} action
+          </button>
+        )
       )}
     </li>
   );

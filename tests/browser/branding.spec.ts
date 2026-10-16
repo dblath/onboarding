@@ -12,9 +12,20 @@ test("Unity branding preserves the original proportions and complete logo in pro
   await application(pages.contractor, "Unity Brand Demo");
   for (const [experience, page] of Object.entries(pages)) {
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await expect(page).toHaveTitle(/Unity \| Fieldwork demo/);
+    const titles = {
+      contractor: "Contractor Portal",
+      operations: "Onboarding Operations",
+      monitor: "Workflow Monitor",
+    };
+    await expect(page).toHaveTitle(
+      `Unity fieldwork \u2014 ${titles[experience as keyof typeof titles]}`,
+    );
+    await expect(page.locator("header .app-identity")).toHaveText(
+      `Unity fieldwork / ${titles[experience as keyof typeof titles]}`,
+    );
+    await expect(page.locator(".brand-caption")).toHaveText("Unityfieldwork");
     const logo = page
-      .getByRole("link", { name: "Unity - Fieldwork demo" })
+      .getByRole("link", { name: "Unity fieldwork" })
       .getByRole("img");
     await expect(logo).toBeVisible();
     await expect(

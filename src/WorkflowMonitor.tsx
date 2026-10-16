@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { DiagnosticPanel } from "./DiagnosticPanel";
 import {
-  activityDefinitions,
   companyLifecycleCorrelation,
   type State,
   type WorkflowInstance,
 } from "./domain";
 import type { OnboardingService } from "./application";
+import { activityLabel } from "./presentation";
 import type { Run } from "./TaskCard";
 export function WorkflowMonitor({
   state: s,
@@ -191,7 +191,7 @@ export function WorkflowMonitor({
                     <strong>{wait.eventType}</strong>
                     <small>
                       {t
-                        ? `${activityDefinitions[t.activity].label} → ${t.owner}`
+                        ? `${activityLabel(t.activity)} → ${t.owner}`
                         : "Readiness policy waits for company and skill facts"}
                     </small>
                   </div>
@@ -222,7 +222,7 @@ export function WorkflowMonitor({
           {attempts.length ? (
             attempts.map((a) => (
               <div className={"attempt " + a.status} key={a.id}>
-                <strong>{activityDefinitions[a.activity].label}</strong>
+                <strong>{activityLabel(a.activity)}</strong>
                 <span className="pill neutral">
                   Attempt {a.attempt} · {a.status}
                 </span>
@@ -244,7 +244,7 @@ export function WorkflowMonitor({
                   {t.status === "Completed" ? "✓" : "○"}
                 </span>
                 <div>
-                  <strong>{activityDefinitions[t.activity].label}</strong>
+                  <strong>{activityLabel(t.activity)}</strong>
                   <small>
                     {t.owner} · {t.outcome ?? t.expectedOutcome}
                   </small>

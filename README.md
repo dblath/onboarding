@@ -1,8 +1,8 @@
-# Fieldwork — Contractor onboarding, Iteration 3.3
+# Unity fieldwork - Contractor onboarding, Iteration 3.4
 
-End-to-end product discovery prototype: contractor application, screening, administrative approvals, independent skill qualification, vendor provisioning, portal, training, readiness and activation. Browser-only persistence and simulated integrations. Demo company sign-in uses the application email and password 123. No backend, real authentication or live services.
+End-to-end product discovery prototype: contractor application, screening, administrative approvals, independent skill qualification, vendor provisioning, portal, training, readiness and activation. Browser-only persistence and simulated integrations. Simulated company sign-in uses the application email and password 123. No backend, real authentication or live services.
 
-Unity branding uses the complete original logo across all three experiences. The square favicons add transparent padding and preserve its proportions. See [asset derivations](public/assets/README.md) and [branding acceptance](docs/acceptance-branding.md). Current verification, including the known timing-sensitive UI test failure, is recorded in [STATUS](docs/STATUS.md).
+Unity branding uses the complete original logo across all three experiences. The square favicons add transparent padding and preserve its proportions. See [asset derivations](public/assets/README.md) and [branding acceptance](docs/acceptance-branding.md). Current verification, including the corrected asynchronous count-test wait, is recorded in [STATUS](docs/STATUS.md).
 
 Historical onboarding completion, current readiness and operational status are separate. Job eligibility requires Ready AND Active. Restoring qualifications never removes a suspension. [Operations queue acceptance](docs/acceptance-3.3.md) / [Iteration 3.2 UX acceptance](docs/acceptance-3.2.md) / [Lifecycle acceptance](docs/acceptance-3.1.md) · [Current status](docs/STATUS.md).
 
@@ -30,43 +30,43 @@ Open these in three Chrome tabs in the same profile and exact origin (do not mix
 | Tab | URL                                | Experience                                                                |
 | --- | ---------------------------------- | ------------------------------------------------------------------------- |
 | 1   | http://127.0.0.1:5173/#/contractor | Contractor Portal: Your journey, Required actions, Messages               |
-| 2   | http://127.0.0.1:5173/#/operations | Onboarding Operations: internal role, work queue, approvals, provisioning |
-| 3   | http://127.0.0.1:5173/#/monitor    | Workflow Monitor: instances, events, rules, retry, timers                 |
+| 2   | http://127.0.0.1:5173/#/operations | Onboarding Operations: internal role, human work queues, automation discovery |
+| 3   | http://127.0.0.1:5173/#/monitor    | Workflow Monitor: automations, integrations, execution diagnostics                 |
 
 Operations and Monitor have links to open the other experiences in new tabs. Internal role and company selection are in sessionStorage for that tab/experience. Contractor and Monitor have no role selector. Contractor has no worker controls, monitor tools, ingress tests, timers or internal outbox.
 
-Submit in Tab 1. Tab 2 receives Recruitment work; Tab 3 shows the instance automatically. Sign in to Contractor with the application email and demo password 123, choosing a company if the email matches several. Proceed in Recruitment; Tab 1 receives evidence requests. Submit an expired license, verify as Compliance in Tab 2, and watch correction work appear in Tab 1 and its trace in Tab 3. Replace with valid evidence and verify again. Field Manager approves the skill. Finish administration, vendor, portal and training as below. All tabs reach Ready without refreshing; revision indicators converge on the committed revision.
+Submit in Tab 1. Tab 2 receives Recruitment work; Tab 3 opens Automations & Integrations; choose Workflow monitor to inspect execution diagnostics. Sign in to Contractor with the application email and simulation password 123, choosing a company if the email matches several. Proceed in Recruitment; Tab 1 receives evidence requests. Submit an expired license, verify as Compliance in Tab 2, and watch correction work appear in Tab 1 and its trace in Tab 3. Replace with valid evidence and verify again. Field Manager approves the skill. Finish administration, vendor, portal and training as below. All tabs reach Ready without refreshing; revision indicators converge on the committed revision.
 
 Each tab reloads authoritative state on change notification and again on focus, visibility return and pageshow, recovering missed notifications. No tab runs a background workflow dispatcher.
 
-## Happy-path demo
+## Happy-path walkthrough
 
 Use fictional names and example.com emails. Document submission uses predefined fictional fixtures, with no file upload, bank account, tax ID or identity number fields.
 
-1. **Contractor:** New application, select HVAC or Plumbing, submit. Sign in using that email and demo password 123; duplicate emails require an explicit company choice.
+1. **Contractor:** New application, select HVAC or Plumbing, submit. Sign in using that email and simulation password 123; duplicate emails require an explicit company choice.
 2. **Recruitment:** Work queue → Proceed. Administrative and skill work start in parallel.
-3. **Contractor:** Submit three administrative packs and license evidence. Choose Valid demo document.
+3. **Contractor:** Submit three administrative packs and license evidence. Choose Valid simulated document.
 4. **Compliance:** Run insurance and license verification.
 5. **Finance:** Run fictional financial verification.
 6. **Contractor Relations:** Run simulated agreement execution.
-7. In **Operations**, run scheduled **vendor provisioning** under Work queue -> System Activities after all administrative approvals. The panel represents a worker and is available to internal roles.
+7. In **Operations**, Work queue -> Automations & Integrations opens the Monitor automation queue. After administrative approvals, explicitly run **Create vendor record** there. Simulations make no external calls.
 8. **Field Manager:** Approve skill; this can occur before or after administration.
 9. **Contractor:** Complete portal setup, then initial training.
 10. **Training:** Confirm initial training.
-11. Policy derives **Ready** while operational status remains Pending and jobs remain Not eligible. In **Operations**, open Work queue -> System Activities and run initial activation publication. Historical onboarding becomes Completed, operational status Active, and jobs Eligible.
+11. Policy derives **Ready** while operational status remains Pending and jobs remain Not eligible. In **Workflow Monitor -> Automations & Integrations**, explicitly run **Publish contractor activation**. Historical onboarding becomes Completed, operational status Active, and jobs Eligible.
 
-Contractor → Your journey and Operations → Overview show relevant facts, requirements, skills, notes and evidence versions. Required actions and Work queue show participant work. Operations Work queue expands participant counts across all companies. Its parent count always includes every open item, regardless of role/company filtering; completed/cancelled work is excluded. Select System Activities for vendor setup and activation publication. Contractor work is visible there but completed in the signed-in portal. Workflow Monitor selects company/skill instances independently. Supporting diagnostics, ingress tools and timers launch collapsed; expand their title buttons to use them. Status, history and event activity stay visible. These are separate views, not access control. Contractor sign-in stores only a company ID in tab-local sessionStorage. Sign Out changes no business facts. Anonymous visitors see application confirmation and sign-in, not existing company records.
+Contractor → Your journey and Operations → Overview show relevant facts, requirements, skills, notes and evidence versions. Required actions and Work queue show participant work. Operations Work queue expands participant counts across all companies. Its parent count always includes every open item, regardless of role/company filtering; completed/cancelled work is excluded. Automations & Integrations navigates to Monitor for vendor setup and activation publication; individual work cards and eligibility guidance carry company/activity context. Operations has no system execution controls. Contractor work is visible there but completed in the signed-in portal. Workflow Monitor opens with pending automations and failed verification retries across companies; its Workflow monitor view selects company/skill executions independently. Supporting diagnostics, ingress tools and timers launch collapsed; expand their title buttons to use them. Status, history and event activity stay visible. These are separate views, not access control. Contractor sign-in stores only a company ID in tab-local sessionStorage. Sign Out changes no business facts. Anonymous visitors see application confirmation and sign-in, not existing company records.
 
-## Exception and operations demos
+## Exception and operations scenarios
 
 | Scenario                      | UI behavior                                                                                                                                                            |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Screening information request | Recruitment requests details with a reason; Contractor responds; review resumes on the same instance.                                                                  |
 | Decline                       | Required reason; close without administrative/skill work.                                                                                                              |
 | Missing prerequisite          | Leave any administrative approval missing: no vendor. Leave training or first skill incomplete: no readiness.                                                          |
-| Expired license               | Submit Expired demo document; Compliance verifies; Contractor receives a specific replacement task; submit Valid and verify again. Same qualification, retained v1/v2. |
+| Expired license               | Submit Expired simulated document; Compliance verifies; Contractor receives a specific replacement task; submit Valid and verify again. Same qualification, retained v1/v2. |
 | Other corrections             | Expired/incomplete insurance, financial or agreement evidence repeats the same correction/review pattern without losing other approvals.                               |
-| Failure / recovery            | Inject a timeout on any simulated integration. Failed attempt persists, no business outcome; Retry continues the same task.                                            |
+| Failure / recovery            | Inject a timeout on any simulated integration. Failed attempt persists, no business outcome; retry in Monitor -> Automations & Integrations continues the same task.                                            |
 | Durable waiting               | Refresh while work is open; return to its company/persona. Evidence, events, waits, tasks, attempts and history persist.                                               |
 | Timer / escalation            | Workflow monitor → Advance 3 days → Advance 2 days. Outbox shows reminders and escalations for overdue human work.                                                     |
 | Skill expansion               | After activation, Contractor → Overview → Add another company skill. Independent workflow, no repeated company setup.                                                  |
@@ -116,7 +116,7 @@ Iteration 3 introduced snapshot schema 3 and a shared revision. Iteration 3.1 us
 
 Concurrent tabs on the same exact origin/profile are supported. There is no cross-browser/profile/device synchronization. Close tabs running any older release before using the latest release: old code does not understand the current schema/lifecycle rules. Browser data can be cleared/evicted. Fixtures determine verification, not real document/legal/financial rules. No live training, actual signature, portal account, external messages, automatic expiry or reinstatement journey. Timers run on simulated time advancement only. A rejected first skill leaves company onboarding waiting; recovery policy remains a discovery question.
 
-No real authentication, payments, backend, hosted persistence, C#/.NET or hosting deployment. Demo sign-in is not a security boundary. Source is published at https://github.com/dblath/onboarding on main.
+No real authentication, payments, backend, hosted persistence, C#/.NET or hosting deployment. Simulation sign-in is not a security boundary. Source is published at https://github.com/dblath/onboarding on main.
 
 
-Operations Overview and Contractor Your journey explain unsatisfied requirements, next participants, pending activation and suspension. Zero work for one role does not mean all company work is complete. Ready remains Not eligible until Operations explicitly publishes activation. [Current queue acceptance and investigation](docs/acceptance-3.3.md).
+Operations Overview and Contractor Your journey explain unsatisfied requirements, next participants, pending activation and suspension. Zero work for one role does not mean all company work is complete. Ready remains Not eligible until explicit activation publication in Workflow Monitor -> Automations & Integrations. [Current status](docs/STATUS.md). Detailed Iteration 3.4 acceptance and screenshots are local-only under docs/chet; older acceptance documents retain historical UI locations.

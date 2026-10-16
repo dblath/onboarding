@@ -50,10 +50,10 @@ it("does not restore legacy selection or expose company work anonymously; reject
     screen.getByLabelText("Application email"),
     "shared@example.com",
   );
-  await user.type(screen.getByLabelText("Demo password"), "wrong");
+  await user.type(screen.getByLabelText("Simulation password"), "wrong");
   await user.click(screen.getByRole("button", { name: "Sign In" }));
   expect(screen.getByRole("alert").textContent).toContain(
-    "Incorrect demo password",
+    "Incorrect simulation password",
   );
   expect(sessionStorage.getItem(contractorSessionKey)).toBeNull();
   await user.clear(screen.getByLabelText("Application email"));
@@ -61,8 +61,8 @@ it("does not restore legacy selection or expose company work anonymously; reject
     screen.getByLabelText("Application email"),
     "unknown@example.com",
   );
-  await user.clear(screen.getByLabelText("Demo password"));
-  await user.type(screen.getByLabelText("Demo password"), "123");
+  await user.clear(screen.getByLabelText("Simulation password"));
+  await user.type(screen.getByLabelText("Simulation password"), "123");
   await user.click(screen.getByRole("button", { name: "Sign In" }));
   expect(screen.getByRole("alert").textContent).toContain("No company found");
   expect(sessionStorage.getItem(contractorSessionKey)).toBeNull();
@@ -77,7 +77,7 @@ it("requires an explicit duplicate-email company choice and sign-out preserves d
     screen.getByLabelText("Application email"),
     "SHARED@example.com",
   );
-  await user.type(screen.getByLabelText("Demo password"), "123");
+  await user.type(screen.getByLabelText("Simulation password"), "123");
   await user.click(screen.getByRole("button", { name: "Sign In" }));
   expect(
     screen.getByRole("heading", { name: "Choose your company" }),

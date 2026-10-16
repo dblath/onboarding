@@ -1,198 +1,138 @@
-# Unity / Fieldwork implementation status and context handoff
+# Unity fieldwork implementation status and context handoff
 
-**Executive summary - Unity branding follow-up on Iteration 3.3, 2026-10-16, America/Denver**
+**Executive summary - Iteration 3.4, 2026-10-16, America/Denver. Package 0.3.4.**
 
-**Unity branding is implemented; visual acceptance is pending.** All three experiences use the same complete, proportionally scaled Unity logo in shared navigation/header and both favicon sizes. The original 267 x 331 PNG is unchanged; square favicons use transparent padding rather than cropping. Package remains 0.3.3. Workflow, domain, rules, persistence and concurrency code are unchanged.
+Unity fieldwork is the consistent product identity in navigation, breadcrumbs and browser titles. The supplied Unity PNG and favicon assets remain unchanged and proportionally rendered. The Simulation disclosure remains prominent; no integration is live.
 
-Current verification: **59 regression/UI tests passed, 1 failed; 17 Chromium browser tests passed, 0 failed; TypeScript/production build passed.** The failing existing work-count UI test is timing-sensitive; focused runs both failed and passed. Its unbranded baseline passed. This is a known unresolved test failure, not an all-green delivery. Browser work-count and onboarding journeys pass. The unrelated test was left unchanged under the branding-only scope. Audit was not rerun for branding; the previous 3.3 delivery reported zero vulnerabilities.
+Workflow Monitor now opens in **Automations & Integrations**, showing pending vendor creation, initial activation publication, failed verification retries and completed/cancelled integration history. These are projections of existing WorkItems/attempts, not another persisted queue. Execution remains explicitly user-triggered through existing commands. Workflow execution history, event activity and collapsed diagnostics are available separately through Workflow monitor.
 
-**Reported eligibility incident resolved by tester confirmation.** The tester subsequently confirmed that completing the System task changed the company to eligible for jobs, with Ready / Active facts. No lifecycle repair or automatic activation was needed. Earlier zero-task observations remain historical context, not an independently captured snapshot. Additional work-discovery UX is deferred to the user's next prompt.
+Operations retains global open-work totals across all companies and all roles. Its automation entry navigates to Monitor; individual automation cards and eligibility guidance provide company/activity deep links. Human queues remain in Operations. Contractors see pending activation but have no internal automation controls. Operations role/company preferences are preserved.
 
-Retained 3.3 behavior: an expandable Operations queue exposes eight participant groups plus All participants, global open-work counts, company context and System Activities. Eligibility guidance identifies missing requirements, owners, publication and suspension. Contractor work is completed through its signed-in portal.
+The branding-era count-test failure was confirmed as an immediate assertion before asynchronous command/refresh completion. It now uses `waitFor` on the expected rendered count, with no sleeps or speculative production timing changes. Current final regression: **62 passed, 0 failed**. Final Chromium: **19 passed, 0 failed**; TypeScript/production build passed and dependency audit reported **0 vulnerabilities**. See verification below for exact runs, including intermediate failures.
 
-Iteration 3.1 corrections remain: completed onboarding is historical, readiness is derived, operations is separate, eligibility requires Ready AND Active, and restored readiness never removes suspension. **No domain rules, workflow transitions, event contracts, schema, persistence or concurrency code changed. No automatic activation or suspension bypass. Iteration 4 has not started.**
+The prior eligibility incident is resolved by the tester's confirmation: completing the System task made the company eligible (Ready / Active). No lifecycle repair or automatic activation was introduced. Completed onboarding, current readiness, operational status and job eligibility remain distinct. **Iteration 4 and Save/Load State have not started. Stop for product review after delivery.**
 
-## 1. Capability matrix
+## 1. Implemented / Partial / Not Implemented
 
 | Capability | Status | Actual behavior |
 | --- | --- | --- |
-| Unity logo and browser icons | Implemented | Complete original in shared sidebar/header across all three experiences; proportional responsive scaling, 331-square padded favicon and proportionally scaled 32-square favicon. Browser and pixel-preservation checks pass; human visual acceptance pending. |
-| Cross-role Operations queue | Implemented | Recruitment, Compliance, Finance, Contractor Relations, Field Manager, Training, Contractor and System Activities; only Open WorkItems count, not completed/cancelled work, history or attempts. |
-| Global totals and company context | Implemented | Parent/role counts stay global under role/company filtering; All companies is the launch default; every item shows company name/email/short ID. |
-| Pending system work discovery | Implemented | Explicit System Activities queue and pending-system signpost from filtered/empty participant queues; existing vendor/activation commands only. |
-| Actionable eligibility guidance | Implemented | Missing requirements, next owners/actions, suspension and publication on company Overview; shortcuts select appropriate queue/company. Missing work or unavailable recovery is explicit, without inventing actions. |
-| Anonymous application and confirmation | Implemented | Apply without login; confirmation provides submitted email/demo password and sign-in form, without opening the company workspace. |
-| Simulated contractor sign-in/out | Implemented | Trimmed/case-normalized email, fixed password 123, unknown-email/wrong-password errors, explicit duplicate-company choice. Only company ID is saved in tab-local sessionStorage. |
-| Selected-company contractor workspace | Implemented | Journey, work counts/actions, skills, lifecycle facts and contractor messages use the session company. No all-company selector or fallback. |
-| Monitor diagnostics | Implemented | Six independent panels launch closed, support keyboard/ARIA, update while hidden and persist no expanded state. Status/history/events remain outside panels. |
-| Compact headers | Implemented | Three experiences retain identity, messaging, subtitle, simulation disclosure and live browser/revision information. Anonymous Contractor omits company metrics. |
-| Application, screening, corrections | Implemented | Proceed, information request, decline, reasons, responses and retained evidence versions. |
-| Administration, skills, vendor, portal, training | Implemented | Existing happy path and independent skill qualification retained and exercised across three browser pages. |
-| Historical onboarding completion | Implemented | Completed/completedAt; closed CompanyOnboarding rejects later events/work and never resumes for later skill activity. |
-| Readiness, operations and eligibility | Implemented | Admin AND portal AND training AND one approved company skill; eligibility additionally requires Active. Readiness loss suspends Active; restoration retains suspension. |
-| Shared browser state and event protection | Implemented | IndexedDB, Web Locks, revision-only BroadcastChannel, authoritative reload and duplicate/unrelated ingress protection. |
-| First rejection / sole-approval loss recovery | Partial | Consistent waiting/suspended states, notices and existing pending qualification completion; no new recovery request until Iteration 4. |
-| Temporal/integration simulation | Partial | Persisted waits, attempts, manual retry/timers and local outbox; no real Temporal, dispatcher, worker or external service. |
-| Full DDD / production durability | Partial | Interfaces, policies and ports exist; mutable models, service/orchestrator business behavior and whole-snapshot persistence remain. |
-| Administrative requests, suspension removal, ongoing compliance | Not implemented | No request/approval/removal shortcut, automatic expiry, renewal lifecycle or recurring scheduler. |
-| Real authentication, jobs, cross-device sync, backend, workflow designer | Not implemented | Outside this slice. |
+| Unity fieldwork identity | Implemented | Capital Unity/lowercase fieldwork, complementary serif/sans typography, exact experience breadcrumbs and browser titles; routine UI says simulation rather than demo. User-entered names are unchanged. |
+| Intact logo and favicons | Implemented | Original 267 x 331 PNG; desktop/mobile proportional contain sizing; existing 331-square padded and 32-square proportional icons unchanged. |
+| Monitor automation operations | Implemented | Default Monitor view; pending system work, failed verification retries, company filtering, action/status/company context and separate attempt/completion history. No automatic execution. |
+| Operations discovery and counts | Implemented | Expandable queue; global parent/eight participant totals count Open WorkItems only, independent of role/company filters. All participants includes navigation-only automation cards. |
+| Automation deep links | Implemented | `#/monitor?view=automations&company=<id>&activity=<workItemId>`; company filter, selected activity focus, reload support, completed selected activity history, unavailable-context notices. No Operations role/company reassignment. |
+| Eligibility guidance | Implemented | Outstanding requirements, owner, publication and suspension; internal publication links go to Monitor. Contractor cannot execute internal work. |
+| Anonymous application / company sign-in | Implemented | Submit without login; confirmation; application email + fixed password 123; unknown/wrong credentials fail; duplicate email requires explicit company choice; tab-local sessionStorage and sign-out. No real authentication. |
+| Screening, correction and approvals | Implemented | Proceed, information request, decline; evidence versions/corrections; administrative reviews, company skill qualification, vendor, portal and training. |
+| Lifecycle separation | Implemented | Historical completed onboarding stays closed; readiness derives from current facts; eligibility requires Ready AND Active; readiness loss suspends Active; restoration never clears suspension. |
+| Monitor execution diagnostics | Implemented | Separate workflow view with primary execution history/events and six independent initially collapsed supporting panels, keyboard/ARIA controls, live hidden data, no expansion persistence. |
+| Same-browser synchronization | Implemented | IndexedDB snapshot, Web Locks, revision-only BroadcastChannel, authoritative reload and duplicate/correlation protection. Three-tab browser acceptance retained. |
+| Temporal / integration simulation | Partial | Persisted waits, attempts, manually injected timeout, explicit retry/time advancement and local outbox. No real Temporal, worker, external integration or scheduler. |
+| Qualification recovery | Partial | Existing pending skill may finish; rejection/invalidation remains consistent. No new recovery request or suspension-removal bypass. |
+| Full DDD / production durability | Partial | Policies and ports exist; models remain mutable interfaces and whole-snapshot storage persists; business mutations reside in service/orchestrator. |
+| Administrative requests / suspension removal / ongoing compliance | Not Implemented | No request/approval lifecycle, recurring expiry/renewal or automatic reinstatement. Iteration 4 deferred. |
+| Real identity, backend, jobs, cross-device sync, workflow designer, Save/Load State | Not Implemented | Outside this iteration. |
 
-## 2. Presentation architecture and changes
+## 2. Architecture and responsibility boundaries
 
-### Unity branding follow-up
+### Iteration 3.4 presentation changes
 
-- `src/App.tsx`: shared navigation/header use `public/assets/unity.png`, with intrinsic 267 x 331 dimensions and accessible names. Unity is the brand; Fieldwork demo remains the application description.
-- `src/style.css`: sidebar image width 80px (44px on narrow screens), automatic height and `object-fit: contain`; header image height 24px (20px narrow), automatic width. Workspace spacing accommodates the portrait logo without oversized branding.
-- `index.html`: Vite-base-relative PNG favicon links and default title. `src/experiences.ts`: experience-specific document titles include Unity / Fieldwork demo; route/session behavior unchanged.
-- `public/assets/README.md`: asset provenance, original SHA-256 and deterministic derivations. The requested PNG was absent from this checkout; an identical local Unity asset was copied unchanged from the neighboring unityOne repository, as disclosed during implementation. Original SHA-256: `88ef0146e47c4f25fbb95372945eca19b65e6598c7a8a43a8eb39a5af337d1a1`.
-- `unity-favicon.png`: original unscaled on a 331 x 331 transparent canvas with 32px side padding. `unity-favicon-32.png`: entire original scaled proportionally by 32/331, centered on a transparent 32 x 32 canvas. No crop, redraw or distortion; no dependency changes.
-- New `tests/browser/branding.spec.ts` checks all three routes, desktop/mobile proportions, logo/title/favicon serving, exact original pixels inside the padded icon and transparent side padding. No existing tests or business/runtime sources were changed to resolve the unrelated regression-test failure.
+- `src/App.tsx`: shared Unity fieldwork chrome, exact breadcrumb text, Monitor default automation view, global attention badge, navigation-only Operations automation selection and retained tab preferences. Removes old Operations system execution console and Monitor bottom-of-page retry console.
+- `src/AutomationQueue.tsx`: `pendingAutomations` derives Open system work plus Open human verification work whose latest attempt failed. The component filters company context and renders existing TaskCards with explicit automation execution enabled; completed/cancelled work is separate. No repository, new state schema, command or event contract.
+- `src/OperationsWorkQueue.tsx`: existing Open WorkItem projection and global counts; Simulation displays as Automations & Integrations. System-owned work renders links, never execution controls. Contractor work remains a portal link; human participant commands remain in Operations.
+- `src/presentation.ts`: `activityLabel` maps internal identifiers to business labels and `simulationMessage` translates only known system messages without changing stored definitions or user text; `automationLink` encodes company/WorkItem IDs and `monitorContext` reads hash query context.
+- `src/experiences.ts`: query-aware hash routing and `Unity fieldwork - experience` document title composition (rendered with an em dash). Known routes remain Contractor/Operations/Monitor.
+- `src/TaskCard.tsx`: existing execute/retry commands; failed verification and system execution require the Monitor presentation context. Operations failed human work links to Monitor for retry. Evidence option labels say simulated while their stored values remain identical.
+- `src/EligibilityGuidance.tsx`: pending system actions link directly to Monitor by company and WorkItem; contractor view retains descriptive information without internal links/controls.
+- `src/ContractorAccess.tsx`, `src/style.css`, `index.html`: routine wording, complementary restrained typography and unchanged intact-logo treatment. Package version is 0.3.4; dependency versions unchanged.
 
-### Retained Iteration 3.3 Operations visibility
+Operations' automation badge counts only Simulation-owned Open work so participant totals partition the parent total without double-counting. Monitor's attention badge also includes failed human verifications, whose ownership/count stays in their human Operations role. The shared WorkItem is displayed in both discovery contexts; it is stored and completed once. A successful human verification is retained in integration history, not an additional pending automation.
 
-- `src/OperationsWorkQueue.tsx`: `openWork` is a read-only Open WorkItem projection. `OperationsQueueNavigation` derives the global parent/eight participant counts; `OperationsWorkQueue` filters role/company independently, adds company context, uses existing TaskCard commands for internal/system work and links contractor work to its portal. Pending-system signposts do not mix those items into the selected role's list.
-- `src/EligibilityGuidance.tsx`: reads existing readiness/eligibility policies plus company-owned open work. Shows missing requirements, available owners/actions, publication and suspension. Operations shortcuts open role/company queues; contractor shortcuts expose its own actions only. Viewing guidance executes no business command.
-- `src/App.tsx`: local queue expansion/role/company filters, global open-work metric/company counts and blocker navigation. Internal roles remain tab-local; Contractor/System filters do not impersonate them or change the saved internal role.
-- `src/TaskCard.tsx`: display-only Simulation owner becomes Operations / System Activities; next-participant text also says Operations. Stored owner remains Simulation.
-- `src/style.css`: participant navigation, filters, company cards, blockers and explicit sidebar top anchoring after screenshot review. Compact headers retained.
-- Package 0.3.3, no dependency changes. Domain, application, orchestration, migration, coordination and runtime source remain unchanged.
+Plain `#/monitor` launches the automation queue across all companies. Workflow monitor and Outbox remain separate local views. Deep links select the requested company/activity and focus the pending item; a completed selected item opens its history. Invalid company/activity context shows an explicit notice instead of silently substituting work. A company dropdown change clears activity context. Operations queue filters/expansion remain local across same-app route switches; a fresh launch keeps the established All companies queue default. Stored Operations role/company identity is never overwritten by Monitor navigation. Monitor context uses its own company preference.
 
-### Retained Iteration 3.2 presentation architecture
+### Retained domain and application architecture
 
-- `src/ContractorAccess.tsx`: `useContractorSession` resolves/stores only fieldwork:contractor:session, a company ID. `ContractorAccess` owns input, errors, confirmation and duplicate-email company selection. Password input is transient component state, cleared on accepted credentials and never written to browser persistence/domain state.
-- `src/App.tsx`: anonymous/signed-in rendering, sign-out/confirmation, no fallback for contractor identity, scoped navigation counts and company views. Operations/Monitor company preferences and Operations role remain independent. A second application from a signed-in tab ends only that contractor session and returns to confirmation; the original company's business facts are untouched.
-- `src/DiagnosticPanel.tsx`: component-local expansion, semantic button, aria-expanded/aria-controls, stable region ID and hidden content retained in the React tree for current data. No storage/service calls. Remount/reload starts closed.
-- `src/WorkflowMonitor.tsx`: Expected events & owners, Correlation, Activity attempts, Completed & pending work and Event ingress demonstrations use diagnostic panels; App also wraps Timer & escalation lab. Primary status, execution history, event envelopes and lifecycle signals remain outside; failed-activity retry stays directly accessible.
-- `src/style.css`: compact shared header/title/strip/metrics, contractor single-column view and sign-in/panel styles with responsive overrides. Desktop geometry is measured in browser tests.
-- Iteration 3.2 introduced package 0.3.2 without dependency changes; current package is 0.3.3.
+- `src/domain.ts`: ContractorCompany, OnboardingApplication, AdministrativeRequirement, evidence, SkillQualification, WorkItem, ActivityAttempt, WorkflowInstance, history, outbox and typed event envelopes. `isReady`, `isJobEligible`, `readinessChecks`, `companyLifecycleCorrelation` remain authoritative policies.
+- Company is the business identity, including one-person companies. OperationalStatus remains Pending/Active/Suspended in compatibility field `activationStatus`. WorkItem status is Open/Completed/Cancelled.
+- `src/application.ts`: OnboardingService application/evidence/screening/skill/participant/integration commands and queries; IntegrationPort, Repository and IndexedDbRepository. `executeActivity` / `retryActivity` still validate persisted work and reject completed workflow work.
+- `src/orchestration.ts`: CompanyOnboarding v2 and SkillQualification v2 compiled transitions, guarded event ingress/scheduling and readiness evaluation. Business event envelopes remain version 1. Completed company workflow/history/processed IDs never resume for later skill events.
+- `src/companyLifecycle.ts`: `applyReadinessChange` changes current publication/operational facts outside closed onboarding, can suspend Active after readiness loss, and never clears suspension or schedules reactivation.
+- `src/migration.ts`: snapshot schema 4 repair from schema 2/3; legacy historical completion and invalid reactivation repair preserve original events/history. No 3.4 migration.
+- `src/LifecycleStatus.tsx`: onboarding history / current readiness / operational status / eligibility displayed separately.
 
-Company remains the business identity, including one-person companies. There is no new user/account aggregate, login use case, business event or workflow activity. Domain, application, orchestration, migration, coordination and runtime sources were checked and have no changes in this iteration.
+Readiness requires administrative completion AND portal setup AND initial training AND at least one approved company skill. Job eligibility additionally requires Active. First onboarding completion remains at successful initial activation acknowledgement. Later qualifications can restore Ready while retaining Suspended / Not eligible. No new administrative-removal use case exists.
 
-### Retained domain and lifecycle architecture
+Architecture limitations: entities are mutable TypeScript interfaces rather than encapsulated aggregate roots/value objects; IDs/dates are strings; administrative readiness is a maintained summary; service/orchestrator own most mutations. Whole-snapshot persistence, no runtime schema validation, and linear scans of work/attempt history remain prototype debt. No broad refactoring or workflow designer was introduced.
 
-- `src/domain.ts`: company/application/requirements/evidence/qualifications/work/attempts/workflow/history/event models, definition catalogs, `isReady`, `isJobEligible`, `readinessChecks`, `companyLifecycleCorrelation`. OperationalStatus remains Pending/Active/Suspended under compatibility field activationStatus. Work may be Cancelled.
-- `src/companyLifecycle.ts`: `applyReadinessChange` updates current publication/operational facts and can append ContractorSuspended event/outbox. Never clears suspension or schedules workflow work.
-- `src/application.ts`: OnboardingService commands/queries and IntegrationPort/Repository/IndexedDbRepository; task execution rejects completed workflows. No administrative removal use case.
-- `src/orchestration.ts`: explicit company/skill transitions, guarded ingress/scheduling and readiness evaluation. Completed company execution/history/work/processed IDs remain frozen. Later readiness events use company:<companyId>:lifecycle outside the completed execution.
-- `src/migration.ts`: existing schema 2/3 to 4 repair maps legacy Ready to historical Completed, derives completion time where evidence exists, cancels invalid reactivation work and relatches historical suspension. Original events/history retained. No 3.2 migration.
-- `src/LifecycleStatus.tsx`: separate onboarding history, current readiness, operational state and eligibility.
+## 3. Execution, waiting and simulated recovery
 
-Entities remain mutable TypeScript interfaces, not encapsulated aggregate roots/value objects; IDs/dates are strings, administrative readiness is a maintained summary, and service/orchestrator retain most business mutations. Layer packaging, runtime schema validation and snapshot storage remain debt. Initial completion still occurs at successful first activation acknowledgement. Completed skill invalidation retains the existing qualification-history behavior; closed CompanyOnboarding protection is not a claim of actual Temporal execution semantics for every record.
+User action -> TaskCard / existing use case -> exclusive Web Lock -> latest IndexedDB load/migration -> validate task/outcome -> domain changes and typed business event -> workflow correlation -> explicit rule evaluation -> next Activity/WorkItem -> atomic revision save -> release lock -> revision BroadcastChannel notification -> authoritative reload -> next participant.
 
-## 3. Workflow execution and simulation
+`AutomationQueue` calls the same `OnboardingService.executeActivity` / `retryActivity` through App's `run`; it adds no alternative execution pipeline. Vendor creation schedules existing contractor portal work. Activation publication acknowledges the initial activation and changes eligibility if current readiness is satisfied. Merely opening Monitor, selecting a company, or following a deep link executes no business command. Existing startup initialization can increment revision on reload; tests compare domain/event/work data separately from that initialization revision.
 
-User activity -> existing use case -> exclusive Web Lock -> latest IndexedDB load/migration -> validate task/outcome -> typed business event -> workflow correlation -> rule/domain facts -> next Activity/WorkItem -> atomic revision save -> release lock -> BroadcastChannel invalidation -> authoritative reload -> next participant.
+Persisted waits/work survive reload. Simulated integrations record attempts, with immediate injected timeouts; failure leaves work open. Explicit retry executes the same scheduled activity, preserving successful business work. Timer reminders/escalations require advancing simulation time manually. There is no background worker, automatic retry/backoff, real Temporal replay/recovery loop, external dispatcher or wall-clock scheduler. No temporary activation/reinstatement shortcut.
 
-Sign-in/out and panel toggles are local presentation actions, outside this chain. Anonymous submission still calls the existing submitApplication command, so Recruitment and Monitor receive the application before contractor login.
+## 4. Three experiences and synchronization
 
-CompanyOnboarding v2 and SkillQualification v2 remain compiled constants with explicit transitions; event envelopes remain version 1. Current readiness requires all administrative/portal/training facts plus an approved company skill; job eligibility adds Active status. Later skill events can change readiness outside completed onboarding and cannot schedule activation or clear suspension.
+- Routes: `/#/contractor`, `/#/operations`, `/#/monitor`, with automation query context within the Monitor hash. Same exact origin is required for shared state.
+- IndexedDB `fieldwork-onboarding`, version 1, object store `state`, key `current`; snapshot schema 4. One authoritative snapshot; the automation queue is a read-only projection of it until an explicit existing command runs.
+- Web Lock `fieldwork-onboarding:commands:v1` encloses latest load, validation, processing and atomic save. Per-tab queue preserves local ordering.
+- BroadcastChannel `fieldwork-onboarding:changes:v1` carries committed/revision metadata, not business events or snapshots, after commit/lock release.
+- Notification, focus, visibility return and pageshow trigger authoritative reload. Stale reads cannot overwrite newer displayed revisions. Duplicate/unrelated ingress does not save/increment revision. Missing required browser capabilities disables writes.
+- Contractor stores only company ID in `fieldwork:contractor:session`; Operations role/company and Monitor company keys remain independent. No password storage or cross-tab sign-out; same-browser data is not protected by these UI filters.
+- Refresh retains tab-local identity; browser duplication/opener/session restore may initially inherit sessionStorage. Experience links use noopener. No real authentication/expiration/backend authorization.
 
-Persisted waits/work survive reload. Simulated integrations record attempts and immediate injected timeouts; manual retry executes the same scheduled activity without duplicating completed business work. Reminders/escalations use explicitly advanced demo time. No real replay, worker-recovery loop, automatic backoff, background dispatcher or wall-clock scheduler exists.
-
-## 4. Three experiences, storage and synchronization
-
-- Routes: /#/contractor, /#/operations, /#/monitor; Operations retains six internal roles, with no role selector in Contractor/Monitor.
-- IndexedDB fieldwork-onboarding, version 1, store state, key current; snapshot schema 4. Domain IDs/events/workflow history and migration behavior are unchanged.
-- Web Lock fieldwork-onboarding:commands:v1 encloses latest load, validation, processing and atomic save; per-tab queue preserves local order.
-- BroadcastChannel fieldwork-onboarding:changes:v1 sends committed/revision metadata after commit/lock release. It transports no business events, snapshots or sessions.
-- Notification, focus, visible visibilitychange and pageshow reload authoritative state. Old reads cannot overwrite newer displayed revisions. Duplicate/unrelated ingress does not save or increment revision; missing required browser capabilities disables writes.
-- Contractor session is independent of fieldwork:operations:role and fieldwork:<experience>:company. Legacy contractor selection is not login. Invalid session IDs show anonymous rather than another company. No cross-tab sign-out is broadcast.
-- Refresh retains the session. Independently opened tabs can use different companies. Browser duplicate/opener tabs may initially inherit sessionStorage; later changes remain tab-local. Experience links use noopener. Browser session restore can restore sessionStorage; there is no secure expiration/logout service.
-- Existing startup initialization increments shared revision on reload; local login/panel changes do not mutate business state. Tests distinguish that initialization revision from business changes.
-- Shared same-origin data remains available to local code/devtools. UI filtering is not authorization or protected storage. No password/hashes are persisted.
-
-### Eligibility investigation
-
-The new browser journey completes the normal UI through administrative/skill approvals, vendor, portal, induction and Training confirmation. The snapshot then has exactly one Open WorkItem, PublishActivation owned by Simulation (shown as Operations), no ContractorActivated event, Ready facts and Pending operational status. Contractor and Training can both truthfully have zero work while eligibility stays false. Explicit existing publication produces one activation event, completed onboarding and Active/Eligible in all tabs.
-
-This reproduces a visibility problem, not a lifecycle defect. Previous Operations counts/list reflected the selected role and company, concealing other participants/system work. The original manual company/email was requested but its snapshot has not been inspected; do not claim this proves that company's cause. No automatic repair/business change was made. Guidance distinguishes pending publication, Ready/Pending without an available publication (Operations review needed), missing requirements and Suspended (removal process unimplemented).
-
-Historical manual follow-up on 2026-10-16: the tester initially reported zero outstanding work across all roles while ineligible. Source review and `npx vitest run src/lifecycle.test.ts src/workVisibility.test.tsx` then passed 14/14, demonstrating legitimate zero-open-work cases after rejection, invalidation or suspension. That did not establish the original company's cause. Subsequent tester confirmation resolved the reported incident: completing the System task made the company eligible for jobs; the reported lifecycle values are Ready / Active. No captured before/after snapshot is claimed. No business rules or user company data were changed during this investigation. Future UX refinement remains separate from this branding delivery.
+Tested: contested writes, duplicate ingress, revision ordering, missed-channel visibility recovery, capability failure, tab preference isolation, deep-link reload, no navigation-driven execution, system counts, failed retry persistence, and explicit activation updating eligibility across three tabs. Browser visibility tests dispatch lifecycle events explicitly in headless Chromium. Physical process crash, real sleep/resume, storage eviction/quota, mixed-version tabs and cross-device behavior remain unverified.
 
 ## 5. Actual verification
 
-Executed on Windows, Node v24.13.1 / npm 11.8.0, 2026-10-16:
+Executed on Windows / Node v24.13.1 / npm 11.8.0 on 2026-10-16. Final source verification is recorded here; product acceptance remains separate.
 
-| Command | Actual final result |
+| Command / check | Actual result |
 | --- | --- |
-| npm test | **59 passed, 1 failed**, 7 files, on both full branding runs. Failure: `src/workVisibility.test.tsx:149`, count-refresh assertion expects Recruitment 0 but reads 1 immediately after submitting a decision. |
-| npx vitest run src/workVisibility.test.tsx | One focused run **3 passed / 1 failed**, another **4 passed / 0 failed**. |
-| npm run test:browser | **17 passed, 0 failed**, including one new branding test and all 16 existing journeys; real IndexedDB, BroadcastChannel and Web Locks. |
-| npm run build, also run by test:browser | TypeScript/Vite passed; 46 modules; JS 305.26 kB / CSS 23.31 kB before gzip. |
-| Unbranded baseline comparison, detached afea37c worktree | Full regression **60 passed / 0 failed**; focused work visibility **4 passed / 0 failed**. Temporary worktree removed, original repository/dependencies retained. |
-| Local dev HTTP checks | App and all three Unity PNG URLs returned 200; images served as image/png. Production assets and rendered logos verified by browser tests. |
-| npm audit --audit-level=moderate | Historical 3.3 result: 0 known vulnerabilities. Not rerun for branding. |
+| `npm test` | **62 passed, 0 failed**, 7 files, final run. Includes 2 new automation UI cases and the corrected state-based count wait. |
+| `npm run test:browser` | **19 passed, 0 failed**, one Chromium worker, including production build. Final run: 54.8 seconds. |
+| `npm run build` (also inside browser command) | TypeScript/Vite passed, 48 modules; JS 310.62 kB / CSS 23.87 kB before gzip. |
+| `npm audit --audit-level=moderate` | **0 vulnerabilities** reported. |
+| Protected-source/asset diff | Domain, application, orchestration, lifecycle, migration, storage/runtime/coordination and all three Unity PNGs unchanged from branding delivery. |
 
-Test references:
+Test references and evidence:
 
-- `tests/browser/branding.spec.ts` (1 new): shared full logo, document titles, served PNG favicons, desktop/mobile aspect ratio, pixel-for-pixel preservation on the padded canvas, transparent padding and screenshots. Native Chrome screenshots also show real browser tabs with the Unity icon, using isolated fictional demo data.
+- `src/workVisibility.test.tsx` (6): Open-only participant counts; stable global totals under filtering and real command completion; navigation-only system cards; pending/failed/history separation with no render mutation; eligibility publication links/missing publication and suspension.
+- The old failure was at the immediate Recruitment count assertion after `user.click`. TaskCard submits via `void run(...)`; click completion does not imply IndexedDB command, refresh and React render completion. `waitFor` now retries that rendered-state assertion. Production command/refresh timing was not changed. Full regression passed 60/60 after synchronization correction, then 62/62 with the new UI cases, and 62/62 on final source.
+- `src/application.test.ts` (10), `src/iteration2.test.ts` (23), `src/coordination.test.ts` (5), `src/lifecycle.test.ts` (10): retained command/workflow/integration, readiness, event protection and migration regressions.
+- `src/ui.test.tsx` (4), `src/portalUx.test.tsx` (4): end-to-end participant actions, corrections, failure/retry through Monitor, timers, qualification/invalidation, anonymous/session/duplicate handling and independent diagnostics. Updated presentation labels; stored fixture/event contracts unchanged.
+- `tests/browser/automation-ux.spec.ts` (2 new): Monitor default, invalid context, system discovery without execution in Operations, retained Operations preferences, exact company/activity link/focus/reload, no navigation mutation, other-company work preserving totals, explicit publication and eligibility in all three tabs, retained completed activity history. Captures all three experiences.
+- `tests/browser/branding.spec.ts` (1): exact titles and breadcrumbs across three experiences, logo containment/desktop/mobile proportions, served PNG favicon sizes and pixel-exact original preservation in transparent padding. Assets themselves unchanged.
+- `tests/browser/work-visibility.spec.ts` (2): global role/company counts, cross-tab updates and human filtering, vendor/activation discovery in Operations and execution in Monitor.
+- Retained `lifecycle.spec.ts` (3), `multitab.spec.ts` (3), `synchronization.spec.ts` (5), `portal-ux.spec.ts` (3): four lifecycle audit scenarios, completed-workflow freeze, suspension, cancellation, contested writes, explicit failed retry, three-tab flows, session isolation, collapsed/keyboard/live diagnostics and compact headers. Helpers follow new UI routes; no direct-state bypass was added.
 
-- `src/workVisibility.test.tsx` (4 new): eight role counts, exclusion of completed/cancelled items, system mapping, global total stable under role/company filters, real command completion/count refresh, pending/missing publication and suspension without state mutation.
-- `tests/browser/work-visibility.spec.ts` (2 new): multiple-company filtering and two Operations tabs, live counts after completion, contractor portal routing, vendor discovery and full explicit activation reproduction. Existing pre-activation cancellation browser case also verifies zero global/system open counts after cancellation.
+Intermediate runs are not hidden: first regression 59 passed / 1 failed because the old eligibility test still expected the removed Operations navigation button; its assertions now verify the deep link. An intermediate complete browser run finished 15 passed / 2 failed because reload/default-Monitor tests still expected diagnostics; those tests now explicitly choose the diagnostics view. Next browser run finished 18 passed / 1 failed because a new history assertion matched all six rows; it now selects the activation row. A further 18/1 run exposed a test assuming queue navigation was collapsed after the newly preserved route context; its toggle is now conditional on aria-expanded. One earlier browser attempt was interrupted after its first passing test while test-route updates were still being completed. Final results above supersede these runs.
 
-- `src/application.test.ts` (10), `src/iteration2.test.ts` (23), `src/coordination.test.ts` (5), `src/lifecycle.test.ts` (10): retained application/workflow/readiness, migration, event protection and lifecycle regressions.
-- `src/ui.test.tsx` (4): participant happy path, prerequisites, correction, retry, timers, skills/invalidation; now performs normal sign-in and expands diagnostic tools before use.
-- `src/portalUx.test.tsx` (4 new): anonymous/legacy-selection gating, invalid credentials without writes, explicit duplicate selection, scoped company rendering/sign-out/internal preferences, invalid stored session, independent keyboard panels/current hidden data/reset.
-- Existing browser `lifecycle.spec.ts`, `multitab.spec.ts`, `synchronization.spec.ts`: original 11 journeys retained, including the four 3.1 audit scenarios, contested writes, retry, notification ordering/recovery, capability failure and private preferences. Helpers sign in normally and explicitly select System Activities for integrations; no direct-state bypass.
-- `tests/browser/portal-ux.spec.ts` (3 new): anonymous application/confirmation/errors/normalized login/reload/sign-out; duplicate choice and independent contractor/internal tabs; six initially closed panels, Enter/Space, independent expansion, live hidden data, no toggle mutation, reload reset, header geometry and screenshots.
+Branding-era evidence was 59/60 regression, 17/17 browser, build passed; it is historical and superseded by the corrected current regression. Prior 3.3 delivery was 60/60 regression and 16/16 browser. No lint, coverage, load-test, broad accessibility certification or hosted-deployment claims. Current screenshots are isolated fictional test data, captured from the served production build and visually reviewed; no new native browser-tab capture is claimed in 3.4. Prior real-tab favicon captures remain local historical evidence, with unchanged favicon binaries.
 
-Historical evidence: 3.2 finished with 56 regression/UI and 14 browser passes; 3.3 Operations visibility finished with 60 regression/UI and 16 browser passes. Those results predate this branding follow-up and do not override its current 59/60 regression result. Initial 3.2 browser failures and subsequent corrections were documented in that handoff.
+## 6. Decisions, limitations and product review
 
-Current branding screenshots: full-page Contractor, Operations and Monitor captures plus native browser-window captures showing the actual favicon. Durable copies are in `docs/chet/unity-branding-screenshots/`, with the local branding handoff. Prior 3.3 pending-publication screenshots remain historical in `docs/chet/iteration-3.3-screenshots/`. All Chet files/screenshots stay excluded from Git.
+Implemented rules remain authoritative: no auto execution/publication, no reopened completed onboarding, no suspended-company bypass, no new readiness condition. Current company remains the business identity. Simulation remains explicitly disclosed even though product branding no longer says demo.
 
-### Defects, limits and untested behavior
+Presentation decisions: Monitor opens in an all-company automation queue; failed human integration attempts are recoverable there while human ownership/counts stay unchanged. Deep links use existing WorkItem IDs. Completed/cancelled work and attempts remain available separately. Stored evidence enum values, activity definitions, database/channel/session keys and historical event/outbox text can retain legacy wording for compatibility; company names and user-entered content are not renamed. New visible activity/evidence labels use simulation wording. The logo is an unchanged asset; complementary product typography is separate from it.
 
-One regression/UI assertion remains failing in full branding runs. The immediate post-click count assertion appears consistent with an asynchronous command/refresh timing assumption: focused outcomes vary, while browser count-update tests await refreshed state and pass. The unbranded baseline passed, so this is not claimed as an established failing baseline. No unrelated test/harness or application behavior was changed under branding-only scope. This needs a targeted test-timing investigation if authorized in a subsequent slice.
+Known limits: manual product review is pending. No remaining automated failure was observed in final runs; this is not a claim of zero defects. Existing confirmation is transient on refresh; authentication is presentation-only. No scheduler/worker, real external service, automatic recovery or cross-device synchronization. Broad mobile/screen-reader verification, very large histories, quotas/eviction, mixed versions and hosted deployment remain untested. Whole portrait logo is intact in favicons; its small text is naturally limited at tab size.
 
-Manual branding/remaining product UX acceptance is pending. Broad mobile/accessibility certification, screen-reader review, headed Chrome sleep/resume, process crash recovery, quota/eviction, large-history load, mixed-version tabs and hosted deployment remain unverified. Existing headless visibility tests explicitly dispatch visibility events because pages remain individually visible. No coverage, lint or load-test claims. The entire portrait logo is retained in the favicon; its small text is naturally limited at tab-icon size. Actual hosted deployment is untested; local dev and served production build are verified.
+Before further business lifecycle work, product must decide suspension-removal request/approval/evidence/denial/audit rules; recovery after first skill rejection or sole invalidation; ongoing compliance/expiry/grace periods; post-activation administrative changes; training/agreement renewal, in-progress jobs and escalation rules; and whether initial onboarding historical completion should happen before activation acknowledgement. Do not invent provisional shortcuts.
 
-Submission confirmation is transient; refresh returns to anonymous sign-in without resubmitting. No password changes, recovery, expiration or backend authorization. Browser autofill/session restoration is outside this demo's guarantees. Diagnostic expansion is not persisted. Event envelope details retain their existing individual controls and launch closed.
+Highest-value immediate next step: manual product review of the Automation queue, action discovery and terminology using `docs/chet/acceptance-3.4.md`. Gather feedback before expanding scope. No Iteration 4 or Save/Load State implementation is included.
 
-First-skill rejection leaves initial onboarding running/waiting and not ready; sole-approval invalidation after activation leaves Completed/Not ready/Suspended/Not eligible. An existing pending qualification can later restore Ready while retaining Suspended/Not eligible. New recovery, ongoing expiry and suspension removal remain absent, with no temporary bypass.
+## 7. Repository, run commands and continuity
 
-## 6. Manual acceptance, decisions and next boundary
+- Repository: `onboarding`, `C:\Users\david\Documents\Repositories\onboarding`; branch `main` tracks `origin/main`.
+- Origin fetch/push: `https://github.com/dblath/onboarding.git`. History preserved; no force-push, reinitialization or deployment.
+- Iteration 3.4 baseline: `0dc17902d0d369f3b62cbfa320d7a98ed572fb66`; implementation commit/push verification recorded after publication. Intended changes: presentation, query routing, related tests, package version metadata and documentation only. No dependency-version change.
+- Earlier implementations: 3.1 `04567dc532b0a509c6ae94e91fd4ff47f5843c25`; 3.2 `4cc625d833ca827c6e4febf4a6f227df78d4cd32`; 3.3 `c0918e7125806d8f3f1439be948c05b57f70095a`; Unity branding `cbd352fa5ea884b67e71ed42ebf2d38f59d02036`. Previous publication reports remain in Git history and local Chet snapshots.
+- Run: `npm install` if needed, `npm run dev`; dev origin `http://127.0.0.1:5173`. Routes: `/#/contractor`, `/#/operations`, `/#/monitor`; automation deep link: `/#/monitor?view=automations`.
+- Production: `npm run build`, then `npm run preview -- --host 127.0.0.1 --port 4174`. Same routes on `http://127.0.0.1:4174`. Static `dist`, no backend/environment variables. Keep tabs on the same exact origin.
+- Checks: `npm test`, `npx playwright install chromium` if needed, `npm run test:browser` (isolated production preview port 4173), `npm run build`, `npm audit --audit-level=moderate`.
+- Docs: README, STATUS, public/assets/README, prior acceptance-3.1/3.2/3.3 and branding walkthroughs (historical UI labels/locations), domain UML, process/event/rule catalogs, assumptions and shared-browser architecture.
+- Chet's current detailed report, screenshots and acceptance steps are **local only** under `docs/chet/`. `/docs/chet/` is excluded by `.git/info/exclude`; never stage/commit/push it. Test artifacts remain ignored. Current manual steps supersede old System Activities execution instructions.
 
-Current branding acceptance: [Unity branding](acceptance-branding.md), covering three routes, intact logo proportions and real tab icons in dev/production. The tester has manually confirmed the System publication -> Eligible path. Remaining [Operations work visibility acceptance](acceptance-3.3.md) and broader visual/product sign-off are pending; do not infer full acceptance from that single confirmed path. No new work-discovery UX is implemented in this branding slice.
-
-Queue presentation decisions: All companies on launch; optional company filtering via dropdown or company list; sidebar counts remain global; Contractor/System filters leave the saved internal role intact; contractor activities are read-only in Operations. A pending-system signpost is outside the main participant list and navigates to System Activities. Counts can stay level or increase after completion when successor work is created; this is not a counting defect.
-
-Retained 3.2 UX/lifecycle regression acceptance:
-
-Exact steps/URLs: [Iteration 3.2 UX acceptance](acceptance-3.2.md). [Lifecycle acceptance](acceptance-3.1.md) remains applicable with sign-in after each application.
-
-1. Anonymous apply -> confirmation without company work/status. Wrong/unknown credentials fail; valid email + 123 identifies the company; refresh retains session; sign-out changes no business facts.
-2. Duplicate email -> empty explicit company picker; independent contractor tabs and unchanged Operations/Monitor preferences; selected-company-only work/messages/counts.
-3. Existing three-tab onboarding without refresh. Before activation: In progress / Ready / Pending / Not eligible. After publication: Completed / Ready / Active / Eligible. Later sole approval loss suspends; restored readiness never clears suspension.
-4. Six Monitor diagnostics launch closed; independent pointer/Enter/Space operation, current hidden data, no mutation and reset on reload. Primary status/history/events remain outside panels.
-5. Review compact headers at normal desktop zoom, long names and your preferred narrow window. Automated geometry is not human acceptance.
-
-Presentation choices: trim/case-normalize email; duplicate labels include short IDs; company switching requires sign-out/sign-in; another application returns the contractor to confirmation. No qualification/readiness business rule changed.
-
-Before Iteration 4, product must decide: who requests/approves suspension removal and required evidence/denial/audit; first-rejection/sole-invalidation recovery; administrative changes affecting readiness and grace periods; ownership of ongoing compliance without reopening onboarding; actual expiry/training/agreement/job-in-progress/escalation rules; whether initial historical completion should occur earlier than activation acknowledgement.
-
-**Stop after this delivery and request manual UX acceptance.** No Iteration 4 implementation or administrative-request shortcut is included.
-
-## 7. Repository and reporting continuity
-
-- Repository: onboarding, `C:\Users\david\Documents\Repositories\onboarding`; main tracks origin/main.
-- Origin fetch/push: `https://github.com/dblath/onboarding.git` ([repository](https://github.com/dblath/onboarding)). History preserved; no reinitialization, force-push or deployment.
-- Branding baseline: `afea37c657610cda4f608be7e5b98adb8879c609`. Implementation `cbd352fa5ea884b67e71ed42ebf2d38f59d02036` (Add Unity branding and proportion-preserving favicons) was committed and pushed to origin/main on 2026-10-16. `git ls-remote` verified that exact SHA and the working tree was clean after the implementation push. This publication record receives a separate documentation commit; final tip/remote agreement is recorded in the delivery and local Chet handoff. Only shared presentation, static assets, a branding browser test and documentation are in scope; no existing regression tests changed. Screenshots/Chet handoffs remain local and excluded from Git.
-- Published pre-3.2 tip: `fc6f559422ff80a3cc5ad8196b3d426e1aa48c7b`. Lifecycle implementation: `04567dc532b0a509c6ae94e91fd4ff47f5843c25`; earlier baseline: `0ac0987bf910502b82f6e0daf2c03a2fc83624aa`.
-- Iteration 3.3 baseline: `e59e3f7024bfa8f17de603ae390becffdcead678`. Implementation `c0918e7125806d8f3f1439be948c05b57f70095a` (Expose Operations work across participants and explain eligibility blockers) was committed and pushed to origin/main on 2026-10-16. git ls-remote verified the exact implementation SHA. This publication record receives a separate documentation commit; the final tip SHA and clean-tree/remote agreement are recorded in the delivery message and local Chet handoff.
-- Iteration 3.2 implementation: `4cc625d833ca827c6e4febf4a6f227df78d4cd32` (Add demo contractor login and compact working views). `git push origin main` succeeded on 2026-10-16; git ls-remote confirmed that exact implementation SHA on origin/main. The working tree was clean after this push. This publication record is a separate documentation commit; its final tip SHA/remote agreement and clean-tree check are recorded in the delivery message and local Chet handoff.
-- Intentional 3.3 changes: queue/guidance presentation, TaskCard owner display, related UI/browser tests, CSS, version metadata and docs. Domain/workflow/storage/coordination source unchanged. Build/test artifacts and docs/chet are not staged/pushed.
-- Run: npm install if needed, then npm run dev. Browser prerequisite: npx playwright install chromium. Checks: npm test, npm run test:browser, npm run build. Static assets in dist; no backend/environment variables.
-- Docs: README, STATUS, acceptance-3.3, acceptance-3.2, acceptance-3.1, domain UML, processes, event/rule catalogs, assumptions and shared-browser architecture. This report supersedes historical iteration conclusions.
-
-Each iteration: update STATUS from code/executed checks; commit, push, verify local/remote SHA agreement and clean tree; report actual tests/build/manual instructions. Put Chet reports/artifacts in docs/chet, **local only, never stage/commit/push**, as explicitly requested; /docs/chet/ is excluded through .git/info/exclude. Keep manual acceptance separate from automated evidence.
-
-| Date | Handoff |
-| --- | --- |
-| 2026-10-16 | Iteration 3 audit: 42 regression / 8 browser passes; lifecycle ambiguity, invalid completed-workflow reactivation and recovery gaps identified. |
-| 2026-10-16 | Iteration 3.1: lifecycle separation/closed execution/suspension/schema 4 repair; 52 regression / 11 browser passes, commit 04567dc. |
-| 2026-10-16 | GitHub main published; report commit fc6f559. Chet destination established as local-only docs/chet. |
-| 2026-10-16 | Iteration 3.2: anonymous/demo company login, scoped portal, six diagnostic panels, compact headers; 56 regression/UI / 14 browser passes, production build passed. Manual UX acceptance pending; Iteration 4 deferred. |
-| 2026-10-16 | Iteration 3.3 Operations visibility: stable global open-work totals, role/company filters, system-work discovery, eligibility blockers. Pending activation reproduced; original tester snapshot unconfirmed. 60 regression/UI / 16 browser passes; build passed. Manual acceptance pending; no lifecycle changes or Iteration 4. |
-| 2026-10-16 | Manual follow-up: tester explicitly reports zero outstanding tasks across roles with continued ineligibility. Distinct from the one-pending-publication reproduction; incident remains open pending actual readiness/operational values and snapshot. Focused lifecycle/blocker checks 14/14 passed; documentation only, no runtime change or full-suite/build rerun. |
-| 2026-10-16 | Subsequent tester confirmation resolves that incident: completing the System task produces eligibility, reported Ready / Active. No lifecycle change needed. Further work-discovery UX awaits a new prompt. |
-| 2026-10-16 | Unity branding: original intact logo across three experiences, transparently padded/proportional favicons, new branding browser test and local screenshots. Current regression 59 passed / 1 failed (timing-sensitive existing count assertion), browser 17/17, production build passed. Branding visual acceptance pending; no Iteration 4. |
+Reporting standard: each completed iteration updates STATUS from actual code and executed checks, commits/pushes, verifies local/remote SHA and clean working tree, reports failures as well as passes, and leaves manual product acceptance distinct from automation. This report is the current state; historical reports do not override it.

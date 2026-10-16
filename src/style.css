@@ -73,12 +73,50 @@ aside {
   display: block;
   font-size: 22px;
   letter-spacing: -0.4px;
+  font-family: Georgia, serif;
 }
 .brand-caption small {
   display: block;
   margin-top: 5px;
-  font-size: 10px;
+  font-size: 16px;
   color: #c3cfc4;
+}
+.product-name strong {
+  font-family: Georgia, serif;
+  font-size: 1.1em;
+}
+.product-name em {
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+.automation-queue {
+  padding: 24px;
+}
+.automation-queue > label {
+  max-width: 440px;
+}
+.automation-item {
+  padding: 16px;
+  margin: 16px 0;
+  border: 1px solid #d6dfd7;
+  border-radius: 12px;
+}
+.automation-item .task-card {
+  margin-bottom: 0;
+}
+.automation-item:focus,
+.automation-selected {
+  outline: 3px solid #688473;
+  outline-offset: 2px;
+}
+.automation-signpost {
+  padding: 14px;
+  background: #f0f5ef;
+  border-radius: 8px;
+}
+.automation-history {
+  margin-top: 24px;
 }
 .header-brand-image {
   display: inline-block;

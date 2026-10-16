@@ -17,7 +17,7 @@ export const internalPersonas = [
 ] as const satisfies readonly Persona[];
 export type InternalPersona = (typeof internalPersonas)[number];
 function readExperience(): Experience {
-  const route = window.location.hash.slice(1);
+  const route = window.location.hash.slice(1).split("?")[0];
   return route === "/operations"
     ? "operations"
     : route === "/monitor"
@@ -31,14 +31,14 @@ export function useExperience() {
     window.addEventListener("hashchange", changed);
     if (
       !["#/contractor", "#/operations", "#/monitor"].includes(
-        window.location.hash,
+        window.location.hash.split("?")[0],
       )
     )
       window.location.replace("#/contractor");
     return () => window.removeEventListener("hashchange", changed);
   }, []);
   useEffect(() => {
-    document.title = `${experienceNames[experience]} · Unity | Fieldwork demo`;
+    document.title = `Unity fieldwork — ${experienceNames[experience]}`;
   }, [experience]);
   return experience;
 }

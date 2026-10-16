@@ -74,7 +74,7 @@ test("three simultaneous experiences complete correction, independent branches a
   for (const name of [
     "Submit insurance evidence",
     "Submit fictional tax / banking pack",
-    "Submit demo agreement",
+    "Submit simulated agreement",
   ])
     await evidence(contractor, name);
   await role(operations, "Compliance");
@@ -85,19 +85,19 @@ test("three simultaneous experiences complete correction, independent branches a
   await verify(operations, "Execute simulated agreement");
   // The contractor must never see worker controls even when shared state contains pending system work.
   await systemActivities(operations);
-  await expect(card(operations, "Provision simulated vendor")).toBeVisible();
+  await expect(card(operations, "Create vendor record")).toBeVisible();
   await expect(
     contractor.getByText("Workflow-scheduled system activities"),
   ).toHaveCount(0);
   await expect(
-    contractor.getByRole("button", { name: "Run vendor provisioning →" }),
+    contractor.getByRole("button", { name: "Create vendor record →" }),
   ).toHaveCount(0);
-  await card(operations, "Provision simulated vendor")
-    .getByRole("button", { name: "Run vendor provisioning →" })
+  await card(operations, "Create vendor record")
+    .getByRole("button", { name: "Create vendor record →" })
     .click();
   await completion(
     contractor,
-    "Complete demo portal setup",
+    "Complete simulated portal setup",
     "Complete portal setup →",
   );
   await completion(
@@ -112,15 +112,13 @@ test("three simultaneous experiences complete correction, independent branches a
     "Confirm training →",
   );
   await systemActivities(operations);
-  await expect(
-    card(operations, "Publish activation to demo contractor management"),
-  ).toBeVisible();
-  await card(operations, "Publish activation to demo contractor management")
-    .getByRole("button", { name: "Run activation publication →" })
+  await expect(card(operations, "Publish contractor activation")).toBeVisible();
+  await card(operations, "Publish contractor activation")
+    .getByRole("button", { name: "Publish contractor activation →" })
     .click();
-  await expect(
-    card(operations, "Publish activation to demo contractor management"),
-  ).toHaveCount(0);
+  await expect(card(operations, "Publish contractor activation")).toHaveCount(
+    0,
+  );
   await nav(contractor, "Your journey");
   await nav(operations, "Overview");
   await expect(
@@ -285,6 +283,7 @@ test("failed activities retry from Monitor, persist on refresh and resume every 
   await task
     .getByRole("button", { name: "Run simulated verification →" })
     .click();
+  await nav(monitor, "Automations & Integrations");
   await expect(card(monitor, "Verify license")).toContainText(
     "Technical failure",
   );
@@ -299,6 +298,7 @@ test("failed activities retry from Monitor, persist on refresh and resume every 
   await expect(card(monitor, "Verify license")).toHaveCount(0);
   await role(operations, "Field Manager");
   await expect(card(operations, "Approve skill qualification")).toBeVisible();
+  await nav(monitor, "Workflow monitor");
   await monitor.getByRole("button", { name: "Timer & escalation lab" }).click();
   await monitor.getByRole("button", { name: "Advance 3 days" }).click();
   await monitor.getByRole("button", { name: "Advance 2 days" }).click();

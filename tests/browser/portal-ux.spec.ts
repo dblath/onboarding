@@ -25,8 +25,8 @@ test("anonymous application confirms before login; failed credentials, reload an
   await contractor
     .getByLabel("Fictional company name")
     .fill("Summit Portal Demo");
-  await contractor.getByLabel("Demo contact name").fill("Alex Demo");
-  await contractor.getByLabel("Demo email").fill("alex@example.com");
+  await contractor.getByLabel("Contact name").fill("Alex Demo");
+  await contractor.getByLabel("Application email").fill("alex@example.com");
   await contractor
     .getByRole("button", { name: "Submit application →" })
     .click();
@@ -42,12 +42,14 @@ test("anonymous application confirms before login; failed credentials, reload an
   ).toHaveCount(0);
   await expect(card(operations, "Review application")).toBeVisible();
   const submitted = await snapshot(operations);
-  await contractor.getByLabel("Demo password", { exact: true }).fill("wrong");
+  await contractor
+    .getByLabel("Simulation password", { exact: true })
+    .fill("wrong");
   await contractor
     .getByRole("button", { name: "Sign In", exact: true })
     .click();
   await expect(contractor.getByRole("alert")).toContainText(
-    "Incorrect demo password",
+    "Incorrect simulation password",
   );
   expect(
     await contractor.evaluate(() =>
@@ -55,7 +57,9 @@ test("anonymous application confirms before login; failed credentials, reload an
     ),
   ).toBeNull();
   await contractor.getByLabel("Application email").fill("unknown@example.com");
-  await contractor.getByLabel("Demo password", { exact: true }).fill("123");
+  await contractor
+    .getByLabel("Simulation password", { exact: true })
+    .fill("123");
   await contractor
     .getByRole("button", { name: "Sign In", exact: true })
     .click();
@@ -119,7 +123,7 @@ test("duplicate emails require a company choice; independent contractor tabs nev
   await application(first, "Other Company", "other@example.com");
   await first.getByRole("button", { name: "Sign Out" }).click();
   await first.getByLabel("Application email").fill("alex@example.com");
-  await first.getByLabel("Demo password", { exact: true }).fill("123");
+  await first.getByLabel("Simulation password", { exact: true }).fill("123");
   await first.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(
     first.getByRole("heading", { name: "Choose your company" }),
@@ -256,6 +260,7 @@ test("monitor diagnostics launch closed, update while hidden, expand independent
   await expect(correlation).toHaveAttribute("aria-expanded", "true");
   expect(await snapshot(monitor)).toEqual(before);
   await monitor.reload();
+  await nav(monitor, "Workflow monitor");
   for (const title of titles)
     await expect(
       monitor.getByRole("button", { name: title, exact: true }),

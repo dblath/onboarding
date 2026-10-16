@@ -10,7 +10,6 @@ import {
   type InternalPersona,
 } from "./experiences";
 import {
-  activityDefinitions,
   approvedSkills,
   isReady,
   isJobEligible,
@@ -31,16 +30,34 @@ import {
   type QueueParticipant,
 } from "./OperationsWorkQueue";
 import { EligibilityGuidance } from "./EligibilityGuidance";
+import { AutomationQueue, pendingAutomations } from "./AutomationQueue";
+import {
+  activityLabel,
+  automationLink,
+  monitorContext,
+  simulationMessage,
+} from "./presentation";
 import "./style.css";
 let browserService: OnboardingService | undefined;
 function getDefaultService() {
   return (browserService ??= createBrowserService());
 }
-type View = "Overview" | "Work queue" | "Workflow monitor" | "Outbox";
+type View =
+  | "Overview"
+  | "Work queue"
+  | "Workflow monitor"
+  | "Automations & Integrations"
+  | "Outbox";
 export function App({
   service = getDefaultService(),
 }: { service?: OnboardingService } = {}) {
   const experience = useExperience();
+  const [routeContext, setRouteContext] = useState(monitorContext);
+  useEffect(() => {
+    const changed = () => setRouteContext(monitorContext());
+    window.addEventListener("hashchange", changed);
+    return () => window.removeEventListener("hashchange", changed);
+  }, []);
   const { state, refresh, loading, error, setError, refreshing } =
     useWorkspace(service);
   const contractorSession = useContractorSession(state.companies);
@@ -73,7 +90,7 @@ export function App({
     ),
     [view, setView] = useState<View>(
       experience === "monitor"
-        ? "Workflow monitor"
+        ? "Automations & Integrations"
         : experience === "operations"
           ? "Work queue"
           : "Overview",
@@ -87,19 +104,29 @@ export function App({
     );
     setView(
       experience === "monitor"
-        ? "Workflow monitor"
+        ? "Automations & Integrations"
         : experience === "operations"
           ? "Work queue"
           : "Overview",
     );
     setCreating(false);
     setNotice("");
-    setQueueCompany("");
-    setQueueExpanded(false);
   }, [experience]);
+  useEffect(() => {
+    if (experience === "monitor" && routeContext.automation) {
+      setView("Automations & Integrations");
+      if (routeContext.companyId) {
+        setSelected(routeContext.companyId);
+        sessionStorage.setItem(
+          "fieldwork:monitor:company",
+          routeContext.companyId,
+        );
+      }
+    }
+  }, [experience, routeContext]);
   const views: View[] =
     experience === "monitor"
-      ? ["Workflow monitor", "Outbox"]
+      ? ["Automations & Integrations", "Workflow monitor", "Outbox"]
       : ["Overview", "Work queue", "Outbox"];
   const viewName = (v: View) =>
     experience === "contractor"
@@ -142,12 +169,6 @@ export function App({
       (t) => t.companyId === c?.id && t.status === "Open",
     ),
     myTasks = tasks.filter((t) => t.owner === persona),
-    systemTasks = tasks.filter((t) => t.owner === "Simulation"),
-    recoveryTasks = tasks.filter(
-      (t) =>
-        state.attempts.filter((attempt) => attempt.workItemId === t.id).at(-1)
-          ?.status === "Failed",
-    ),
     ready = c ? isReady(c, state.qualifications) : false,
     eligible = c ? isJobEligible(c, state.qualifications) : false,
     checks = c ? readinessChecks(state, c) : [],
@@ -170,6 +191,10 @@ export function App({
     setNotice("");
   }
   function chooseParticipant(participant: QueueParticipant) {
+    if (participant === "Simulation") {
+      window.location.hash = automationLink(queueCompany).slice(1);
+      return;
+    }
     setQueueParticipant(participant);
     if (internalPersonas.includes(participant as InternalPersona)) {
       setInternalPersona(participant as InternalPersona);
@@ -213,7 +238,7 @@ export function App({
         <a
           className="brand"
           href={`#/${experience}`}
-          aria-label="Unity - Fieldwork demo"
+          aria-label="Unity fieldwork"
         >
           <img
             className="brand-image"
@@ -224,7 +249,7 @@ export function App({
           />
           <span className="brand-caption">
             <strong>Unity</strong>
-            <small>Fieldwork demo</small>
+            <small>fieldwork</small>
           </span>
         </a>
         <div className="workspace">
@@ -281,6 +306,11 @@ export function App({
                 >
                   <span>{["▦", "☷", "◎", "↗"][i]}</span>
                   <span>{viewName(v)}</span>
+                  {v === "Automations & Integrations" && (
+                    <span className="nav-count">
+                      {pendingAutomations(state).length}
+                    </span>
+                  )}
                   {v === "Work queue" && (
                     <span className="nav-count">{allMyTasks.length}</span>
                   )}
@@ -291,7 +321,7 @@ export function App({
         </nav>
         <div className="aside-bottom">
           <span className="live-dot" /> Browser-local workspace
-          <p>Iteration 3.3 · Work visibility</p>
+          <p>Iteration 3.4 · Automations</p>
         </div>
       </aside>
       <div className="main">
@@ -304,7 +334,10 @@ export function App({
               width="267"
               height="331"
             />{" "}
-            Unity <b>/</b> Fieldwork demo <b>/</b> {experienceNames[experience]}
+            <span className="product-name">
+              <strong>Unity</strong> <em>fieldwork</em>
+            </span>{" "}
+            <b>/</b> {experienceNames[experience]}
           </span>
           {experience === "operations" ? (
             <div className="persona">
@@ -366,7 +399,9 @@ export function App({
                 {persona === "Contractor"
                   ? "One company. Independent skills. A clear path to your first job."
                   : persona === "Workflow Monitor"
-                    ? "Watch business events resume durable waits and schedule the next activity."
+                    ? view === "Automations & Integrations"
+                      ? "Run simulated integrations and review actions that need attention."
+                      : "Watch business events resume durable waits and schedule the next activity."
                     : view === "Work queue"
                       ? `${participantName(queueParticipant)} work. Review outstanding actions across companies.`
                       : `Your ${persona.toLowerCase()} workspace. Complete an action and see the process move.`}
@@ -476,7 +511,7 @@ export function App({
           )}
           {error && (
             <div role="alert" className="alert">
-              {error}
+              {simulationMessage(error)}
             </div>
           )}
           {notice && (
@@ -486,7 +521,7 @@ export function App({
           )}
           {experience !== "contractor" && (
             <div className="experience-links">
-              <span>Open the other demo experiences:</span>
+              <span>Open the other experiences:</span>
               {(["contractor", "operations", "monitor"] as const)
                 .filter((x) => x !== experience)
                 .map((x) => (
@@ -525,11 +560,11 @@ export function App({
                     />
                   </label>
                   <label>
-                    Demo contact name
+                    Contact name
                     <input name="contact" required placeholder="Alex Rivers" />
                   </label>
                   <label>
-                    Demo email
+                    Application email
                     <input
                       name="email"
                       type="email"
@@ -567,6 +602,19 @@ export function App({
                 setView("Overview");
                 setNotice("");
                 setError("");
+              }}
+            />
+          ) : experience === "monitor" &&
+            view === "Automations & Integrations" ? (
+            <AutomationQueue
+              state={state}
+              service={service}
+              run={run}
+              busy={writeDisabled}
+              companyId={routeContext.companyId}
+              activityId={routeContext.activityId}
+              onCompanyChange={(id) => {
+                window.location.hash = automationLink(id).slice(1);
               }}
             />
           ) : (
@@ -709,7 +757,17 @@ export function App({
                           company={c}
                           application={a}
                           contractorView={experience === "contractor"}
-                          onOpenWork={(owner) => {
+                          onOpenWork={(owner, activityId) => {
+                            if (
+                              owner === "Simulation" &&
+                              experience === "operations"
+                            ) {
+                              window.location.hash = automationLink(
+                                c.id,
+                                activityId,
+                              ).slice(1);
+                              return;
+                            }
                             if (experience === "operations") {
                               chooseParticipant(owner);
                               setQueueCompany(c.id);
@@ -781,7 +839,7 @@ export function App({
                                 ...new Set(
                                   tasks.map((t) =>
                                     t.owner === "Simulation"
-                                      ? "Operations"
+                                      ? "Automations & Integrations"
                                       : t.owner,
                                   ),
                                 ),
@@ -837,7 +895,11 @@ export function App({
                                   <span className="pill neutral">
                                     {r.status}
                                   </span>
-                                  {r.outcome && <small>{r.outcome}</small>}
+                                  {r.outcome && (
+                                    <small>
+                                      {simulationMessage(r.outcome)}
+                                    </small>
+                                  )}
                                 </div>
                               ))}
                           </div>
@@ -898,7 +960,7 @@ export function App({
                                       <input
                                         name="reason"
                                         required
-                                        placeholder="Demo: approval no longer valid"
+                                        placeholder="Approval no longer valid"
                                       />
                                     </label>
                                     <button
@@ -967,9 +1029,7 @@ export function App({
                               <div key={t.id}>
                                 <span className="work-symbol">○</span>
                                 <div>
-                                  <strong>
-                                    {activityDefinitions[t.activity].label}
-                                  </strong>
+                                  <strong>{activityLabel(t.activity)}</strong>
                                   <small>
                                     {experience === "contractor"
                                       ? "Action needed from you"
@@ -1023,7 +1083,6 @@ export function App({
                     )}
                     {view === "Work queue" && experience === "operations" && (
                       <OperationsWorkQueue
-                        onParticipantChange={chooseParticipant}
                         state={state}
                         participant={queueParticipant}
                         companyId={queueCompany}
@@ -1119,61 +1178,17 @@ export function App({
                         ))}
                       </>
                     )}
-                    {experience === "operations" &&
-                      view !== "Work queue" &&
-                      systemTasks.length > 0 && (
-                        <div className="system-console">
-                          <div className="eyebrow">
-                            SIMULATED INTEGRATION · NO EXTERNAL CALLS
-                          </div>
-                          <h3>Workflow-scheduled system activities</h3>
-                          <p className="muted">
-                            Run the scheduled activity to deliver its outcome.
-                            Inject a timeout to demonstrate retry.
-                          </p>
-                          {systemTasks.map((t) => (
-                            <TaskCard
-                              key={t.id}
-                              task={t}
-                              state={state}
-                              service={service}
-                              run={run}
-                              busy={writeDisabled}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    {experience === "monitor" && recoveryTasks.length > 0 && (
-                      <div className="system-console">
-                        <div className="eyebrow">FAILED ACTIVITY RECOVERY</div>
-                        <h3>Retry a failed activity</h3>
-                        <p className="muted">
-                          A retry executes the same scheduled activity.
-                          Completed business work is preserved.
-                        </p>
-                        {recoveryTasks.map((t) => (
-                          <TaskCard
-                            key={t.id}
-                            task={t}
-                            state={state}
-                            service={service}
-                            run={run}
-                            busy={writeDisabled}
-                          />
-                        ))}
-                      </div>
-                    )}
                     {experience === "monitor" &&
                       view === "Workflow monitor" && (
                         <DiagnosticPanel title="Timer & escalation lab">
                           <p>
-                            Current demo time:{" "}
+                            Current simulation time:{" "}
                             {new Date(state.clock).toLocaleString()}
                           </p>
                           <p>
-                            Human work is due after 2 demo days. A reminder
-                            fires when due; escalation follows 2 days later.
-                            Advancing time does not complete work.
+                            Human work is due after 2 simulation days. A
+                            reminder fires when due; escalation follows 2 days
+                            later. Advancing time does not complete work.
                           </p>
                           <div className="button-row">
                             <button
@@ -1182,7 +1197,7 @@ export function App({
                               onClick={() =>
                                 run(
                                   () => service.advanceTime(3),
-                                  "Demo clock advanced 3 days. Due reminders recorded in the outbox.",
+                                  "Simulation clock advanced 3 days. Due reminders recorded in the outbox.",
                                 )
                               }
                             >
@@ -1194,7 +1209,7 @@ export function App({
                               onClick={() =>
                                 run(
                                   () => service.advanceTime(2),
-                                  "Demo clock advanced 2 days. Eligible escalations recorded in the outbox.",
+                                  "Simulation clock advanced 2 days. Eligible escalations recorded in the outbox.",
                                 )
                               }
                             >
