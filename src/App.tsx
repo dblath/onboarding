@@ -210,9 +210,22 @@ export function App({
       className={`shell experience-${experience}${anonymous ? " anonymous" : ""}`}
     >
       <aside>
-        <a className="brand" href={`#/${experience}`}>
-          <span className="brand-icon">f</span> fieldwork
-          <span className="brand-dot">●</span>
+        <a
+          className="brand"
+          href={`#/${experience}`}
+          aria-label="Unity - Fieldwork demo"
+        >
+          <img
+            className="brand-image"
+            src="./assets/unity.png"
+            alt="Unity - A Stronger Frontdoor"
+            width="267"
+            height="331"
+          />
+          <span className="brand-caption">
+            <strong>Unity</strong>
+            <small>Fieldwork demo</small>
+          </span>
         </a>
         <div className="workspace">
           {experienceNames[experience].toUpperCase()}
@@ -283,8 +296,15 @@ export function App({
       </aside>
       <div className="main">
         <header>
-          <span>
-            Fieldwork <b>/</b> {experienceNames[experience]}
+          <span className="app-identity">
+            <img
+              className="header-brand-image"
+              src="./assets/unity.png"
+              alt="Unity"
+              width="267"
+              height="331"
+            />{" "}
+            Unity <b>/</b> Fieldwork demo <b>/</b> {experienceNames[experience]}
           </span>
           {experience === "operations" ? (
             <div className="persona">

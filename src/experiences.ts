@@ -38,7 +38,7 @@ export function useExperience() {
     return () => window.removeEventListener("hashchange", changed);
   }, []);
   useEffect(() => {
-    document.title = `${experienceNames[experience]} · Fieldwork`;
+    document.title = `${experienceNames[experience]} · Unity | Fieldwork demo`;
   }, [experience]);
   return experience;
 }
