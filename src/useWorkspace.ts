@@ -10,7 +10,7 @@ export function useWorkspace(service: OnboardingService) {
   const [refreshing, setRefreshing] = useState(false);
   const refresh = useCallback(async () => {
     const snapshot = await service.getState();
-    if (snapshot.schemaVersion !== 3)
+    if (snapshot.schemaVersion !== 4)
       throw new Error(
         "This workspace requires a safely locked data upgrade. Use Chrome on localhost or HTTPS.",
       );

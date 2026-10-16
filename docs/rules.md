@@ -11,11 +11,21 @@
 | R07 | Verification is not final skill approval                                                                | Compliance schedules Field Manager decision; rejection needs reason and affects one qualification.                                                                                   |
 | R08 | Additional skills require Active and Ready                                                              | requestSkill; HVAC/Plumbing catalog; duplicate approved/in-progress skills blocked. Rejected/invalidated same skill can be requested again while another approval keeps eligibility. |
 | R09 | Pending/rejected skills do not negate approvals                                                         | Count only Approved qualifications belonging to the company. Explicit invalidation removes an approval.                                                                              |
-| R10 | Publish readiness only when its boolean changes                                                         | readinessPublished tracks publication; loss suspends immediately, gain schedules activation.                                                                                         |
+| R10 | Publish readiness only when its boolean changes                                                         | Readiness loss suspends Active. Gain schedules initial activation only on running onboarding with Pending status; it never removes Suspended.                                        |
 | R11 | Timeout is technical, not a business rejection                                                          | Failed attempt only; open task/wait retained; retry produces another attempt and normal outcome event.                                                                               |
 | R12 | Correlation, expected task, subject and eventId checks                                                  | Duplicate/unrelated events, completed work and impossible fixture results cannot advance execution.                                                                                  |
 | R13 | Screening decline/information request need reasons                                                      | Blank additional information also rejected; decline creates no later work.                                                                                                           |
 | R14 | Human work due in 2 demo days; remind when due; escalate 2 days later                                   | advanceTime; once per open human task; in-app only. Provisional SLA.                                                                                                                 |
-| R15 | Activation cannot bypass readiness                                                                      | Checked at command and ingress; vendor/application approval are insufficient.                                                                                                        |
+| R15 | Activation cannot bypass readiness                                                                      | Readiness, Pending operational status, open work and running initial company execution are required. Activation cannot remove suspension.                                            |
 
 application.test.ts retains Iteration 1 regressions; iteration2.test.ts covers invariant/workflow cases; ui.test.tsx performs participant actions against rendered controls from an empty workspace, including the happy path to Ready.
+
+## Iteration 3.1 lifecycle invariants
+
+- R16: Job eligibility = isReady(company, qualifications) AND activationStatus === Active.
+- R17: Historical application Completed and completed CompanyOnboarding execution remain closed after current eligibility changes.
+- R18: No scheduling or correlated continuation on completed CompanyOnboarding. Later company lifecycle signals are separate from execution history.
+- R19: Suspension removal requires a future administrative request and approval; Iteration 3.1 offers no shortcut.
+- R20: Initial readiness loss before activation cancels its pending work instead of claiming successful completion.
+
+These rules are covered by src/lifecycle.test.ts and tests/browser/lifecycle.spec.ts.

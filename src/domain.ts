@@ -15,6 +15,7 @@ export const skillCatalog = ["HVAC", "Plumbing"] as const;
 export type RequirementType = "Insurance" | "Financial" | "Agreement";
 export type EvidenceFixture =
   "Valid demo document" | "Expired demo document" | "Incomplete demo document";
+export type OperationalStatus = "Pending" | "Active" | "Suspended";
 export interface ContractorCompany {
   id: string;
   name: string;
@@ -25,7 +26,7 @@ export interface ContractorCompany {
   portalSetupComplete: boolean;
   initialTrainingComplete: boolean;
   readinessPublished: boolean;
-  activationStatus: "Pending" | "Active" | "Suspended";
+  activationStatus: OperationalStatus;
 }
 export interface OnboardingApplication {
   id: string;
@@ -34,7 +35,12 @@ export interface OnboardingApplication {
   skill: string;
   submittedAt: string;
   status:
-    "Screening" | "Information requested" | "Onboarding" | "Ready" | "Declined";
+    | "Screening"
+    | "Information requested"
+    | "Onboarding"
+    | "Completed"
+    | "Declined";
+  completedAt?: string;
   responses: { text: string; at: string }[];
   reason?: string;
   screeningDecisions: { decision: Decision; reason: string; at: string }[];
@@ -103,12 +109,13 @@ export interface WorkItem {
   activity: Activity;
   owner: Role;
   dueAt: string;
-  status: "Open" | "Completed";
+  status: "Open" | "Completed" | "Cancelled";
   outcome?: string;
   expectedOutcome: string;
   instructions: string;
   createdAt: string;
   completedAt?: string;
+  cancelledAt?: string;
   remindedAt?: string;
   escalatedAt?: string;
   completionHistory: { at: string; outcome: string; eventId: string }[];
@@ -275,7 +282,7 @@ export interface OutboxMessage {
   companyId: string;
   at: string;
   recipient: Role;
-  kind: "Task" | "Reminder" | "Escalation" | "Readiness";
+  kind: "Task" | "Reminder" | "Escalation" | "Readiness" | "Operational";
   message: string;
   workItemId?: string;
 }
@@ -329,7 +336,12 @@ export interface EventPayloads {
     reason: string;
   };
   SkillInvalidated: { qualificationId: string; reason: string };
-  ContractorReadinessChanged: { ready: boolean; approvedSkillCount: number };
+  ContractorReadinessChanged: {
+    ready: boolean;
+    approvedSkillCount: number;
+    causedByEventId?: string;
+  };
+  ContractorSuspended: { reason: string; causedByEventId: string };
   ContractorActivated: { workItemId: string };
 }
 export type EventType = keyof EventPayloads;
@@ -348,7 +360,7 @@ export type BusinessEvent = {
   };
 }[EventType];
 export interface State {
-  schemaVersion: 3;
+  schemaVersion: 4;
   revision: number;
   clock: string;
   companies: ContractorCompany[];
@@ -363,7 +375,7 @@ export interface State {
   outbox: OutboxMessage[];
 }
 export const emptyState = (): State => ({
-  schemaVersion: 3,
+  schemaVersion: 4,
   revision: 0,
   clock: new Date().toISOString(),
   companies: [],
@@ -393,6 +405,12 @@ export const isReady = (
   company.portalSetupComplete &&
   company.initialTrainingComplete &&
   approvedSkills(company.id, qualifications).length >= 1;
+export const isJobEligible = (
+  company: ContractorCompany,
+  qualifications: SkillQualification[],
+) => isReady(company, qualifications) && company.activationStatus === "Active";
+export const companyLifecycleCorrelation = (companyId: string) =>
+  `company:${companyId}:lifecycle`;
 export const administrativeComplete = (
   requirements: AdministrativeRequirement[],
 ) =>

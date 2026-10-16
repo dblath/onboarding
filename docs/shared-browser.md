@@ -75,3 +75,7 @@ Use identical scheme, host, port and Chrome profile. Different origins, profiles
 7. Recovery after deliberately dropped messages on visibility return. Headless pages remain individually visible, so the lifecycle test explicitly drives visibility events while using real IndexedDB, BroadcastChannel and Web Locks.
 
 Generated screenshots and failure-only traces are ignored under test-results. Browser scenarios do not use developer endpoints, edit business snapshots or manually activate contractors.
+
+## Iteration 3.1 addendum
+
+The same database, Web Lock and revision notification protocol now persist snapshot schema 4. Migration repairs legacy reactivation work without rewriting original workflow execution history/events. All experiences show historical completion, derived readiness, operational status and Ready-plus-Active job eligibility separately. Later company lifecycle signals are not delivered to completed CompanyOnboarding. Three additional Chromium journeys verify rejection, suspension/restored readiness, immutable completed execution and cancellation before initial activation. See acceptance-3.1.md and STATUS.md.

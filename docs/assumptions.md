@@ -9,7 +9,7 @@ These are demo choices, not validated production policy.
 5. Predefined fixtures represent document submission/verification. No actual legal or financial validity is inferred.
 6. Explicit Run controls stand in for asynchronous workers and make failures/retries observable.
 7. Human work has a two-demo-day due date; one reminder when due, one escalation two days later to Contractor Relations. Not a production SLA.
-8. Eligibility is derived readiness. Activation publication is a separate acknowledgement needed to complete onboarding. Loss immediately suspends that projection.
+8. Iteration 3.1 confirms job eligibility requires derived readiness AND Active operational status. Initial activation publication records historical onboarding completion. Readiness loss suspends an Active company; restoration never removes suspension. Removal requires a separate administrative request and approval in Iteration 4.
 9. Additional skills require Active and Ready. Approved/in-progress duplicates are blocked; a rejected/invalidated skill can be requested again while another skill keeps the company eligible.
 10. Explicit invalidation demonstrates readiness reevaluation. No periodic revalidation or reinstatement policy is invented.
 11. Each submission creates a company; identity deduplication rules were not supplied. Iteration 3 supports concurrent tabs on the exact origin and Chrome profile through Web Locks. No authentication or cross-device synchronization is added.

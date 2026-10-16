@@ -1,6 +1,8 @@
-# Fieldwork — Contractor onboarding, Iteration 3
+# Fieldwork — Contractor onboarding, Iteration 3.1
 
 End-to-end product discovery prototype: contractor application, screening, administrative approvals, independent skill qualification, vendor provisioning, portal, training, readiness and activation. Browser-only persistence and simulated integrations. No backend, login or live services.
+
+Historical onboarding completion, current readiness and operational status are separate. Job eligibility requires Ready AND Active. Restoring qualifications never removes a suspension. [Iteration 3.1 manual acceptance](docs/acceptance-3.1.md) · [Current status](docs/STATUS.md).
 
 ## Run
 
@@ -49,7 +51,7 @@ Use fictional names and example.com emails. Document submission uses predefined 
 8. **Field Manager:** Approve skill; this can occur before or after administration.
 9. **Contractor:** Complete portal setup, then initial training.
 10. **Training:** Confirm initial training.
-11. Policy derives **Ready for jobs**. In **Operations**, run scheduled activation publication to complete onboarding and record Active in simulated contractor management.
+11. Policy derives **Ready** while operational status remains Pending and jobs remain Not eligible. In **Operations**, run initial activation publication. Historical onboarding becomes Completed, operational status Active, and jobs Eligible.
 
 Contractor → Your journey and Operations → Overview show relevant facts, requirements, skills, notes and evidence versions. Required actions and Work queue show participant work. Operations roles filter queues by responsibility and company. Workflow Monitor selects company/skill instances independently. These are separate views, not access control.
 
@@ -73,6 +75,8 @@ Contractor → Your journey and Operations → Overview show relevant facts, req
 ## Architecture
 
 - `src/domain.ts`: company facts, company-owned qualifications, requirements, evidence, work, typed events, known definitions and policies.
+- `src/companyLifecycle.ts`: company readiness/operational policy outside completed onboarding; no suspension removal.
+- `src/LifecycleStatus.tsx`: four distinct lifecycle values shared by all experiences.
 - `src/application.ts`: use cases/queries, repository and integration ports, simulated integrations, command serialization, IndexedDB adapter.
 - `src/orchestration.ts`: orchestration port and bounded browser adapter. Explicit CompanyOnboarding v2 and SkillQualification v2 transitions, correlation, deduplication, expected-work validation and history.
 - `src/migration.ts`: versioned Iteration 1 snapshot migration.
@@ -95,7 +99,7 @@ Database `fieldwork-onboarding`, store/key and origin stay unchanged. Migration 
 
 Later-stage facts were not completable in Iteration 1; the new participant process establishes them rather than inferring approvals from planned work. Browser data is scoped to scheme/host/port: keep the same origin.
 
-Iteration 3 adds snapshot schema 3 and a shared revision. Iteration 2 data migrates without changing business records. Migration runs only under the shared lock, never during ordinary reads. Opening an experience commits initialization and increments the revision without replaying workflows.
+Iteration 3 introduced snapshot schema 3 and a shared revision. Iteration 3.1 uses schema 4: legacy application Ready becomes historical Completed, invalid open work on completed company executions is Cancelled, and historical suspension is retained. Original events and execution history are preserved. Migration runs only under the shared lock, never during ordinary reads. Opening an experience commits initialization and increments the revision without replaying workflows.
 
 ## Product handoff
 
@@ -108,6 +112,6 @@ Iteration 3 adds snapshot schema 3 and a shared revision. Iteration 2 data migra
 
 ## Limits
 
-Concurrent tabs on the same exact origin/profile are supported. There is no cross-browser/profile/device synchronization. Close older pre-Iteration-3 tabs before using this release: old code cannot participate in the new lock protocol. Browser data can be cleared/evicted. Fixtures determine verification, not real document/legal/financial rules. No live training, actual signature, portal account, external messages, automatic expiry or reinstatement journey. Timers run on simulated time advancement only. A rejected first skill leaves company onboarding waiting; recovery policy remains a discovery question.
+Concurrent tabs on the same exact origin/profile are supported. There is no cross-browser/profile/device synchronization. Close tabs running any older release before using 3.1: old code does not understand the current schema/lifecycle rules. Browser data can be cleared/evicted. Fixtures determine verification, not real document/legal/financial rules. No live training, actual signature, portal account, external messages, automatic expiry or reinstatement journey. Timers run on simulated time advancement only. A rejected first skill leaves company onboarding waiting; recovery policy remains a discovery question.
 
 No authentication, payments, backend, hosted persistence, C#/.NET, remote Git or hosting deployment. Connect a remote when supplied.

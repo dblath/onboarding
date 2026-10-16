@@ -2,6 +2,7 @@ import {
   activityDefinitions,
   administrativeComplete,
   approvedSkills,
+  companyLifecycleCorrelation,
   definition,
   id,
   isReady,
@@ -18,6 +19,7 @@ import {
   type WorkflowInstance,
   type WorkItem,
 } from "./domain";
+import { applyReadinessChange } from "./companyLifecycle";
 export interface OrchestrationPort {
   deliver(state: State, event: BusinessEvent): boolean;
 }
@@ -37,6 +39,8 @@ export function schedule(
   instructions: string,
   related: { requirementId?: string; qualificationId?: string } = {},
 ) {
+  if (w.status === "Completed")
+    throw new Error("Cannot schedule work on a completed workflow.");
   if (
     s.workItems.some(
       (t) =>
@@ -79,6 +83,11 @@ export function schedule(
   updateWaits(s, w);
 }
 export function updateWaits(s: State, w: WorkflowInstance) {
+  if (w.status === "Completed") {
+    w.awaitedEvents = [];
+    w.waitingFor = null;
+    return;
+  }
   w.awaitedEvents = s.workItems
     .filter((t) => t.workflowId === w.id && t.status === "Open")
     .map((t) => ({
@@ -149,6 +158,33 @@ export class LocalOrchestrator implements OrchestrationPort {
       return false;
     const c = s.companies.find((x) => x.id === e.companyId);
     if (!c) return false;
+    // Post-onboarding readiness is a company lifecycle fact, never a signal to
+    // the completed execution. It has its own correlation and no workflow delivery.
+    if (
+      e.eventType === "ContractorReadinessChanged" &&
+      e.correlationId === companyLifecycleCorrelation(c.id)
+    ) {
+      const root = s.workflows.find(
+        (w) => w.companyId === c.id && w.definitionId === "CompanyOnboarding",
+      );
+      if (
+        !root ||
+        root.status !== "Completed" ||
+        root.stage === "Declined" ||
+        e.applicationId ||
+        e.qualificationId ||
+        e.payload.ready !== isReady(c, s.qualifications) ||
+        e.payload.ready === c.readinessPublished ||
+        e.payload.approvedSkillCount !==
+          approvedSkills(c.id, s.qualifications).length
+      )
+        return false;
+      s.events.push(e);
+      applyReadinessChange(s, c, e);
+      return true;
+    }
+    // Suspension is produced by the operational policy, not an activation shortcut.
+    if (e.eventType === "ContractorSuspended") return false;
     const a = s.applications.find(
       (x) => x.id === e.applicationId && x.companyId === c.id,
     );
@@ -204,14 +240,9 @@ export class LocalOrchestrator implements OrchestrationPort {
       );
     } else if (!w) return false;
     if (!w) return false;
-    if (
-      w.status === "Completed" &&
-      ![
-        "SkillInvalidated",
-        "ContractorReadinessChanged",
-        "ContractorActivated",
-      ].includes(e.eventType)
-    )
+    if (w.status === "Completed" && w.definitionId === "CompanyOnboarding")
+      return false;
+    if (w.status === "Completed" && e.eventType !== "SkillInvalidated")
       return false;
     const workItemId =
       "workItemId" in e.payload ? e.payload.workItemId : undefined;
@@ -370,7 +401,11 @@ export class LocalOrchestrator implements OrchestrationPort {
           !task ||
           task.activity !== "PublishActivation" ||
           !isReady(c, s.qualifications) ||
-          !c.readinessPublished
+          !c.readinessPublished ||
+          c.activationStatus !== "Pending" ||
+          w.definitionId !== "CompanyOnboarding" ||
+          !a ||
+          a.status !== "Onboarding"
         )
           return false;
         break;
@@ -630,42 +665,37 @@ export class LocalOrchestrator implements OrchestrationPort {
         w.stage = "Waiting for approved skill";
         break;
       case "ContractorReadinessChanged": {
-        c.readinessPublished = e.payload.ready;
-        s.outbox.push({
-          id: id(),
-          companyId: c.id,
-          at: s.clock,
-          recipient: "Contractor",
-          kind: "Readiness",
-          message: `Eligibility for jobs changed: ${e.payload.ready ? "Ready" : "Not ready"}. ${e.payload.approvedSkillCount} approved skill(s).`,
-        });
+        applyReadinessChange(s, c, e);
         if (e.payload.ready) {
-          if (c.activationStatus !== "Active") {
-            w.stage =
-              w.status === "Completed"
-                ? "Reactivation pending"
-                : "Activation pending";
+          if (c.activationStatus === "Pending") {
+            w.stage = "Activation pending";
             schedule(
               s,
               w,
               "PublishActivation",
-              "Publish derived readiness to the simulated contractor management system.",
+              "Publish initial activation after readiness is satisfied. This cannot remove a suspension.",
             );
           }
         } else {
-          c.activationStatus =
-            c.activationStatus === "Active" ? "Suspended" : "Pending";
           const pending = s.workItems.find(
             (t) =>
               t.workflowId === w!.id &&
               t.activity === "PublishActivation" &&
               t.status === "Open",
           );
-          if (pending)
-            finish(
-              pending,
-              "Superseded: readiness prerequisites no longer satisfied",
+          if (pending) {
+            pending.status = "Cancelled";
+            pending.cancelledAt = s.clock;
+            pending.outcome =
+              "Superseded: readiness prerequisites no longer satisfied";
+            log(
+              s,
+              w,
+              "Activity",
+              "Cancelled initial activation: readiness prerequisites no longer satisfied",
+              e.eventId,
             );
+          }
           log(
             s,
             w,
@@ -681,7 +711,10 @@ export class LocalOrchestrator implements OrchestrationPort {
         c.activationStatus = "Active";
         w.stage = "Onboarding complete";
         w.status = "Completed";
-        if (a) a.status = "Ready";
+        if (a) {
+          a.status = "Completed";
+          a.completedAt = s.clock;
+        }
         log(
           s,
           w,
@@ -785,26 +818,40 @@ export class LocalOrchestrator implements OrchestrationPort {
       );
     if (!root || root.stage === "Declined") return;
     const ready = isReady(c, s.qualifications);
-    log(
-      s,
-      root,
-      "Rule",
-      `Readiness = admin ${c.adminComplete} ∧ portal ${c.portalSetupComplete} ∧ training ${c.initialTrainingComplete} ∧ approved skills ${approvedSkills(c.id, s.qualifications).length} ≥ 1 → ${ready}`,
-      eventId,
-    );
-    if (ready !== c.readinessPublished)
-      this.deliver(
+    if (root.status === "Running")
+      log(
         s,
-        envelope(
-          s,
-          root,
-          "ContractorReadinessChanged",
-          {
-            ready,
-            approvedSkillCount: approvedSkills(c.id, s.qualifications).length,
-          },
-          "Domain policy",
-        ),
+        root,
+        "Rule",
+        `Readiness = admin ${c.adminComplete} ∧ portal ${c.portalSetupComplete} ∧ training ${c.initialTrainingComplete} ∧ approved skills ${approvedSkills(c.id, s.qualifications).length} ≥ 1 → ${ready}`,
+        eventId,
       );
+    if (ready !== c.readinessPublished) {
+      const payload = {
+        ready,
+        approvedSkillCount: approvedSkills(c.id, s.qualifications).length,
+        causedByEventId: eventId,
+      };
+      const event: BusinessEvent =
+        root.status === "Running"
+          ? envelope(
+              s,
+              root,
+              "ContractorReadinessChanged",
+              payload,
+              "Domain policy",
+            )
+          : {
+              eventId: id(),
+              eventType: "ContractorReadinessChanged",
+              eventVersion: 1,
+              occurredAt: s.clock,
+              companyId: c.id,
+              correlationId: companyLifecycleCorrelation(c.id),
+              actor: "Domain policy",
+              payload,
+            };
+      this.deliver(s, event);
+    }
   }
 }

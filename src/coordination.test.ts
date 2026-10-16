@@ -146,7 +146,7 @@ describe("shared command coordination", () => {
     await Promise.all([first.initialize(), second.initialize()]);
     expect(await repository.load()).toEqual({
       ...previous,
-      schemaVersion: 3,
+      schemaVersion: 4,
       revision: 2,
     });
   });

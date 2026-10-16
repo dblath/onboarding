@@ -137,7 +137,7 @@ describe("Iteration 2 end-to-end workflows", () => {
     expect(isReady(c, s.qualifications)).toBe(true);
     expect(c.activationStatus).toBe("Active");
     expect(c.vendorReference).toMatch(/^DEMO-/);
-    expect(s.applications[0].status).toBe("Ready");
+    expect(s.applications[0].status).toBe("Completed");
     expect(s.workflows).toHaveLength(2);
     expect(s.workflows.every((w) => w.status === "Completed")).toBe(true);
     expect(s.workItems.every((t) => t.status === "Completed")).toBe(true);
@@ -301,7 +301,7 @@ describe("Iteration 2 end-to-end workflows", () => {
     expect(s.qualifications.find((q) => q.id === qId)!.status).toBe("Rejected");
     expect(isReady(s.companies[0], s.qualifications)).toBe(true);
     expect(s.companies[0].activationStatus).toBe("Active");
-    expect(s.applications[0].status).toBe("Ready");
+    expect(s.applications[0].status).toBe("Completed");
   });
   it("a rejected first skill leaves company onboarding waiting, rather than declining it", async () => {
     const { service } = await setup();

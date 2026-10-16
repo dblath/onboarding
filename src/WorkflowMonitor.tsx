@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   activityDefinitions,
+  companyLifecycleCorrelation,
   type State,
   type WorkflowInstance,
 } from "./domain";
@@ -28,6 +29,11 @@ export function WorkflowMonitor({
     events = s.events.filter((e) => e.correlationId === w.correlationId),
     attempts = s.attempts.filter((a) => a.workflowId === w.id),
     last = events.at(-1);
+  const lifecycleEvents = s.events.filter(
+    (e) =>
+      e.companyId === companyId &&
+      e.correlationId === companyLifecycleCorrelation(companyId),
+  );
   const name = (w: WorkflowInstance) =>
     w.definitionId === "CompanyOnboarding"
       ? "Company onboarding"
@@ -220,6 +226,33 @@ export function WorkflowMonitor({
           <pre>{JSON.stringify(e, null, 2)}</pre>
         </details>
       ))}
+      <section
+        className="company-signals"
+        data-testid="company-lifecycle-signals"
+      >
+        <h3>Company lifecycle signals · outside workflow execution</h3>
+        <p className="muted">
+          Post-onboarding readiness and suspension are company facts. These
+          signals are not delivered to a completed CompanyOnboarding execution;
+          its history and work remain closed.
+        </p>
+        {!lifecycleEvents.length && (
+          <p className="muted">No post-onboarding company signals yet.</p>
+        )}
+        {lifecycleEvents.map((event) => (
+          <details key={event.eventId}>
+            <summary>
+              {event.eventType} ·{" "}
+              {event.eventType === "ContractorReadinessChanged"
+                ? event.payload.ready
+                  ? "Ready"
+                  : "Not ready"
+                : "Suspended"}
+            </summary>
+            <pre>{JSON.stringify(event, null, 2)}</pre>
+          </details>
+        ))}
+      </section>
       {last && (
         <div className="ingress-test">
           <h3>Event ingress demonstrations</h3>

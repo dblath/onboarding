@@ -244,6 +244,8 @@ export class OnboardingService {
     );
     if (!t || (activities && !activities.includes(t.activity)))
       throw new Error("This work item is no longer available for this action.");
+    if (s.workflows.find((w) => w.id === t.workflowId)?.status === "Completed")
+      throw new Error("Completed workflow execution cannot accept work.");
     return t;
   }
   recordScreeningDecision(

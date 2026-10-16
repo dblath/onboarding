@@ -104,3 +104,70 @@ export async function synchronized(pages: Page[]) {
     .toBe(true);
   return snapshot(pages[0]);
 }
+
+/** Normal participant actions, stopping before initial activation publication. */
+export async function initialReadiness(
+  contractor: Page,
+  operations: Page,
+  approveSkill = true,
+) {
+  await application(contractor);
+  await proceed(operations);
+  await nav(contractor, "Required actions");
+  for (const name of [
+    "Submit insurance evidence",
+    "Submit fictional tax / banking pack",
+    "Submit demo agreement",
+    "Submit license evidence",
+  ])
+    await evidence(contractor, name);
+  await role(operations, "Compliance");
+  await verify(operations, "Review insurance");
+  await verify(operations, "Verify license");
+  await role(operations, "Finance");
+  await verify(operations, "Verify fictional financial pack");
+  await role(operations, "Contractor Relations");
+  await verify(operations, "Execute simulated agreement");
+  await card(operations, "Provision simulated vendor")
+    .getByRole("button", { name: "Run vendor provisioning →" })
+    .click();
+  await expect(card(operations, "Provision simulated vendor")).toHaveCount(0);
+  await role(operations, "Field Manager");
+  const decision = card(operations, "Approve skill qualification");
+  if (!approveSkill) {
+    await decision.getByLabel("Qualification decision").selectOption("Reject");
+    await decision
+      .getByLabel("Decision note")
+      .fill("Demo qualification rejected");
+  }
+  await decision
+    .getByRole("button", { name: "Record skill decision →" })
+    .click();
+  await expect(decision).toHaveCount(0);
+  await completion(
+    contractor,
+    "Complete demo portal setup",
+    "Complete portal setup →",
+  );
+  await completion(
+    contractor,
+    "Complete initial training",
+    "Complete initial training →",
+  );
+  await role(operations, "Training");
+  await completion(
+    operations,
+    "Confirm training completion",
+    "Confirm training →",
+  );
+}
+export async function publishInitialActivation(operations: Page) {
+  const task = card(
+    operations,
+    "Publish activation to demo contractor management",
+  );
+  await task
+    .getByRole("button", { name: "Run activation publication →" })
+    .click();
+  await expect(task).toHaveCount(0);
+}

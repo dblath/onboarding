@@ -13,12 +13,14 @@ import {
   activityDefinitions,
   approvedSkills,
   isReady,
+  isJobEligible,
   readinessChecks,
   skillCatalog,
   type Persona,
 } from "./domain";
 import { TaskCard, type Run } from "./TaskCard";
 import { WorkflowMonitor } from "./WorkflowMonitor";
+import { LifecycleStatus } from "./LifecycleStatus";
 import "./style.css";
 let browserService: OnboardingService | undefined;
 function getDefaultService() {
@@ -121,6 +123,7 @@ export function App({
           ?.status === "Failed",
     ),
     ready = c ? isReady(c, state.qualifications) : false,
+    eligible = c ? isJobEligible(c, state.qualifications) : false,
     checks = c ? readinessChecks(state, c) : [],
     messages = state.outbox.filter(
       (m) =>
@@ -186,7 +189,7 @@ export function App({
         </nav>
         <div className="aside-bottom">
           <span className="live-dot" /> Browser-local workspace
-          <p>Iteration 03 · Shared workspace</p>
+          <p>Iteration 3.1 · Lifecycle corrections</p>
         </div>
       </aside>
       <div className="main">
@@ -271,7 +274,7 @@ export function App({
             <div>
               <span>
                 {experience === "contractor"
-                  ? "Your application"
+                  ? "Your onboarding"
                   : "Contractor companies"}
               </span>
               <strong>
@@ -320,15 +323,15 @@ export function App({
               <span>Eligible for jobs</span>
               <strong>
                 {experience === "contractor"
-                  ? ready
-                    ? "Ready"
-                    : "Not ready"
+                  ? eligible
+                    ? "Eligible"
+                    : "Not eligible"
                   : String(
                       state.companies.filter((c) =>
-                        isReady(c, state.qualifications),
+                        isJobEligible(c, state.qualifications),
                       ).length,
                     ).padStart(2, "0")}
-                {experience !== "contractor" && <small>Derived policy</small>}
+                {experience !== "contractor" && <small>Ready + Active</small>}
               </strong>
             </div>
           </div>
@@ -461,11 +464,13 @@ export function App({
                               (app?.status === "Declined" ? "red" : "")
                             }
                           >
-                            {isReady(company, state.qualifications)
-                              ? "Ready"
-                              : app?.status === "Ready"
-                                ? "Readiness lost"
-                                : app?.status}
+                            {app?.status === "Completed"
+                              ? "Onboarding complete"
+                              : app?.status}{" "}
+                            ·{" "}
+                            {isJobEligible(company, state.qualifications)
+                              ? "Eligible"
+                              : "Not eligible"}
                           </span>
                         </div>
                         <span className="arrow">↗</span>
@@ -501,16 +506,21 @@ export function App({
                           "pill " + (a.status === "Declined" ? "red" : "")
                         }
                       >
-                        {ready
-                          ? "Ready for jobs"
+                        {eligible
+                          ? "Eligible for jobs"
                           : a.status === "Declined"
                             ? "Declined"
-                            : "Not ready for jobs"}
+                            : "Not eligible for jobs"}
                       </span>
                     </div>
                     <div className="contact-line">
                       {c.contact} <span>·</span> {c.email}
                     </div>
+                    <LifecycleStatus
+                      company={c}
+                      application={a}
+                      state={state}
+                    />
                     <div className="page-tabs">
                       {views.map((v) => (
                         <button
@@ -527,23 +537,27 @@ export function App({
                       <>
                         <div
                           className={
-                            "readiness-banner " + (ready ? "ready" : "")
+                            "readiness-banner " + (eligible ? "ready" : "")
                           }
                         >
                           <div className="readiness-symbol">
-                            {ready ? "✓" : "◷"}
+                            {eligible ? "✓" : "◷"}
                           </div>
                           <div>
                             <h3>
-                              {ready
+                              {eligible
                                 ? "Eligible to receive jobs"
-                                : "Building a ready-to-work partnership"}
+                                : ready
+                                  ? c.activationStatus === "Suspended"
+                                    ? "Ready, but operationally suspended"
+                                    : "Ready; initial activation pending"
+                                  : a.status === "Completed"
+                                    ? "Not ready; onboarding remains completed"
+                                    : "Building a ready-to-work partnership"}
                             </h3>
                             <p>
                               {ready
-                                ? experience === "contractor"
-                                  ? `${approvedSkills(c.id, state.qualifications).length} approved skill(s). ${c.activationStatus === "Active" ? "Your network onboarding is complete." : "Your network setup is being finalized."}`
-                                  : `${approvedSkills(c.id, state.qualifications).length} approved skill(s). Activation publication: ${c.activationStatus}.`
+                                ? `${approvedSkills(c.id, state.qualifications).length} approved skill(s). Job eligibility requires current readiness and Active operational status. Current operational status: ${c.activationStatus}.`
                                 : `${checks.filter((x) => x.complete).length} of 4 readiness requirements complete. Every condition is required.`}
                             </p>
                           </div>
@@ -567,7 +581,7 @@ export function App({
                         </div>
                         <div className="info-grid">
                           <div>
-                            <span>Application</span>
+                            <span>Application history</span>
                             <strong>
                               {a.status} · {a.id.slice(0, 8)}
                             </strong>
@@ -587,8 +601,14 @@ export function App({
                             </strong>
                           </div>
                           <div>
-                            <span>Contractor management</span>
-                            <strong>{c.activationStatus}</strong>
+                            <span>Onboarding completed at</span>
+                            <strong>
+                              {a.completedAt
+                                ? new Date(a.completedAt).toLocaleString()
+                                : a.status === "Completed"
+                                  ? "Historical completion recorded"
+                                  : "Not completed"}
+                            </strong>
                           </div>
                         </div>
                         {a.reason && (

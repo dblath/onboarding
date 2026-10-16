@@ -56,3 +56,7 @@ Every qualification has an ID, correlation, tasks, evidence versions and executi
 Work defines expected event, owner and subject. Multiple administrative tasks can await EvidenceSubmitted simultaneously; workItemId disambiguates them. Skill work uses a different correlation. A company with completed training but no approved skill waits for ContractorReadinessChanged.
 
 The persisted clock starts at workspace creation and advances only on command. Human work is due after two demo days; reminder when due, escalation two days later. Each occurs once per open task. Timers create outbox/history records, never approvals or task completions.
+
+# Iteration 3.1: completion and current eligibility
+
+Initial activation publication records historical application Completed plus completedAt. That company execution then rejects new work/events and its execution history does not grow. Later skill outcomes can update company readiness using company-scoped lifecycle events. Job eligibility requires Ready AND Active. Losing the final approval suspends an Active company; restoring an approval leaves suspension in force. Removal requires a separate administrative request/approval in Iteration 4; this release implements no reinstatement workflow.

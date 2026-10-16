@@ -1,6 +1,6 @@
 import {
   emptyState,
-  id,
+  isReady,
   type State,
   type WorkflowInstance,
   type WorkItem,
@@ -47,9 +47,13 @@ interface LegacyState {
 /** Versioned storage boundary. Leaves the original IDs, events and history intact. */
 export function migrateState(raw: unknown): State {
   if (!raw) return emptyState();
-  if ((raw as State).schemaVersion === 3) return raw as State;
-  if ((raw as { schemaVersion?: number }).schemaVersion === 2) {
-    return { ...(raw as State), schemaVersion: 3, revision: 0 };
+  if ((raw as State).schemaVersion === 4) return raw as State;
+  if ([2, 3].includes((raw as { schemaVersion: number }).schemaVersion)) {
+    return correctLegacyLifecycle({
+      ...(raw as State),
+      schemaVersion: 4,
+      revision: (raw as State).revision ?? 0,
+    });
   }
   const old = raw as LegacyState,
     s = emptyState();
@@ -139,5 +143,72 @@ export function migrateState(raw: unknown): State {
     updateWaits(s, w);
   }
   // These facts were not completable in Iteration 1; approval is established through v2 participant actions.
+  return correctLegacyLifecycle(s);
+}
+
+/** Repair current projections and invalid pending work, without rewriting execution history/events. */
+function correctLegacyLifecycle(s: State): State {
+  s.applications = s.applications.map((a) => {
+    if ((a.status as string) !== "Ready") return a;
+    const completion = s.events.find(
+      (e) =>
+        e.companyId === a.companyId && e.eventType === "ContractorActivated",
+    );
+    return { ...a, status: "Completed", completedAt: completion?.occurredAt };
+  });
+  s.companies = s.companies.map((company) => {
+    let activated = false,
+      wasSuspended = company.activationStatus === "Suspended";
+    for (const event of s.events.filter((e) => e.companyId === company.id)) {
+      if (event.eventType === "ContractorActivated") activated = true;
+      if (
+        activated &&
+        event.eventType === "ContractorReadinessChanged" &&
+        !event.payload.ready
+      )
+        wasSuspended = true;
+    }
+    const ready = isReady(company, s.qualifications);
+    return {
+      ...company,
+      readinessPublished: ready,
+      activationStatus:
+        wasSuspended || (company.activationStatus === "Active" && !ready)
+          ? "Suspended"
+          : company.activationStatus,
+    };
+  });
+  const completed = new Set(
+    s.workflows
+      .filter(
+        (w) =>
+          w.definitionId === "CompanyOnboarding" && w.status === "Completed",
+      )
+      .map((w) => w.id),
+  );
+  s.workItems = s.workItems.map((t) =>
+    completed.has(t.workflowId) && t.status === "Open"
+      ? {
+          ...t,
+          status: "Cancelled",
+          cancelledAt: s.clock,
+          outcome:
+            "Retired by Iteration 3.1: completed onboarding cannot accept new work. Suspension removal requires a future administrative approval.",
+        }
+      : t,
+  );
+  s.workflows = s.workflows.map((w) =>
+    completed.has(w.id)
+      ? {
+          ...w,
+          stage:
+            w.stage === "Reactivation pending"
+              ? "Onboarding complete"
+              : w.stage,
+          waitingFor: null,
+          awaitedEvents: [],
+        }
+      : w,
+  );
   return s;
 }

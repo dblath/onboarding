@@ -350,7 +350,7 @@ describe("participant UI acceptance", () => {
       screen.getByRole("button", { name: "Invalidate skill approval" }),
     );
     await screen.findByRole("heading", {
-      name: "Building a ready-to-work partnership",
+      name: "Not ready; onboarding remains completed",
     });
     s = await service.getState();
     expect(isReady(s.companies[0], s.qualifications)).toBe(false);
