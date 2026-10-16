@@ -11,6 +11,7 @@ import {
   synchronized,
   verify,
   workspace,
+  systemActivities,
 } from "./helpers";
 
 test("three simultaneous experiences complete correction, independent branches and activation without refresh", async ({
@@ -83,6 +84,7 @@ test("three simultaneous experiences complete correction, independent branches a
   await role(operations, "Contractor Relations");
   await verify(operations, "Execute simulated agreement");
   // The contractor must never see worker controls even when shared state contains pending system work.
+  await systemActivities(operations);
   await expect(card(operations, "Provision simulated vendor")).toBeVisible();
   await expect(
     contractor.getByText("Workflow-scheduled system activities"),
@@ -109,6 +111,7 @@ test("three simultaneous experiences complete correction, independent branches a
     "Confirm training completion",
     "Confirm training →",
   );
+  await systemActivities(operations);
   await expect(
     card(operations, "Publish activation to demo contractor management"),
   ).toBeVisible();

@@ -32,6 +32,16 @@ export function card(page: Page, name: string): Locator {
     .getByRole("article")
     .filter({ has: page.getByRole("heading", { name, exact: true }) });
 }
+export async function systemActivities(page: Page) {
+  const parent = page
+    .getByRole("navigation")
+    .getByRole("button", { name: "Work queue", exact: true });
+  if ((await parent.getAttribute("aria-expanded")) !== "true")
+    await parent.click();
+  await page
+    .getByRole("button", { name: "System Activities work", exact: true })
+    .click();
+}
 export async function application(
   page: Page,
   name = "Summit Three Tabs",
@@ -154,6 +164,7 @@ export async function initialReadiness(
   await verify(operations, "Verify fictional financial pack");
   await role(operations, "Contractor Relations");
   await verify(operations, "Execute simulated agreement");
+  await systemActivities(operations);
   await card(operations, "Provision simulated vendor")
     .getByRole("button", { name: "Run vendor provisioning →" })
     .click();
@@ -188,6 +199,7 @@ export async function initialReadiness(
   );
 }
 export async function publishInitialActivation(operations: Page) {
+  await systemActivities(operations);
   const task = card(
     operations,
     "Publish activation to demo contractor management",

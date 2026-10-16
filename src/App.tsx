@@ -23,6 +23,14 @@ import { WorkflowMonitor } from "./WorkflowMonitor";
 import { LifecycleStatus } from "./LifecycleStatus";
 import { ContractorAccess, useContractorSession } from "./ContractorAccess";
 import { DiagnosticPanel } from "./DiagnosticPanel";
+import {
+  OperationsQueueNavigation,
+  OperationsWorkQueue,
+  openWork,
+  participantName,
+  type QueueParticipant,
+} from "./OperationsWorkQueue";
+import { EligibilityGuidance } from "./EligibilityGuidance";
 import "./style.css";
 let browserService: OnboardingService | undefined;
 function getDefaultService() {
@@ -55,6 +63,11 @@ export function App({
       : experience === "monitor"
         ? "Workflow Monitor"
         : internalPersona;
+  const [queueParticipant, setQueueParticipant] =
+    useState<QueueParticipant>(internalPersona);
+  const [queueExpanded, setQueueExpanded] = useState(false);
+  const [queueCompany, setQueueCompany] = useState("");
+  const openTasks = openWork(state);
   const [selected, setSelected] = useState(
       () => sessionStorage.getItem(`fieldwork:${experience}:company`) ?? "",
     ),
@@ -81,6 +94,8 @@ export function App({
     );
     setCreating(false);
     setNotice("");
+    setQueueCompany("");
+    setQueueExpanded(false);
   }, [experience]);
   const views: View[] =
     experience === "monitor"
@@ -149,7 +164,19 @@ export function App({
     );
   function selectCompany(companyId: string) {
     setSelected(companyId);
+    if (experience === "operations" && view === "Work queue")
+      setQueueCompany(companyId);
     sessionStorage.setItem(`fieldwork:${experience}:company`, companyId);
+    setNotice("");
+  }
+  function chooseParticipant(participant: QueueParticipant) {
+    setQueueParticipant(participant);
+    if (internalPersonas.includes(participant as InternalPersona)) {
+      setInternalPersona(participant as InternalPersona);
+      sessionStorage.setItem("fieldwork:operations:role", participant);
+    }
+    setView("Work queue");
+    setCreating(false);
     setNotice("");
   }
   function submit(e: FormEvent<HTMLFormElement>) {
@@ -212,30 +239,46 @@ export function App({
               </button>
             </>
           ) : (
-            views.map((v, i) => (
-              <button
-                key={v}
-                aria-label={viewName(v)}
-                aria-current={view === v && !creating ? "page" : undefined}
-                className={view === v && !creating ? "nav-active" : ""}
-                onClick={() => {
-                  setView(v);
-                  setCreating(false);
-                  setNotice("");
-                }}
-              >
-                <span>{["▦", "☷", "◎", "↗"][i]}</span>
-                <span>{viewName(v)}</span>
-                {v === "Work queue" && (
-                  <span className="nav-count">{allMyTasks.length}</span>
-                )}
-              </button>
-            ))
+            views.map((v, i) =>
+              v === "Work queue" && experience === "operations" ? (
+                <OperationsQueueNavigation
+                  active={view === "Work queue"}
+                  key={v}
+                  state={state}
+                  participant={queueParticipant}
+                  expanded={queueExpanded}
+                  onToggle={() => {
+                    setQueueExpanded(!queueExpanded);
+                    setView("Work queue");
+                    setNotice("");
+                  }}
+                  onSelect={chooseParticipant}
+                />
+              ) : (
+                <button
+                  key={v}
+                  aria-label={viewName(v)}
+                  aria-current={view === v && !creating ? "page" : undefined}
+                  className={view === v && !creating ? "nav-active" : ""}
+                  onClick={() => {
+                    setView(v);
+                    setCreating(false);
+                    setNotice("");
+                  }}
+                >
+                  <span>{["▦", "☷", "◎", "↗"][i]}</span>
+                  <span>{viewName(v)}</span>
+                  {v === "Work queue" && (
+                    <span className="nav-count">{allMyTasks.length}</span>
+                  )}
+                </button>
+              ),
+            )
           )}
         </nav>
         <div className="aside-bottom">
           <span className="live-dot" /> Browser-local workspace
-          <p>Iteration 3.2 · Portal UX</p>
+          <p>Iteration 3.3 · Work visibility</p>
         </div>
       </aside>
       <div className="main">
@@ -252,6 +295,7 @@ export function App({
                 onChange={(e) => {
                   const role = e.target.value as InternalPersona;
                   setInternalPersona(role);
+                  setQueueParticipant(role);
                   sessionStorage.setItem("fieldwork:operations:role", role);
                   setView("Work queue");
                   setNotice("");
@@ -303,7 +347,9 @@ export function App({
                   ? "One company. Independent skills. A clear path to your first job."
                   : persona === "Workflow Monitor"
                     ? "Watch business events resume durable waits and schedule the next activity."
-                    : `Your ${persona.toLowerCase()} workspace. Complete an action and see the process move.`}
+                    : view === "Work queue"
+                      ? `${participantName(queueParticipant)} work. Review outstanding actions across companies.`
+                      : `Your ${persona.toLowerCase()} workspace. Complete an action and see the process move.`}
               </p>
             </div>
             {persona === "Contractor" && (
@@ -353,7 +399,9 @@ export function App({
                 <span>
                   {experience === "monitor"
                     ? "Business events"
-                    : "Your open work"}
+                    : experience === "operations"
+                      ? "All open work"
+                      : "Your open work"}
                 </span>
                 <strong>
                   {String(
@@ -361,10 +409,14 @@ export function App({
                       ? myTasks.length
                       : experience === "monitor"
                         ? state.events.length
-                        : allMyTasks.length,
+                        : openTasks.length,
                   ).padStart(2, "0")}
                   <small>
-                    {experience === "monitor" ? "Persisted" : persona}
+                    {experience === "monitor"
+                      ? "Persisted"
+                      : experience === "operations"
+                        ? "All participants"
+                        : persona}
                   </small>
                 </strong>
               </div>
@@ -523,9 +575,9 @@ export function App({
                       const app = state.applications.find(
                           (a) => a.companyId === company.id,
                         ),
-                        count = allMyTasks.filter(
-                          (t) => t.companyId === company.id,
-                        ).length;
+                        count = (
+                          experience === "operations" ? openTasks : allMyTasks
+                        ).filter((t) => t.companyId === company.id).length;
                       return (
                         <button
                           className={
@@ -542,7 +594,10 @@ export function App({
                             <strong>{company.name}</strong>
                             <span>
                               {app?.skill} · {count} task
-                              {count === 1 ? "" : "s"} for you
+                              {count === 1 ? "" : "s"}
+                              {experience === "operations"
+                                ? " open across all participants"
+                                : " for you"}
                             </span>
                             <span
                               className={
@@ -603,6 +658,16 @@ export function App({
                       application={a}
                       state={state}
                     />
+                    {!eligible &&
+                      experience !== "monitor" &&
+                      view !== "Overview" && (
+                        <button
+                          className="text-button eligibility-link"
+                          onClick={() => setView("Overview")}
+                        >
+                          See eligibility requirements and next actions
+                        </button>
+                      )}
                     <div className="page-tabs">
                       {views.map((v) => (
                         <button
@@ -611,12 +676,27 @@ export function App({
                           onClick={() => setView(v)}
                         >
                           {viewName(v)}
-                          {v === "Work queue" ? ` (${myTasks.length})` : ""}
+                          {v === "Work queue"
+                            ? ` (${experience === "operations" ? openTasks.length : myTasks.length})`
+                            : ""}
                         </button>
                       ))}
                     </div>
                     {view === "Overview" && (
                       <>
+                        <EligibilityGuidance
+                          state={state}
+                          company={c}
+                          application={a}
+                          contractorView={experience === "contractor"}
+                          onOpenWork={(owner) => {
+                            if (experience === "operations") {
+                              chooseParticipant(owner);
+                              setQueueCompany(c.id);
+                              setQueueExpanded(true);
+                            } else setView("Work queue");
+                          }}
+                        />
                         <div
                           className={
                             "readiness-banner " + (eligible ? "ready" : "")
@@ -677,9 +757,15 @@ export function App({
                           <div>
                             <span>Next participants</span>
                             <strong>
-                              {[...new Set(tasks.map((t) => t.owner))].join(
-                                ", ",
-                              ) || "No outstanding work"}
+                              {[
+                                ...new Set(
+                                  tasks.map((t) =>
+                                    t.owner === "Simulation"
+                                      ? "Operations"
+                                      : t.owner,
+                                  ),
+                                ),
+                              ].join(", ") || "No outstanding work"}
                             </strong>
                           </div>
                           <div>
@@ -877,7 +963,7 @@ export function App({
                           <p className="muted">
                             No open actions for {persona}.{" "}
                             {tasks.length
-                              ? `Next: ${[...new Set(tasks.map((t) => t.owner))].join(", ")}.`
+                              ? `Next: ${[...new Set(tasks.map((t) => (t.owner === "Simulation" ? "Operations" : t.owner)))].join(", ")}.`
                               : "This company has no outstanding work."}
                           </p>
                         )}
@@ -915,7 +1001,26 @@ export function App({
                         )}
                       </>
                     )}
-                    {view === "Work queue" && (
+                    {view === "Work queue" && experience === "operations" && (
+                      <OperationsWorkQueue
+                        onParticipantChange={chooseParticipant}
+                        state={state}
+                        participant={queueParticipant}
+                        companyId={queueCompany}
+                        service={service}
+                        run={run}
+                        busy={writeDisabled}
+                        onCompanyChange={(companyId) => {
+                          setQueueCompany(companyId);
+                          if (companyId) selectCompany(companyId);
+                        }}
+                        onOverview={(companyId) => {
+                          selectCompany(companyId);
+                          setView("Overview");
+                        }}
+                      />
+                    )}
+                    {view === "Work queue" && experience !== "operations" && (
                       <>
                         <div className="section-heading">
                           <h3>{persona} work queue</h3>
@@ -944,7 +1049,7 @@ export function App({
                             <h3>You’re all caught up here.</h3>
                             <p>
                               {tasks.length
-                                ? `The next participant is ${[...new Set(tasks.map((t) => t.owner))].join(" / ")}.`
+                                ? `The next participant is ${[...new Set(tasks.map((t) => (t.owner === "Simulation" ? "Operations" : t.owner)))].join(" / ")}.`
                                 : "No outstanding actions for this company."}
                             </p>
                           </div>
@@ -994,28 +1099,30 @@ export function App({
                         ))}
                       </>
                     )}
-                    {experience === "operations" && systemTasks.length > 0 && (
-                      <div className="system-console">
-                        <div className="eyebrow">
-                          SIMULATED INTEGRATION · NO EXTERNAL CALLS
+                    {experience === "operations" &&
+                      view !== "Work queue" &&
+                      systemTasks.length > 0 && (
+                        <div className="system-console">
+                          <div className="eyebrow">
+                            SIMULATED INTEGRATION · NO EXTERNAL CALLS
+                          </div>
+                          <h3>Workflow-scheduled system activities</h3>
+                          <p className="muted">
+                            Run the scheduled activity to deliver its outcome.
+                            Inject a timeout to demonstrate retry.
+                          </p>
+                          {systemTasks.map((t) => (
+                            <TaskCard
+                              key={t.id}
+                              task={t}
+                              state={state}
+                              service={service}
+                              run={run}
+                              busy={writeDisabled}
+                            />
+                          ))}
                         </div>
-                        <h3>Workflow-scheduled system activities</h3>
-                        <p className="muted">
-                          Run the scheduled activity to deliver its outcome.
-                          Inject a timeout to demonstrate retry.
-                        </p>
-                        {systemTasks.map((t) => (
-                          <TaskCard
-                            key={t.id}
-                            task={t}
-                            state={state}
-                            service={service}
-                            run={run}
-                            busy={writeDisabled}
-                          />
-                        ))}
-                      </div>
-                    )}
+                      )}
                     {experience === "monitor" && recoveryTasks.length > 0 && (
                       <div className="system-console">
                         <div className="eyebrow">FAILED ACTIVITY RECOVERY</div>

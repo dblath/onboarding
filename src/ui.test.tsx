@@ -153,7 +153,15 @@ async function reviewAdmin() {
   await persona("Contractor Relations");
   await runReview("Execute simulated agreement");
 }
+async function systemActivities() {
+  const parent = screen.getByRole("button", { name: "Work queue" });
+  if (parent.getAttribute("aria-expanded") !== "true") await user.click(parent);
+  await user.click(
+    screen.getByRole("button", { name: "System Activities work" }),
+  );
+}
 async function vendor() {
+  await systemActivities();
   const t = card("Provision simulated vendor");
   await user.click(
     within(t).getByRole("button", { name: "Run vendor provisioning →" }),
@@ -171,6 +179,7 @@ async function training() {
   await completeTask("Confirm training completion", "Confirm training →");
 }
 async function activate() {
+  await systemActivities();
   const t = card("Publish activation to demo contractor management");
   await user.click(
     within(t).getByRole("button", { name: "Run activation publication →" }),
@@ -259,6 +268,7 @@ describe("participant UI acceptance", () => {
     await waitFor(() => expect(approval.isConnected).toBe(false));
     await submitAdmin();
     await reviewAdmin();
+    await systemActivities();
     let t = card("Provision simulated vendor");
     await user.click(within(t).getByRole("checkbox"));
     await user.click(

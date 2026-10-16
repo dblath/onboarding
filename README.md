@@ -1,8 +1,8 @@
-# Fieldwork — Contractor onboarding, Iteration 3.2
+# Fieldwork — Contractor onboarding, Iteration 3.3
 
 End-to-end product discovery prototype: contractor application, screening, administrative approvals, independent skill qualification, vendor provisioning, portal, training, readiness and activation. Browser-only persistence and simulated integrations. Demo company sign-in uses the application email and password 123. No backend, real authentication or live services.
 
-Historical onboarding completion, current readiness and operational status are separate. Job eligibility requires Ready AND Active. Restoring qualifications never removes a suspension. [Iteration 3.2 UX acceptance](docs/acceptance-3.2.md) / [Lifecycle acceptance](docs/acceptance-3.1.md) · [Current status](docs/STATUS.md).
+Historical onboarding completion, current readiness and operational status are separate. Job eligibility requires Ready AND Active. Restoring qualifications never removes a suspension. [Operations queue acceptance](docs/acceptance-3.3.md) / [Iteration 3.2 UX acceptance](docs/acceptance-3.2.md) / [Lifecycle acceptance](docs/acceptance-3.1.md) · [Current status](docs/STATUS.md).
 
 ## Run
 
@@ -47,13 +47,13 @@ Use fictional names and example.com emails. Document submission uses predefined 
 4. **Compliance:** Run insurance and license verification.
 5. **Finance:** Run fictional financial verification.
 6. **Contractor Relations:** Run simulated agreement execution.
-7. In **Operations**, run scheduled **vendor provisioning** in the simulated integration panel after all administrative approvals. The panel represents a worker and is available to internal roles.
+7. In **Operations**, run scheduled **vendor provisioning** under Work queue -> System Activities after all administrative approvals. The panel represents a worker and is available to internal roles.
 8. **Field Manager:** Approve skill; this can occur before or after administration.
 9. **Contractor:** Complete portal setup, then initial training.
 10. **Training:** Confirm initial training.
-11. Policy derives **Ready** while operational status remains Pending and jobs remain Not eligible. In **Operations**, run initial activation publication. Historical onboarding becomes Completed, operational status Active, and jobs Eligible.
+11. Policy derives **Ready** while operational status remains Pending and jobs remain Not eligible. In **Operations**, open Work queue -> System Activities and run initial activation publication. Historical onboarding becomes Completed, operational status Active, and jobs Eligible.
 
-Contractor → Your journey and Operations → Overview show relevant facts, requirements, skills, notes and evidence versions. Required actions and Work queue show participant work. Operations roles filter queues by responsibility and company. Workflow Monitor selects company/skill instances independently. Supporting diagnostics, ingress tools and timers launch collapsed; expand their title buttons to use them. Status, history and event activity stay visible. These are separate views, not access control. Contractor sign-in stores only a company ID in tab-local sessionStorage. Sign Out changes no business facts. Anonymous visitors see application confirmation and sign-in, not existing company records.
+Contractor → Your journey and Operations → Overview show relevant facts, requirements, skills, notes and evidence versions. Required actions and Work queue show participant work. Operations Work queue expands participant counts across all companies. Its parent count always includes every open item, regardless of role/company filtering; completed/cancelled work is excluded. Select System Activities for vendor setup and activation publication. Contractor work is visible there but completed in the signed-in portal. Workflow Monitor selects company/skill instances independently. Supporting diagnostics, ingress tools and timers launch collapsed; expand their title buttons to use them. Status, history and event activity stay visible. These are separate views, not access control. Contractor sign-in stores only a company ID in tab-local sessionStorage. Sign Out changes no business facts. Anonymous visitors see application confirmation and sign-in, not existing company records.
 
 ## Exception and operations demos
 
@@ -115,3 +115,6 @@ Iteration 3 introduced snapshot schema 3 and a shared revision. Iteration 3.1 us
 Concurrent tabs on the same exact origin/profile are supported. There is no cross-browser/profile/device synchronization. Close tabs running any older release before using the latest release: old code does not understand the current schema/lifecycle rules. Browser data can be cleared/evicted. Fixtures determine verification, not real document/legal/financial rules. No live training, actual signature, portal account, external messages, automatic expiry or reinstatement journey. Timers run on simulated time advancement only. A rejected first skill leaves company onboarding waiting; recovery policy remains a discovery question.
 
 No real authentication, payments, backend, hosted persistence, C#/.NET or hosting deployment. Demo sign-in is not a security boundary. Source is published at https://github.com/dblath/onboarding on main.
+
+
+Operations Overview and Contractor Your journey explain unsatisfied requirements, next participants, pending activation and suspension. Zero work for one role does not mean all company work is complete. Ready remains Not eligible until Operations explicitly publishes activation. [Current queue acceptance and investigation](docs/acceptance-3.3.md).

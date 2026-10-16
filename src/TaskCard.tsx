@@ -54,7 +54,11 @@ export function TaskCard({
         <span className="task-kind">
           {q ? `${q.skill} qualification` : "Company onboarding"}
         </span>
-        <span className="pill neutral">{t.owner}</span>
+        <span className="pill neutral">
+          {t.owner === "Simulation"
+            ? "Operations · System Activities"
+            : t.owner}
+        </span>
       </div>
       <h3>{activityDefinitions[t.activity].label}</h3>
       <p className="task-instructions">{t.instructions}</p>

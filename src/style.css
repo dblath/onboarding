@@ -41,6 +41,7 @@ summary:focus-visible {
   min-height: 100vh;
 }
 aside {
+  top: 0;
   width: 232px;
   background: #192f29;
   color: #eaf0e9;
@@ -1651,5 +1652,135 @@ main {
   .session-controls .experience-badge {
     max-width: 180px;
     display: inline-block;
+  }
+}
+
+/* Operations visibility: counts are global; work filters are explicit. */
+.experience-operations aside {
+  overflow-y: auto;
+}
+.operations-queue-navigation [role="group"] {
+  margin: 4px 0 6px 12px;
+  border-left: 1px solid #536a5b;
+  padding-left: 5px;
+}
+.operations-queue-navigation [role="group"][hidden] {
+  display: none;
+}
+.operations-queue-navigation [role="group"] button {
+  padding: 7px 6px;
+  font-size: 10px;
+  gap: 6px;
+  background: transparent;
+  min-height: 28px;
+}
+.operations-queue-navigation [role="group"] button[aria-pressed="true"] {
+  background: #375447;
+  color: #fff;
+}
+.operations-queue-navigation [role="group"] .nav-count {
+  font-size: 10px;
+}
+.queue-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+  margin: 16px 0;
+}
+.queue-filters label {
+  min-width: 210px;
+}
+.queue-filters p {
+  flex: 1;
+  min-width: 180px;
+}
+.queue-item {
+  margin: 16px 0;
+  border: 1px solid #dfe5d6;
+  border-radius: 7px;
+  overflow: hidden;
+}
+.queue-item .task-card {
+  margin: 0;
+  border: 0;
+  border-top: 1px solid #e6eadf;
+  border-radius: 0;
+}
+.queue-company-context {
+  padding: 10px 14px;
+  background: #f5f7ef;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+.queue-company-context strong {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.queue-company-context small {
+  display: block;
+  margin-top: 4px;
+  font-size: 10px;
+  color: #71806d;
+  overflow-wrap: anywhere;
+}
+.queue-empty {
+  font-size: 12px;
+  padding: 18px;
+  background: #f6f8f1;
+  border-radius: 6px;
+  line-height: 1.6;
+}
+.eligibility-link {
+  margin: 0 0 8px;
+}
+.eligibility-guidance {
+  border: 1px solid #dedfc8;
+  background: #fafbef;
+  padding: 14px 16px;
+  border-radius: 6px;
+  margin: 14px 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.eligibility-guidance h3 {
+  margin: 0 0 6px;
+}
+.eligibility-summary {
+  margin: 4px 0 10px;
+}
+.eligibility-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  font-size: 11px;
+  margin-bottom: 10px;
+}
+.eligibility-guidance ul {
+  padding-left: 18px;
+  margin: 6px 0;
+}
+.eligibility-guidance li {
+  margin: 5px 0;
+}
+.eligibility-guidance li p {
+  margin: 3px 0;
+  color: #6c7766;
+}
+.eligibility-guidance li .text-button {
+  margin-left: 10px;
+}
+@media (max-width: 800px) {
+  aside nav .operations-queue-navigation {
+    min-width: 155px;
+  }
+  .operations-queue-navigation [role="group"] button {
+    width: 100%;
+  }
+  .queue-company-context {
+    align-items: start;
+    flex-direction: column;
   }
 }

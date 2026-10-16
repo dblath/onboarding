@@ -189,6 +189,10 @@ test("readiness loss before first activation cancels the pending activity and do
   await initialReadiness(contractor, operations);
   await states(pages, "In progress", "Ready", "Pending", "Not eligible");
   await invalidate(operations);
+  await expect(operations.getByTestId("queue-total")).toHaveText("0");
+  await expect(operations.getByTestId("queue-count-Simulation")).toHaveText(
+    "0",
+  );
   await states(pages, "In progress", "Not ready", "Pending", "Not eligible");
   await expect(
     card(operations, "Publish activation to demo contractor management"),
