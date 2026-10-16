@@ -2,11 +2,11 @@
 
 Run `npm run dev`, then open:
 
-- Contractor Portal: http://localhost:5173/#/contractor
-- Onboarding Operations: http://localhost:5173/#/operations
-- Workflow Monitor: http://localhost:5173/#/monitor
+- Contractor Portal: http://127.0.0.1:5173/#/contractor
+- Onboarding Operations: http://127.0.0.1:5173/#/operations
+- Workflow Monitor: http://127.0.0.1:5173/#/monitor
 
-For production verification, run `npm run build` followed by `npm run preview -- --port 4174`; use the same routes at http://localhost:4174. If that port is already serving this build, use the existing preview. No backend is needed.
+For production verification, run `npm run build` followed by `npm run preview -- --host 127.0.0.1 --port 4174`; use the same routes at http://127.0.0.1:4174. If that port is already serving this build, use the existing preview. Keep all three tabs on the same exact origin to share state. No backend is needed.
 
 1. Each experience shows the complete Unity portrait logo, including its text, in navigation and a compact copy in the header. Proportions match the original; there is no crop or stretching. Unity / Fieldwork demo titles identify the selected experience.
 2. Each actual browser tab shows the Unity icon. Hard refresh or reopen a tab if the browser retains an older cached icon. The entire logo is retained within a square canvas; small text is naturally difficult to read at tab-icon size.
