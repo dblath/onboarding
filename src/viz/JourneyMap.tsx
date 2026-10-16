@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import {
   Background,
   Controls,
@@ -14,7 +21,8 @@ import {
   type NodeProps,
   type Edge,
 } from "@xyflow/react";
-import dagre from "@dagrejs/dagre";
+import { groups, areaColors, layoutGroups } from "./layout";
+import { compactLabel, edgeStatus, frameStory } from "./story";
 import type { State } from "../domain";
 import type { OnboardingService } from "../application";
 import { automationLink } from "../presentation";
@@ -48,56 +56,61 @@ const visualLabel = (visual: VisualNode) =>
     : statusLabels[visual.status];
 const icons = { neutral: "○", waiting: "◷", complete: "✓", error: "!" };
 type JourneyNode = Node<
-  { model: MapNode; visual: VisualNode; count?: number; selected: boolean },
+  {
+    model: MapNode;
+    visual: VisualNode;
+    count?: number;
+    selected: boolean;
+    changed?: boolean;
+    frameNumber?: number;
+    horizontal?: boolean;
+  },
   "journey"
 >;
 function JourneyNodeCard({ data }: NodeProps<JourneyNode>) {
   return (
     <div
-      className={`viz-node ${data.model.kind} ${data.visual.status}${data.selected ? " selected" : ""}`}
+      key={data.changed ? data.frameNumber : "steady"}
+      className={`viz-node ${data.model.kind} ${data.visual.status}${data.selected ? " selected" : ""}${data.changed ? " changed" : ""}`}
+      data-changed={!!data.changed}
+      title={`${data.model.label} — ${visualLabel(data.visual)}`}
+      style={
+        {
+          "--area-color": areaColors[data.model.group],
+          "--node-width": `${data.count ? 180 : data.model.kind === "join" ? 184 : 154}px`,
+          "--node-height": `${data.count ? 48 : 44}px`,
+        } as CSSProperties
+      }
       data-testid={`viz-node-${data.model.id}`}
       data-status={data.visual.status}
     >
-      <Handle type="target" position={Position.Top} />
-      <div className="viz-node-top">
-        <span>
-          {data.count
-            ? `${data.count} steps · group`
-            : data.model.kind === "join"
-              ? "DEPENDENCY JOIN"
-              : data.model.group}
-        </span>
-        <span className="viz-node-icon" aria-hidden>
-          {data.model.kind === "decision" && data.visual.status === "neutral"
-            ? "◇"
-            : data.visual.status === "neutral" && data.visual.workItemId
-              ? "×"
-              : icons[data.visual.status]}
-        </span>
-      </div>
-      <strong>{data.model.label}</strong>
-      <div className="viz-node-footer">
-        <span>
-          {data.visual.satisfied !== undefined
-            ? `${data.visual.satisfied} of ${data.visual.total} complete`
-            : visualLabel(data.visual)}
-        </span>
-        <small>{data.model.owner}</small>
-      </div>
-      <Handle type="source" position={Position.Bottom} />
+      <Handle
+        type="target"
+        position={data.horizontal ? Position.Left : Position.Top}
+      />
+      <span className="viz-node-icon" aria-hidden="true">
+        {data.visual.status === "neutral" && data.visual.workItemId
+          ? "×"
+          : icons[data.visual.status]}
+      </span>
+      <strong>
+        {data.count ? data.model.label : compactLabel(data.model)}
+      </strong>
+      {data.visual.satisfied !== undefined && data.model.kind === "join" && (
+        <b
+          className={`viz-join-count ${data.visual.satisfied === data.visual.total ? "satisfied" : "outstanding"}`}
+        >
+          {data.visual.satisfied}/{data.visual.total}
+        </b>
+      )}
+      <Handle
+        type="source"
+        position={data.horizontal ? Position.Right : Position.Bottom}
+      />
     </div>
   );
 }
 const nodeTypes = { journey: JourneyNodeCard };
-const groups = [
-  "Starting point",
-  "Insurance",
-  "Finance",
-  "Agreement",
-  "Skill qualification",
-  "Enablement",
-  "Activation",
-];
 
 function diagram(
   r: VizRecording,
@@ -105,6 +118,7 @@ function diagram(
   collapsed: Set<string>,
   selected: string,
 ) {
+  const changes = frameStory(r, frame);
   const nodes: JourneyNode[] = [],
     replacement = new Map<string, string>();
   for (const group of groups) {
@@ -140,6 +154,8 @@ function diagram(
       const visual: VisualNode = {
         ...(join ? frame.nodes[join.id] : (blocker ?? states[0])),
         status,
+        satisfied: join ? frame.nodes[join.id].satisfied : undefined,
+        total: join ? frame.nodes[join.id].total : undefined,
         eventIds: [...new Set(states.flatMap((n) => n.eventIds))],
         explanation:
           blocker?.explanation ??
@@ -151,14 +167,14 @@ function diagram(
           group === "Starting point"
             ? r.definition.workflowName === "SkillQualification"
               ? "Skill request received"
-              : "Application & recruitment"
+              : "Application review"
             : group === "Activation"
-              ? "Readiness & activation"
+              ? "Activation"
               : group === "Enablement"
-                ? "Vendor, portal & training"
+                ? "Company setup"
                 : group === "Skill qualification"
                   ? "Skill qualification"
-                  : `${group} assurance`,
+                  : `${group} checks`,
         owner:
           members.find((n) => frame.nodes[n.id].status === "error")?.owner ??
           members.find((n) => frame.nodes[n.id].status === "waiting")?.owner ??
@@ -176,9 +192,11 @@ function diagram(
           model,
           visual,
           count: members.length,
+          changed: members.some((n) => changes.nodes.has(n.id)),
+          frameNumber: frame.number,
           selected: selected === model.id,
         },
-        ariaLabel: `${model.label}, ${statusLabels[status]}, ${members.length} steps`,
+        ariaLabel: `${model.label}, ${statusLabels[status]}, ${members.length} steps${visual.satisfied !== undefined ? `, ${visual.satisfied} of ${visual.total} complete` : ""}`,
         focusable: true,
       });
       members.forEach((n) => replacement.set(n.id, model.id));
@@ -191,6 +209,8 @@ function diagram(
           data: {
             model,
             visual: frame.nodes[model.id],
+            changed: changes.nodes.has(model.id),
+            frameNumber: frame.number,
             selected: selected === model.id,
           },
           ariaLabel: `${model.label}, ${visualLabel(frame.nodes[model.id])}, ${model.owner}`,
@@ -199,21 +219,29 @@ function diagram(
         replacement.set(model.id, model.id);
       }
   }
-  const edges: Edge[] = [],
-    seen = new Set<string>();
+  const edges: Edge[] = [];
   for (const e of r.definition.edges) {
     const source = replacement.get(e.source)!,
       target = replacement.get(e.target)!,
       key = `${source}:${target}`;
-    if (source === target || seen.has(key)) continue;
-    seen.add(key);
-    const state = frame.edges[e.id];
+    if (source === target) continue;
+    const existing = edges.find((edge) => edge.id === key);
+    const priority = { neutral: 0, complete: 1, waiting: 2, error: 3 };
+    const state =
+      existing &&
+      priority[existing.data!.status as VisualStatus] >
+        priority[edgeStatus(r, frame, e)]
+        ? (existing.data!.status as VisualStatus)
+        : edgeStatus(r, frame, e);
+    const changed = changes.edges.has(e.id) || !!existing?.className;
+    if (existing) edges.splice(edges.indexOf(existing), 1);
     edges.push({
       id: key,
       source,
       target,
       type: "smoothstep",
-      label: !collapsed.size ? e.label : undefined,
+      className: changed ? "viz-edge-changed" : undefined,
+      label: !collapsed.size && state !== "neutral" ? e.label : undefined,
       style: {
         stroke: colors[state],
         strokeWidth: state === "neutral" ? 1.3 : 2,
@@ -225,48 +253,19 @@ function diagram(
         width: 18,
         height: 18,
       },
-      animated: state === "waiting",
+      animated: changed,
       labelStyle: { fill: "#60717c", fontSize: 11 },
       labelBgStyle: { fill: "#f7fafb", fillOpacity: 0.95 },
       data: { status: state },
     });
   }
-  const layout = new dagre.graphlib.Graph()
-    .setGraph({
-      rankdir: "TB",
-      nodesep: collapsed.size ? 32 : 40,
-      ranksep: collapsed.size ? 58 : 34,
-      marginx: 28,
-      marginy: 28,
-    })
-    .setDefaultEdgeLabel(() => ({}));
-  nodes.forEach((n) => layout.setNode(n.id, { width: 216, height: 108 }));
   // Back/correction routes are rendered but excluded from rank assignment so loops do not stretch the map.
   const backwards = new Set(
     r.definition.edges
       .filter((e) => e.label === "Resubmit" || e.label === "Review again")
       .map((e) => `${replacement.get(e.source)}:${replacement.get(e.target)}`),
   );
-  edges
-    .filter((e) => !backwards.has(e.id))
-    .forEach((e) =>
-      layout.setEdge(e.source, e.target, {
-        minlen:
-          e.source === "group:Skill qualification" &&
-          e.target === "group:Activation"
-            ? 2
-            : e.source === "skill-approved" && e.target === "readiness-join"
-              ? 4
-              : 1,
-      }),
-    );
-  dagre.layout(layout);
-  nodes.forEach((n) => {
-    const p = layout.node(n.id);
-    n.position = { x: p.x - 108, y: p.y - 54 };
-    n.width = 216;
-    n.height = 108;
-  });
+  layoutGroups(nodes, edges, backwards);
   return { nodes, edges };
 }
 
@@ -276,12 +275,14 @@ function Canvas({
   collapsed,
   selected,
   onSelect,
+  follow,
 }: {
   recording: VizRecording;
   frame: VisualFrame;
   collapsed: Set<string>;
   selected: string;
   onSelect: (id: string) => void;
+  follow: boolean;
 }) {
   const flow = useReactFlow();
   const container = useRef<HTMLDivElement>(null);
@@ -314,20 +315,47 @@ function Canvas({
     () => diagram(recording, frame, collapsed, selected),
     [recording.definition, frame, collapsed, selected],
   );
+  const graphRef = useRef(graph);
+  graphRef.current = graph;
+  const initialRecording = useRef("");
+  const previousCollapsed = useRef(collapsed);
   useEffect(() => {
-    const element = container.current;
-    let pending = 0;
-    const resize = new ResizeObserver(() => {
-      cancelAnimationFrame(pending);
-      pending = requestAnimationFrame(() => void fit());
+    const expanded = [...previousCollapsed.current].filter(
+      (group) => !collapsed.has(group),
+    );
+    previousCollapsed.current = collapsed;
+    if (initialRecording.current === recording.id && !follow) return;
+    initialRecording.current = recording.id;
+    const pending = requestAnimationFrame(() => {
+      if (expanded.length === 1)
+        void flow.fitView({
+          nodes: graphRef.current.nodes.filter(
+            (n) => n.data.model.group === expanded[0],
+          ),
+          padding: 0.25,
+          maxZoom: 1,
+          duration: 0,
+        });
+      else void fit();
     });
-    if (element) resize.observe(element);
-    pending = requestAnimationFrame(() => void fit());
-    return () => {
-      resize.disconnect();
-      cancelAnimationFrame(pending);
-    };
-  }, [recording.id, collapsed, fit]);
+    return () => cancelAnimationFrame(pending);
+  }, [recording.id, collapsed, fit, follow, flow]);
+  // A new background capture must not move historical playback. The viewed frame
+  // number, rather than the recording revision/object identity, drives focus.
+  useEffect(() => {
+    if (!follow) return;
+    const pending = requestAnimationFrame(() => {
+      const changed = graphRef.current.nodes.filter((n) => n.data.changed);
+      if (changed.length)
+        void flow.fitView({
+          nodes: changed,
+          padding: 0.35,
+          maxZoom: 1,
+          duration: 0,
+        });
+    });
+    return () => cancelAnimationFrame(pending);
+  }, [recording.id, frame.number, follow, flow]);
   return (
     <div
       className="viz-canvas"
@@ -391,11 +419,11 @@ function Canvas({
                 const x = Math.min(...members.map((n) => n.position.x)) - 16,
                   y = Math.min(...members.map((n) => n.position.y)) - 34;
                 const width =
-                    Math.max(...members.map((n) => n.position.x + 216)) -
+                    Math.max(...members.map((n) => n.position.x + n.width!)) -
                     x +
                     16,
                   height =
-                    Math.max(...members.map((n) => n.position.y + 108)) -
+                    Math.max(...members.map((n) => n.position.y + n.height!)) -
                     y +
                     18;
                 return (
@@ -458,6 +486,9 @@ export default function JourneyMap({
   const [selected, setSelected] = useState("");
   const [collapsed, setCollapsed] = useState(() => new Set(groups));
   const [large, setLarge] = useState(false);
+  const [follow, setFollow] = useState(true);
+  const [playing, setPlaying] = useState(false);
+  const [pace, setPace] = useState(1600);
   const recordings = state.viz?.recordings ?? [];
   const recording = recordings.find(
     (r) => r.id === (viewedId || state.viz?.activeRecordingId),
@@ -470,6 +501,20 @@ export default function JourneyMap({
   const frame = recording?.frames[currentIndex];
   const active = recording?.id === state.viz?.activeRecordingId;
   const live = active && index === null;
+  const story = recording && frame ? frameStory(recording, frame) : undefined;
+  useEffect(() => {
+    if (!playing || !recording) return;
+    if (currentIndex >= recording.frames.length - 1) {
+      setPlaying(false);
+      return;
+    }
+    const timer = window.setTimeout(() => setIndex(currentIndex + 1), pace);
+    return () => window.clearTimeout(timer);
+  }, [playing, recording?.id, recording?.frames.length, currentIndex, pace]);
+  function seek(next: number | null) {
+    setPlaying(false);
+    setIndex(next);
+  }
   const sources = originatingEvents(state);
   const selectedModel = recording?.definition.nodes.find(
     (n) => n.id === selected,
@@ -483,6 +528,7 @@ export default function JourneyMap({
     (t) => t.id === selectedVisual?.workItemId && t.status === "Open",
   );
   function chooseRecording(id: string) {
+    setPlaying(false);
     setViewedId(id);
     setIndex(null);
     setSelected("");
@@ -642,23 +688,53 @@ export default function JourneyMap({
           </div>
           <div className="viz-playback" aria-label="Visual playback">
             <button
+              aria-label={playing ? "Pause playback" : "Play playback"}
+              onClick={() => {
+                if (playing) setPlaying(false);
+                else {
+                  if (currentIndex === recording.frames.length - 1) setIndex(0);
+                  setPlaying(true);
+                }
+              }}
+              disabled={recording.frames.length < 2}
+            >
+              {playing ? "Pause" : "Play"}
+            </button>
+            <select
+              aria-label="Playback speed"
+              value={pace}
+              onChange={(e) => setPace(Number(e.target.value))}
+            >
+              <option value={3200}>0.5x</option>
+              <option value={1600}>1x</option>
+              <option value={800}>2x</option>
+            </select>
+            <label className="viz-follow">
+              <input
+                type="checkbox"
+                checked={follow}
+                onChange={(e) => setFollow(e.target.checked)}
+              />
+              Follow changes
+            </label>
+            <button
               aria-label="Jump to first frame"
               disabled={currentIndex === 0}
-              onClick={() => setIndex(0)}
+              onClick={() => seek(0)}
             >
               │←
             </button>
             <button
               aria-label="Step backward"
               disabled={currentIndex === 0}
-              onClick={() => setIndex(currentIndex - 1)}
+              onClick={() => seek(currentIndex - 1)}
             >
               ←
             </button>
             <button
               aria-label="Step forward"
               disabled={currentIndex === recording.frames.length - 1}
-              onClick={() => setIndex(currentIndex + 1)}
+              onClick={() => seek(currentIndex + 1)}
             >
               →
             </button>
@@ -670,7 +746,7 @@ export default function JourneyMap({
                 min={0}
                 max={recording.frames.length - 1}
                 value={currentIndex}
-                onChange={(e) => setIndex(Number(e.target.value))}
+                onChange={(e) => seek(Number(e.target.value))}
               />
             </label>
             <strong data-testid="viz-frame-number">
@@ -678,7 +754,7 @@ export default function JourneyMap({
             </strong>
             <button
               className={live ? "viz-live-button" : "secondary"}
-              onClick={() => setIndex(null)}
+              onClick={() => seek(null)}
             >
               {active ? "Return to Live" : "Latest recorded"}
             </button>
@@ -694,6 +770,73 @@ export default function JourneyMap({
               changes live business state
             </small>
           </div>
+          {story && (
+            <div
+              className="viz-story"
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              data-testid="viz-story"
+            >
+              <div>
+                <h3>{story.title}</h3>
+                <p>{story.explanation}</p>
+                {story.next.length > 0 && (
+                  <p>
+                    <strong>Next: </strong>
+                    {story.next
+                      .slice(0, 2)
+                      .map((n) => `${n.label} — ${n.owner}`)
+                      .join("; ")}
+                    {story.next.length > 2
+                      ? `; +${story.next.length - 2} parallel actions`
+                      : ""}
+                  </p>
+                )}
+                <div className="viz-changed-list" aria-label="Changed steps">
+                  {story.changed.map((n) => (
+                    <button key={n.id} onClick={() => setSelected(n.id)}>
+                      {icons[frame.nodes[n.id].status]} {compactLabel(n)}
+                    </button>
+                  ))}
+                </div>
+                {index !== null &&
+                  active &&
+                  recording.frames.length - 1 > currentIndex && (
+                    <span
+                      className="viz-new-frames"
+                      data-testid="viz-new-frames"
+                    >
+                      {recording.frames.length - 1 - currentIndex} newer frames
+                      available — recording continues
+                    </span>
+                  )}
+              </div>
+              {frame.nodes["readiness-join"] && (
+                <div
+                  className={`viz-join-story ${frame.nodes["readiness-join"].status}`}
+                  data-testid="viz-join-story"
+                >
+                  <strong>
+                    Ready for activation —{" "}
+                    {frame.nodes["readiness-join"].satisfied} of{" "}
+                    {frame.nodes["readiness-join"].total} complete
+                  </strong>
+                  <p>
+                    {frame.nodes["readiness-join"].outstanding?.length
+                      ? `Waiting on ${frame.nodes["readiness-join"].outstanding!.join("; ")}`
+                      : frame.nodes["readiness-join"].explanation}
+                  </p>
+                  <button
+                    className="text-button"
+                    onClick={() => setSelected("readiness-join")}
+                  >
+                    Inspect activation requirements
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
           <div className="viz-group-controls" aria-label="Logical groups">
             <span>DETAIL LEVEL</span>
             {groups
@@ -722,6 +865,7 @@ export default function JourneyMap({
                 collapsed={collapsed}
                 selected={selected}
                 onSelect={setSelected}
+                follow={follow}
               />
             </ReactFlowProvider>
             {selected && (
@@ -874,6 +1018,9 @@ export default function JourneyMap({
             )}
           </div>
           <div className="viz-legend">
+            <small>
+              Left accent: business area · symbol and fill: execution state
+            </small>
             <span>
               <i style={{ background: colors.complete }} />
               Completed / progressed ✓

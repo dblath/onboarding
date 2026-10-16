@@ -1,4 +1,4 @@
-# Unity fieldwork - Contractor onboarding, Iteration 3.5
+# Unity fieldwork - Contractor onboarding, Iteration 3.5.1
 
 End-to-end product discovery prototype: contractor application, screening, administrative approvals, independent skill qualification, vendor provisioning, portal, training, readiness and activation. Browser-only persistence and simulated integrations. Simulated company sign-in uses the application email and password 123. No backend, real authentication or live services.
 
@@ -11,6 +11,8 @@ Historical onboarding completion, current readiness and operational status are s
 Workflow Monitor now includes Journey Map: select an application or skill-request event, then Track journey to capture its current state as Frame 0. Recording continues inside committed commands when Monitor is closed; one origin records at a time. Group/expand the real company and initial-skill lanes, inspect blockers, pan/zoom, or use presentation view. Playback is read-only; it never changes live work. Previous recordings remain archived when tracking switches. The v2 company adapter has 37 map nodes, including 16 activity types and their decisions/joins/routes; a standalone skill map has 9. No earlier visual history is synthesized.
 
 Shared Unity wordmark text is bold sans-serif; the original logo/favicons are unchanged. Recording metadata/frames persist in optional State.viz in the existing locked IndexedDB snapshot, not a second workflow engine. React Flow and Dagre are presentation/layout dependencies. See STATUS for scope, test results, atomic frame semantics and limitations. Chet review instructions/screenshots remain local-only in docs/chet.
+
+Iteration 3.5.1 adds compact 154 x 44 activity nodes, independent business-area accents and execution symbols/fills, two-level automatic lane layout, changed-route illumination, a business change/next-owner summary, visible join counts, Follow changes, and Play/Pause with 0.5x/1x/2x playback. Turn Follow changes off to preserve your viewport. Rewinding keeps recording in the background and shows newer-frame availability. Details remain in node inspection. The recorder, pinned definitions, business rules, persistence and event contracts are unchanged. A clearly labeled 80-step synthetic layout fixture is test-only, not an executable workflow.
 
 ## Run
 

@@ -331,7 +331,7 @@ export function App({
         </nav>
         <div className="aside-bottom">
           <span className="live-dot" /> Browser-local workspace
-          <p>Iteration 3.5 · Journey Map</p>
+          <p>Iteration 3.5.1 · Living Journey Map</p>
         </div>
       </aside>
       <div className="main">

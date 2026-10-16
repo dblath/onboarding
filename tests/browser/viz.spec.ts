@@ -25,7 +25,7 @@ async function track(page: Page, eventId: string) {
   await expect(page.getByTestId("viz-frame-number")).toHaveText("Frame 0 / 0");
 }
 async function fullMapScreenshot(page: Page, path: string) {
-  await page.setViewportSize({ width: 2560, height: 2400 });
+  await page.setViewportSize({ width: 1600, height: 1100 });
   await page.getByRole("button", { name: "Expand all", exact: true }).click();
   await page
     .getByRole("button", { name: "Presentation view", exact: true })
@@ -57,7 +57,7 @@ async function fullMapScreenshot(page: Page, path: string) {
       }),
     );
   const canvas = (await page.getByTestId("viz-canvas").boundingBox())!;
-  expect(Math.min(...geometry.map((n) => n.width))).toBeGreaterThan(125);
+  expect(Math.min(...geometry.map((n) => n.width))).toBeGreaterThan(60);
   for (const node of geometry) {
     expect(node.left).toBeGreaterThanOrEqual(canvas.x);
     expect(node.right).toBeLessThanOrEqual(canvas.x + canvas.width);
@@ -76,7 +76,7 @@ async function fullMapScreenshot(page: Page, path: string) {
       ).toBe(true);
     }
   await expect(page.locator(".react-flow__minimap-node")).toHaveCount(37);
-  await page.screenshot({ path, fullPage: true, animations: "disabled" });
+  await page.screenshot({ path, fullPage: false, animations: "disabled" });
   await page
     .getByRole("button", { name: "Exit presentation", exact: true })
     .first()
@@ -84,6 +84,26 @@ async function fullMapScreenshot(page: Page, path: string) {
   await page.setViewportSize({ width: 1600, height: 1100 });
   await page
     .getByRole("button", { name: "Group overview", exact: true })
+    .click();
+}
+
+async function overviewScreenshot(page: Page, path: string) {
+  await page.setViewportSize({ width: 1600, height: 1100 });
+  await page
+    .getByRole("button", { name: "Group overview", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Presentation view", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Fit map", exact: true }).click();
+  await expect(page.getByTestId("viz-canvas")).toHaveAttribute(
+    "data-fitting",
+    "false",
+  );
+  await page.screenshot({ path, animations: "disabled" });
+  await page
+    .getByRole("button", { name: "Exit presentation", exact: true })
+    .first()
     .click();
 }
 
@@ -156,6 +176,20 @@ test("Viz records a real 37-step journey across tabs, failure, joins and immutab
     .getByRole("button", { name: "↻ Retry activity →" })
     .click();
   await expect(card(monitor, "Review insurance")).toHaveCount(0);
+  await journey(monitor);
+  await expect(monitor.getByTestId("viz-node-group:Insurance")).toHaveAttribute(
+    "data-status",
+    "complete",
+  );
+  await expect(monitor.getByTestId("viz-node-group:Insurance")).toHaveAttribute(
+    "data-changed",
+    "true",
+  );
+  await overviewScreenshot(
+    monitor,
+    testInfo.outputPath("viz-failure-recovered.png"),
+  );
+  await nav(monitor, "Automations & Integrations");
   await role(operations, "Finance");
   await verify(operations, "Verify fictional financial pack");
   await role(operations, "Contractor Relations");
@@ -182,9 +216,16 @@ test("Viz records a real 37-step journey across tabs, failure, joins and immutab
   );
   await journey(monitor);
   await expect(monitor.getByTestId("viz-node-group:Activation")).toContainText(
-    "3 of 4 complete",
+    "3/4",
   );
   await fullMapScreenshot(monitor, testInfo.outputPath("viz-waiting-join.png"));
+  await expect(monitor.getByTestId("viz-join-story")).toContainText(
+    "3 of 4 complete",
+  );
+  await overviewScreenshot(
+    monitor,
+    testInfo.outputPath("viz-desktop-waiting-join.png"),
+  );
   await monitor
     .getByRole("button", { name: "+ Activation", exact: true })
     .click();
@@ -220,6 +261,16 @@ test("Viz records a real 37-step journey across tabs, failure, joins and immutab
   await expect(
     monitor.getByTestId("viz-node-PublishActivation"),
   ).toHaveAttribute("data-status", "waiting");
+  await expect(monitor.getByTestId("viz-story")).toContainText(
+    "All four activation requirements are satisfied.",
+  );
+  await expect(monitor.getByTestId("viz-story")).toContainText(
+    "Publish contractor activation — Automations & Integrations",
+  );
+  await overviewScreenshot(
+    monitor,
+    testInfo.outputPath("viz-desktop-join-satisfied.png"),
+  );
   // Unrelated company commands must leave this recording unchanged, including its processed identities.
   const other = await workspace(context, "contractor");
   const beforeOther = (await snapshot(monitor)).viz!.recordings[0];
