@@ -25,7 +25,6 @@ test("Operations discovers automations without executing them; deep links preser
   const activity = state.workItems.find(
     (t) => t.activity === "PublishActivation" && t.companyId === company.id,
   )!;
-  await operations.getByLabel("Work queue company").selectOption(company.id);
   const preferences = await operations.evaluate(() => ({
     role: sessionStorage.getItem("fieldwork:operations:role"),
     company: sessionStorage.getItem("fieldwork:operations:company"),
@@ -43,6 +42,7 @@ test("Operations discovers automations without executing them; deep links preser
   await operations
     .getByRole("button", { name: "All participants work" })
     .click();
+  await operations.getByLabel("Work queue company").selectOption(company.id);
   await expect(
     operations.getByRole("button", { name: "Publish contractor activation →" }),
   ).toHaveCount(0);

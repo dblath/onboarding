@@ -32,10 +32,15 @@ export function automationLink(companyId = "", activityId = "") {
   return `#/monitor?${query}`;
 }
 
+export function workflowMonitorLink(companyId: string) {
+  return `#/monitor?${new URLSearchParams({ view: "inspection", company: companyId })}`;
+}
+
 export function monitorContext() {
   const [path, query] = window.location.hash.slice(1).split("?");
   const params = new URLSearchParams(query);
   return {
+    inspection: path === "/monitor" && params.get("view") === "inspection",
     automation: path === "/monitor" && params.get("view") === "automations",
     journey: path === "/monitor" && params.get("view") === "journey",
     workspace: path === "/monitor" && params.get("view") === "workspace",

@@ -163,6 +163,7 @@ test("Viz records a real 37-step journey across tabs, failure, joins and immutab
   ]).toEqual(["waiting", "waiting", "waiting"]);
   await role(operations, "Compliance");
   const insurance = card(operations, "Review insurance");
+  await insurance.getByText("Simulation options", { exact: true }).click();
   await insurance.getByRole("checkbox").check();
   await insurance
     .getByRole("button", { name: "Run simulated verification →" })

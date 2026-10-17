@@ -12,6 +12,7 @@ import {
   snapshot,
   synchronized,
   workspace,
+  inspectCompany,
 } from "./helpers";
 import { parseWorkspaceFile } from "../../src/workspace/format";
 
@@ -126,8 +127,8 @@ test("automatic journeys capture with Monitor closed, synchronize, filter, stop 
   await monitor.getByLabel("Recording", { exact: true }).selectOption(alpha.id);
   const opsA = await workspace(context, "operations"),
     opsB = await workspace(context, "operations");
-  await opsA.getByLabel("Work queue company").selectOption(alpha.companyId);
-  await opsB.getByLabel("Work queue company").selectOption(beta.companyId);
+  await inspectCompany(opsA, "Net Alpha");
+  await inspectCompany(opsB, "Net Beta");
   await Promise.all([proceed(opsA), proceed(opsB)]);
   await expect(monitor.getByTestId("viz-frame-number")).toHaveText(
     "Frame 1 / 1",
@@ -262,7 +263,7 @@ test("twelve simultaneous company and skill captures measure real IndexedDB writ
     await application(baselinePortal, `Fleet ${i}`, `fleet${i}@example.com`);
   const baselineCompanies = (await snapshot(baselinePortal)).companies;
   for (const c of baselineCompanies.slice(0, 2)) {
-    await baselineOps.getByLabel("Work queue company").selectOption(c.id);
+    await inspectCompany(baselineOps, c.name);
     await proceed(baselineOps);
   }
   const baseline = await snapshot(baselinePortal);
@@ -289,13 +290,9 @@ test("twelve simultaneous company and skill captures measure real IndexedDB writ
   expect(
     state.viz!.recordings.filter((r) => r.status === "Recording"),
   ).toHaveLength(10);
-  await operations
-    .getByLabel("Work queue company")
-    .selectOption(state.companies[0].id);
+  await inspectCompany(operations, state.companies[0].name);
   await proceed(operations);
-  await operations
-    .getByLabel("Work queue company")
-    .selectOption(state.companies[1].id);
+  await inspectCompany(operations, state.companies[1].name);
   await proceed(operations);
   state = await synchronized([contractor, monitor, operations]);
   expect(
@@ -491,7 +488,6 @@ test("mid-workflow catalog triggers start at the committed Recruitment and readi
     .filter({ hasText: s.companies[0].name })
     .click();
   await role(ops, "Training");
-  await ops.getByLabel("Work queue company").selectOption(s.companies[0].id);
   await completion(ops, "Confirm training completion", "Confirm training →");
   s = await synchronized([portal, ops, monitor]);
   const ready = s.viz!.recordings.at(-1)!;

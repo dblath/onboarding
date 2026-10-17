@@ -149,7 +149,6 @@ export function ContractorPortal({
           {c.name.slice(0, 2).toUpperCase()}
         </div>
         <div>
-          <span className="contractor-kicker">YOUR COMPANY</span>
           <h1>{c.name}</h1>
           <p>
             {c.contact} <span aria-hidden>·</span> {c.email}

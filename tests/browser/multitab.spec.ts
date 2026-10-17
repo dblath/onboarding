@@ -65,6 +65,7 @@ test("three simultaneous experiences complete correction, independent branches a
     monitor.getByText("Evidence correction", { exact: false }).first(),
   ).toBeVisible();
   await evidence(contractor, "Submit license evidence");
+  await role(operations, "Compliance");
   await expect(card(operations, "Verify license")).toBeVisible();
   await verify(operations, "Verify license");
   await role(operations, "Field Manager");
@@ -126,9 +127,9 @@ test("three simultaneous experiences complete correction, independent branches a
   await expect(
     contractor.getByRole("heading", { name: "You're ready for your next job" }),
   ).toBeVisible();
-  await expect(
-    operations.getByRole("heading", { name: "Eligible to receive jobs" }),
-  ).toBeVisible();
+  await expect(operations.locator(".ops-company-heading")).toContainText(
+    "Eligible for jobs",
+  );
   const rootOption = monitor
     .getByLabel("Workflow instance")
     .locator("option")
@@ -281,6 +282,7 @@ test("failed activities retry from Monitor, persist on refresh and resume every 
   await evidence(contractor, "Submit license evidence");
   await role(operations, "Compliance");
   const task = card(operations, "Verify license");
+  await task.getByText("Simulation options", { exact: true }).click();
   await task.getByRole("checkbox").check();
   await task
     .getByRole("button", { name: "Run simulated verification →" })

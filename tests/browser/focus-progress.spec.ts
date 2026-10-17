@@ -10,6 +10,7 @@ import {
   synchronized,
   verify,
   workspace,
+  inspectCompany,
 } from "./helpers";
 
 test.use({ viewport: { width: 1600, height: 1100 } });
@@ -48,9 +49,9 @@ test("role-scoped network follows open owned work, clears stale selection, suppo
   await expect(compliance.locator(".application-row")).toContainText(
     "Active Beta",
   );
-  await expect(compliance.locator(".application-row")).toContainText(
-    "1 task open for Compliance",
-  );
+  await expect(
+    compliance.locator(".application-row .ops-role-count"),
+  ).toHaveText("1");
   await compliance.locator(".application-row").click();
   await verify(compliance, "Review insurance");
   await expect(compliance.locator(".application-row")).toHaveCount(0);
@@ -64,12 +65,13 @@ test("role-scoped network follows open owned work, clears stale selection, suppo
     .locator(".application-row")
     .filter({ hasText: "Active Beta" })
     .click();
+  await inspectCompany(compliance, "Active Beta");
   await expect(compliance.getByTestId("lifecycle-onboarding")).toBeVisible();
   await nav(compliance, "Work queue");
-  await compliance.getByLabel("Work queue company").selectOption("");
   await compliance
     .getByRole("button", { name: "All participants work", exact: true })
     .click();
+  await compliance.getByLabel("Work queue company").selectOption("");
   await expect(
     compliance.getByRole("button", { name: "Record decision →", exact: true }),
   ).toHaveCount(0);
@@ -136,12 +138,14 @@ test("grouped activity counts reconcile with correction loops, failures and immu
   await expect(monitor.getByTestId("remaining-Insurance")).toHaveText(
     "1 remaining",
   );
+  await role(ops, "Compliance");
   const t = card(ops, "Review insurance");
+  await t.getByText("Simulation options", { exact: true }).click();
   await t.getByRole("checkbox").check();
   await t
     .getByRole("button", { name: "Run simulated verification →", exact: true })
     .click();
-  await expect(t).toContainText("Technical failure");
+  await expect(t).toContainText("Verification failed — retry available");
   await expect(monitor.getByTestId("remaining-Insurance")).toHaveText(
     "1 remaining",
   );

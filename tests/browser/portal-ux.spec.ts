@@ -268,6 +268,15 @@ test("monitor diagnostics launch closed, update while hidden, expand independent
       monitor.getByRole("button", { name: title, exact: true }),
     ).toHaveAttribute("aria-expanded", "false");
   for (const page of [monitor, operations]) {
+    if (page === operations) {
+      await expect(
+        page.getByRole("heading", {
+          name: "Onboarding Operations",
+          exact: true,
+        }),
+      ).toBeVisible();
+      continue;
+    }
     expect(
       await page
         .locator(".stats")

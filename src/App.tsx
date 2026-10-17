@@ -22,6 +22,7 @@ import { WorkflowMonitor } from "./WorkflowMonitor";
 import { LifecycleStatus } from "./LifecycleStatus";
 import { ContractorAccess, useContractorSession } from "./ContractorAccess";
 import { ContractorPortal } from "./ContractorPortal";
+import { OperationsWorkspace } from "./OperationsWorkspace";
 import { DiagnosticPanel } from "./DiagnosticPanel";
 import {
   OperationsQueueNavigation,
@@ -41,11 +42,15 @@ import {
 import "./style.css";
 import "./theme.css";
 import "./contractor.css";
+import "./operations.css";
 import { VizBoundary } from "./viz/VizBoundary";
 const JourneyMap = lazy(() => import("./viz/JourneyMap"));
 const DemoWorkspace = lazy(() => import("./workspace/DemoWorkspace"));
 const TriggerManager = lazy(() => import("./viz/TriggerManager"));
 let browserService: OnboardingService | undefined;
+function isOperationsExperience(experience: string): boolean {
+  return experience === "operations";
+}
 function getDefaultService() {
   return (browserService ??= createBrowserService());
 }
@@ -147,6 +152,16 @@ export function App({
     setNotice("");
   }, [experience]);
   useEffect(() => {
+    if (experience === "monitor" && routeContext.inspection) {
+      setView("Workflow monitor");
+      if (routeContext.companyId) {
+        setSelected(routeContext.companyId);
+        sessionStorage.setItem(
+          "fieldwork:monitor:company",
+          routeContext.companyId,
+        );
+      }
+    }
     if (experience === "monitor" && routeContext.triggers)
       setView("Recording Triggers");
     if (experience === "monitor" && routeContext.workspace)
@@ -177,7 +192,9 @@ export function App({
           "Workflow monitor",
           "Outbox",
         ]
-      : ["Overview", "Work queue", "Outbox"];
+      : experience === "operations"
+        ? ["Work queue"]
+        : ["Overview", "Work queue", "Outbox"];
   const viewName = (v: View) =>
     experience === "contractor"
       ? ((
@@ -317,6 +334,23 @@ export function App({
       setView("Overview");
     }, "Application submitted. Recruitment review is ready.");
   }
+  const synchronizationStatus = (
+    <span
+      className="sync-status"
+      role="status"
+      data-testid="sync-status"
+      data-revision={state.revision}
+    >
+      {service.unavailableReason
+        ? "Writes disabled"
+        : refreshing
+          ? "Syncing…"
+          : experience === "contractor"
+            ? "Live · Saved in this browser"
+            : "Live · Shared browser state"}
+      {experience !== "contractor" && <> · Revision {state.revision}</>}
+    </span>
+  );
   return (
     <div
       className={`shell experience-${experience}${anonymous ? " anonymous" : ""}`}
@@ -432,7 +466,7 @@ export function App({
         </nav>
         <div className="aside-bottom">
           <span className="live-dot" /> Browser-local workspace
-          <p>Iteration 3.9 · Onboarding first</p>
+          <p>Iteration 3.10 · Operations first</p>
         </div>
       </aside>
       <div className="main">
@@ -494,63 +528,69 @@ export function App({
           )}
         </header>
         <main>
-          {(experience !== "contractor" || anonymous) && (
-            <div className="title-row">
+          {experience === "operations" && (
+            <div className="ops-page-heading">
               <div>
-                <div className="eyebrow">A STRONG NETWORK STARTS HERE</div>
-                <h1>
-                  {persona === "Contractor"
-                    ? anonymous
-                      ? "Your next chapter starts here."
-                      : "Your company. Your next step."
-                    : persona === "Workflow Monitor"
-                      ? "Every step, in view."
-                      : "Good people. Great partnerships."}
-                </h1>
-                <p className="subtitle">
-                  {persona === "Contractor"
-                    ? "One company. Independent skills. A clear path to your first job."
-                    : persona === "Workflow Monitor"
-                      ? view === "Automations & Integrations"
-                        ? "Run simulated integrations and review actions that need attention."
-                        : "Watch business events resume durable waits and schedule the next activity."
-                      : view === "Work queue"
-                        ? `${participantName(queueParticipant)} work. Review outstanding actions across companies.`
-                        : `Your ${persona.toLowerCase()} workspace. Complete an action and see the process move.`}
+                <h1>Onboarding Operations</h1>
+                <p>
+                  <strong>
+                    {allMyTasks.length} open action
+                    {allMyTasks.length === 1 ? "" : "s"}
+                  </strong>{" "}
+                  for {internalPersona} ·{" "}
+                  {networkScope === "active"
+                    ? "My active work"
+                    : "All companies"}
                 </p>
               </div>
-              {persona === "Contractor" && (
-                <button
-                  className="primary"
-                  disabled={writeDisabled || loading}
-                  onClick={() => setCreating(true)}
-                >
-                  ＋ New application
-                </button>
-              )}
             </div>
           )}
-          <div className="demo-banner">
-            <span>
-              <b>SIMULATION</b> Fictional documents and integrations only. No
-              real financial or identity data.
-            </span>
-            <span
-              className="sync-status"
-              role="status"
-              data-testid="sync-status"
-              data-revision={state.revision}
-            >
-              {service.unavailableReason
-                ? "Writes disabled"
-                : refreshing
-                  ? "Syncing…"
-                  : experience === "contractor"
-                    ? "Live · Saved in this browser"
-                    : "Live · Shared browser state"}{" "}
-              {experience !== "contractor" && <>· Revision {state.revision}</>}
-            </span>
-          </div>
+          {experience !== "operations" &&
+            (experience !== "contractor" || anonymous) && (
+              <div className="title-row">
+                <div>
+                  <div className="eyebrow">A STRONG NETWORK STARTS HERE</div>
+                  <h1>
+                    {persona === "Contractor"
+                      ? anonymous
+                        ? "Your next chapter starts here."
+                        : "Your company. Your next step."
+                      : persona === "Workflow Monitor"
+                        ? "Every step, in view."
+                        : "Good people. Great partnerships."}
+                  </h1>
+                  <p className="subtitle">
+                    {persona === "Contractor"
+                      ? "One company. Independent skills. A clear path to your first job."
+                      : persona === "Workflow Monitor"
+                        ? view === "Automations & Integrations"
+                          ? "Run simulated integrations and review actions that need attention."
+                          : "Watch business events resume durable waits and schedule the next activity."
+                        : view === "Work queue"
+                          ? `${participantName(queueParticipant)} work. Review outstanding actions across companies.`
+                          : `Your ${persona.toLowerCase()} workspace. Complete an action and see the process move.`}
+                  </p>
+                </div>
+                {persona === "Contractor" && (
+                  <button
+                    className="primary"
+                    disabled={writeDisabled || loading}
+                    onClick={() => setCreating(true)}
+                  >
+                    ＋ New application
+                  </button>
+                )}
+              </div>
+            )}
+          {experience !== "contractor" && (
+            <div className="demo-banner">
+              <span>
+                <b>SIMULATION</b> Fictional documents and integrations only. No
+                real financial or identity data.
+              </span>
+              {synchronizationStatus}
+            </div>
+          )}
           {!anonymous && experience !== "contractor" && (
             <div className="stats">
               <div>
@@ -620,7 +660,7 @@ export function App({
               Choose a company from Contractor network to continue.
             </p>
           )}
-          {experience !== "contractor" && (
+          {experience === "monitor" && (
             <div className="experience-links">
               <span>Open the other experiences:</span>
               {(["contractor", "operations", "monitor"] as const)
@@ -720,6 +760,27 @@ export function App({
               busy={writeDisabled}
               view={view}
               onView={setView}
+            />
+          ) : isOperationsExperience(experience) ? (
+            <OperationsWorkspace
+              state={state}
+              role={internalPersona}
+              companies={network}
+              company={c}
+              scope={networkScope}
+              onScope={chooseNetworkScope}
+              onCompany={selectCompany}
+              participant={queueParticipant}
+              queueCompany={queueCompany}
+              onQueueCompany={(id) => {
+                setQueueCompany(id);
+                if (id) selectCompany(id);
+              }}
+              onParticipant={chooseParticipant}
+              view={view}
+              service={service}
+              run={run}
+              busy={writeDisabled}
             />
           ) : experience === "monitor" && view === "Recording Triggers" ? (
             <Suspense
@@ -1453,13 +1514,25 @@ export function App({
             </div>
           )}
           <footer>
-            <span>
-              <span className="live-dot" /> Saved in this browser · Live across
-              tabs
-            </span>
-            <span>
-              Educational Temporal-style simulation · No external services
-            </span>
+            {experience === "contractor" ? (
+              <>
+                <span>
+                  Fictional data · Simulated sign-in and integrations. No real
+                  authentication or external services.
+                </span>
+                {synchronizationStatus}
+              </>
+            ) : (
+              <>
+                <span>
+                  <span className="live-dot" /> Saved in this browser · Live
+                  across tabs
+                </span>
+                <span>
+                  Educational Temporal-style simulation · No external services
+                </span>
+              </>
+            )}
           </footer>
         </main>
       </div>

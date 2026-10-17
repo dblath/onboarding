@@ -1,0 +1,723 @@
+/* Operations shares the accepted Contractor tokens; layout is work-first and role-owned. */
+.experience-operations {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.experience-operations > aside {
+  width: 224px;
+  padding: 28px 20px;
+}
+.experience-operations .main {
+  margin-left: 224px;
+  width: calc(100% - 224px);
+}
+.experience-operations .main > header {
+  height: auto;
+  min-height: 56px;
+  padding: 10px 28px;
+  gap: 16px;
+}
+.experience-operations .persona label {
+  font-size: 12px;
+  white-space: nowrap;
+}
+.experience-operations header .persona select {
+  font-size: 13px;
+  min-height: 38px;
+  padding: 7px 10px;
+}
+.experience-operations main {
+  max-width: 1520px;
+  padding: 24px 28px;
+}
+.experience-operations .stats {
+  display: none;
+}
+.experience-operations .main h1,
+.experience-operations .main h2,
+.experience-operations .main h3 {
+  font-family: inherit;
+  letter-spacing: -0.02em;
+}
+.ops-page-heading h1 {
+  font-size: 24px;
+  font-weight: 650;
+  line-height: 1.3;
+  margin: 0;
+}
+.ops-page-heading p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 6px 0 12px;
+}
+.ops-page-heading p strong {
+  color: var(--text);
+  font-weight: 650;
+}
+.experience-operations .demo-banner {
+  margin: 0 0 22px;
+  font-size: 10px;
+  background: var(--surface-2);
+}
+.experience-operations .notice {
+  font-size: 13px;
+  margin: 12px 0;
+}
+.experience-operations .primary,
+.experience-operations .secondary {
+  min-height: 40px;
+  font-size: 13px;
+  white-space: normal;
+}
+.experience-operations input,
+.experience-operations select,
+.experience-operations textarea {
+  font-size: 14px;
+  min-height: 40px;
+}
+.experience-operations label {
+  font-size: 13px;
+}
+.experience-operations .text-button {
+  font-size: 13px;
+  min-height: 36px;
+}
+.experience-operations aside nav {
+  margin-top: 32px;
+}
+.experience-operations aside nav button {
+  min-height: 40px;
+  font-size: 12px;
+}
+.experience-operations .operations-queue-navigation [role="group"] button {
+  font-size: 11px;
+}
+.operations-product {
+  min-width: 0;
+}
+.ops-working-grid {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.ops-company-list {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  overflow: hidden;
+  min-width: 0;
+}
+.ops-list-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 16px 12px;
+  gap: 12px;
+}
+.ops-list-heading h2 {
+  font-size: 15px;
+}
+.ops-list-heading > span,
+.ops-role-count {
+  background: var(--soft);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 650;
+  min-width: 24px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  text-align: center;
+}
+.ops-list-scope {
+  display: flex;
+  margin: 0 12px 12px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface-2);
+}
+.ops-list-scope button {
+  font-size: 11px;
+  padding: 9px 7px;
+  border: 0;
+  border-radius: 4px;
+  flex: 1;
+  background: transparent;
+  color: var(--muted);
+  min-height: 36px;
+}
+.ops-list-scope button[aria-pressed="true"] {
+  color: #fff;
+  background: var(--accent);
+  font-weight: 650;
+}
+.ops-company-row.application-row {
+  display: block;
+  padding: 16px;
+  text-align: left;
+}
+.ops-company-name {
+  display: flex !important;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.ops-company-name strong {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.ops-company-row .ops-company-task {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.ops-company-row > small {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.ops-company-row.selected {
+  box-shadow: inset 3px 0 var(--accent);
+  background: var(--soft);
+}
+.ops-list-empty {
+  padding: 16px;
+  font-size: 13px;
+}
+.ops-list-empty p {
+  font-size: 12px;
+  color: var(--muted);
+}
+.ops-list-note {
+  padding: 16px;
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+  background: var(--surface-2);
+}
+.ops-list-toggle {
+  display: none;
+}
+.ops-selected-company {
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 22px;
+}
+.ops-company-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+.ops-company-heading h2 {
+  font-size: 21px;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+.ops-company-heading p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 6px 0 0;
+  overflow-wrap: anywhere;
+}
+.ops-status {
+  font-size: 11px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  line-height: 1.5;
+  background: #edf2f7;
+  color: #455e74;
+  white-space: normal;
+}
+.ops-status.complete {
+  background: var(--success-bg);
+  color: var(--success);
+}
+.ops-status.correction {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.ops-actions {
+  margin-top: 18px;
+}
+.ops-section-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 12px;
+}
+.ops-section-heading h2,
+.ops-section-heading h3 {
+  font-size: 16px;
+  font-weight: 650;
+  margin: 0;
+}
+.ops-section-heading > span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.ops-section-heading p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 6px 0 0;
+  max-width: 640px;
+}
+.ops-section-heading > a {
+  font-size: 11px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.ops-actions .queue-item {
+  margin: 12px 0;
+  border: 0;
+}
+.ops-actions .task-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-2);
+  padding: 18px;
+  margin: 0;
+}
+.ops-actions .task-card h3 {
+  font-size: 16px;
+  margin: 12px 0 8px;
+}
+.ops-actions .task-instructions,
+.ops-actions .muted {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.ops-actions .task-kind,
+.ops-actions .task-due,
+.ops-actions .task-top .pill,
+.ops-actions .evidence-chip small {
+  font-size: 11px;
+}
+.ops-actions .task-due {
+  margin: 10px 0;
+}
+.ops-actions .evidence-chip {
+  font-size: 12px;
+  padding: 10px;
+  margin: 12px 0;
+  background: #eaf0f6;
+}
+.ops-actions .task-card form {
+  margin: 12px 0 0;
+}
+.ops-actions textarea {
+  min-height: 68px;
+}
+.ops-simulation-options {
+  padding: 6px 0 12px;
+  border: 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+.ops-simulation-options summary {
+  font-size: 11px;
+  color: var(--muted);
+}
+.ops-simulation-options .checkbox {
+  font-size: 12px;
+}
+.ops-actions .failure-box {
+  font-size: 13px;
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.ops-no-actions {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface-2);
+  font-size: 13px;
+  color: var(--text);
+}
+.ops-no-actions p,
+.ops-no-actions ul {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.ops-no-actions li {
+  padding: 3px 0;
+}
+.ops-automation-note {
+  padding: 14px 16px;
+  background: var(--soft);
+  border: 1px solid #bdd2e4;
+  border-radius: 7px;
+  margin-top: 16px;
+  font-size: 13px;
+}
+.ops-automation-note p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 6px 0;
+}
+.ops-automation-note a {
+  color: var(--accent);
+  font-size: 12px;
+}
+.ops-company-record {
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.ops-progress-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 14px 0 18px;
+  align-items: start;
+}
+.ops-stage {
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.ops-stage summary {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  color: var(--text);
+  min-height: 66px;
+  cursor: pointer;
+}
+.ops-stage summary::-webkit-details-marker,
+.ops-disclosure summary::-webkit-details-marker {
+  display: none;
+}
+.ops-stage summary strong {
+  font-size: 12px;
+  font-weight: 650;
+}
+.ops-stage summary small {
+  float: none;
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 3px;
+}
+.ops-stage-icon {
+  font-size: 13px;
+  color: var(--muted);
+}
+.ops-stage.complete .ops-stage-icon {
+  color: var(--success);
+}
+.ops-stage.owned {
+  background: var(--soft);
+  border-color: #94b8d6;
+}
+.ops-stage.owned .ops-stage-icon {
+  color: var(--accent);
+}
+.ops-stage.correction .ops-stage-icon {
+  color: var(--danger);
+}
+.ops-chevron {
+  font-size: 20px;
+  color: var(--muted);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.ops-stage[open] {
+  grid-column: 1/-1;
+}
+.ops-stage[open] .ops-chevron,
+.ops-disclosure[open] > summary .ops-chevron {
+  transform: rotate(90deg);
+}
+.ops-stage-body {
+  border-top: 1px solid var(--line);
+  padding: 14px;
+  background: var(--surface);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.ops-stage-body > p {
+  margin-top: 0;
+  color: var(--muted);
+}
+.ops-record-row {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+.ops-record-row:last-child {
+  border: 0;
+}
+.ops-record-row small,
+.ops-evidence > span {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 5px;
+}
+.ops-record-row p {
+  margin: 5px 0;
+  overflow-wrap: anywhere;
+}
+.ops-evidence {
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border-radius: 5px;
+  font-size: 12px;
+  margin-top: 10px;
+}
+.ops-evidence strong {
+  font-weight: 500;
+}
+.ops-evidence p {
+  color: var(--muted);
+  font-size: 11px;
+}
+.ops-area-history {
+  margin-top: 14px;
+}
+.ops-disclosure {
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  margin: 8px 0;
+}
+.ops-disclosure > summary {
+  padding: 13px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  list-style: none;
+  color: var(--text);
+  min-height: 58px;
+}
+.ops-disclosure > summary strong {
+  font-size: 13px;
+}
+.ops-disclosure > summary small {
+  display: block;
+  float: none;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 4px;
+}
+.ops-disclosure-body {
+  padding: 16px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+.ops-technical-link {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 16px 0 0;
+}
+.ops-technical-link a,
+.ops-stage-body a {
+  color: var(--accent);
+}
+.ops-welcome {
+  padding: 52px 22px;
+  text-align: center;
+}
+.ops-welcome h2 {
+  font-size: 22px;
+}
+.ops-welcome p {
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 440px;
+  margin: 12px auto 20px;
+  line-height: 1.7;
+}
+.ops-empty-symbol {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--soft);
+  color: var(--accent);
+  margin: 0 auto 20px;
+  font-size: 20px;
+}
+.ops-inventory {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 22px;
+  border-radius: 9px;
+  margin-bottom: 20px;
+}
+.experience-operations footer {
+  font-size: 10px;
+  color: var(--muted);
+}
+.experience-contractor footer .sync-status {
+  font-size: 10px;
+  white-space: normal;
+}
+@media (max-width: 1150px) and (min-width: 801px) {
+  .ops-working-grid {
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 14px;
+  }
+  .experience-operations main {
+    padding: 20px;
+  }
+  .ops-selected-company {
+    padding: 18px;
+  }
+  .ops-progress-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ops-company-heading {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+@media (max-width: 800px) {
+  .experience-operations > aside {
+    width: 100%;
+    padding: 14px 16px;
+  }
+  .experience-operations .main {
+    width: 100%;
+    margin: 0;
+  }
+  .experience-operations aside .brand-image {
+    width: 36px;
+  }
+  .experience-operations aside .brand-caption {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+  }
+  .experience-operations aside .brand-caption small {
+    margin: 0;
+    font-size: 14px;
+  }
+  .experience-operations aside nav {
+    margin-top: 12px;
+  }
+  .experience-operations aside nav button {
+    min-height: 38px;
+    font-size: 12px;
+  }
+  .experience-operations .main > header {
+    padding: 10px 16px;
+    gap: 8px;
+  }
+  .experience-operations .main > header .app-identity {
+    display: none;
+  }
+  .experience-operations .persona {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .experience-operations .persona select {
+    max-width: 230px;
+    flex: 1;
+  }
+  .experience-operations main {
+    padding: 16px;
+  }
+  .ops-page-heading h1 {
+    font-size: 22px;
+  }
+  .experience-operations .demo-banner {
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .ops-working-grid {
+    display: block;
+  }
+  .ops-company-list {
+    margin-bottom: 14px;
+  }
+  .ops-list-heading {
+    padding: 12px 14px 8px;
+  }
+  .ops-list-scope {
+    margin-bottom: 8px;
+  }
+  .ops-list-toggle {
+    display: flex;
+    width: calc(100% - 24px);
+    margin: 0 12px 12px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .ops-companies {
+    display: none;
+    max-height: 320px;
+    overflow: auto;
+  }
+  .ops-companies.is-open {
+    display: block;
+  }
+  .ops-company-row.application-row {
+    padding: 12px 14px;
+  }
+  .ops-list-note {
+    display: none;
+  }
+  .ops-list-empty {
+    padding: 4px 14px 14px;
+  }
+  .ops-selected-company {
+    padding: 16px;
+  }
+  .ops-company-heading {
+    display: block;
+    padding-bottom: 14px;
+  }
+  .ops-company-heading h2 {
+    font-size: 20px;
+  }
+  .ops-company-heading .ops-status {
+    display: inline-block;
+    margin-top: 10px;
+  }
+  .ops-section-heading {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .ops-actions .task-card {
+    padding: 14px;
+  }
+  .ops-progress-grid {
+    grid-template-columns: 1fr;
+  }
+  .ops-stage summary {
+    min-height: 60px;
+  }
+  .ops-disclosure > summary {
+    padding: 12px;
+  }
+  .ops-disclosure-body {
+    padding: 12px;
+  }
+  .ops-welcome {
+    padding: 24px 12px;
+  }
+  .ops-inventory {
+    padding: 16px;
+  }
+}

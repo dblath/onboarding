@@ -38,7 +38,8 @@ test("role and company filters preserve global totals, and completed work update
     await expect(page.getByTestId("queue-count-Recruitment")).toHaveText("2");
   }
   const queue = first.getByRole("region", { name: "Operations work queue" });
-  await expect(queue.getByTestId("queue-item")).toHaveCount(2);
+  await expect(first.locator(".ops-company-row")).toHaveCount(2);
+  await expect(queue.getByTestId("queue-item")).toHaveCount(1);
   for (const role of [
     "Recruitment",
     "Compliance",
@@ -54,9 +55,14 @@ test("role and company filters preserve global totals, and completed work update
   await participant(first, "Recruitment");
   const s = await snapshot(first),
     beta = s.companies.find((company) => company.name === "Beta Work")!;
-  await first.getByLabel("Work queue company").selectOption(beta.id);
+  await first
+    .locator(".ops-company-row")
+    .filter({ hasText: "Beta Work" })
+    .click();
   await expect(queue.getByTestId("queue-item")).toHaveCount(1);
-  await expect(queue.getByTestId("queue-item")).toContainText("Beta Work");
+  await expect(
+    first.getByRole("heading", { name: "Beta Work", exact: true }),
+  ).toBeVisible();
   await expect(first.getByTestId("queue-total")).toHaveText("2");
   await queue.getByRole("button", { name: "Record decision →" }).click();
   for (const page of [first, second]) {
@@ -122,10 +128,15 @@ test("vendor and activation are discovered in Operations and executed in Monitor
   await role(operations, "Contractor Relations");
   await verify(operations, "Execute simulated agreement");
   await expect(
-    operations.getByText("No open work for this participant", { exact: false }),
+    operations.getByText("No active work for Contractor Relations.", {
+      exact: true,
+    }),
   ).toBeVisible();
+  await inspectCompany(operations, "Activation Visibility Demo");
   await expect(
-    operations.getByRole("link", { name: "Open Automations & Integrations" }),
+    operations
+      .locator(".ops-automation-note")
+      .getByRole("link", { name: "Open Automations & Integrations" }),
   ).toBeVisible();
   await nav(contractor, "Your journey");
   await expect(contractor.getByTestId("eligibility-guidance")).toContainText(
@@ -134,9 +145,11 @@ test("vendor and activation are discovered in Operations and executed in Monitor
   await expect(contractor.getByTestId("eligibility-guidance")).toContainText(
     "Operations",
   );
-  const vendorLink = operations.getByRole("link", {
-    name: "Open Automations & Integrations",
-  });
+  const vendorLink = operations
+    .locator(".ops-automation-note")
+    .getByRole("link", {
+      name: "Open Automations & Integrations",
+    });
   await monitor.goto("/" + (await vendorLink.getAttribute("href")));
   await expect(monitor.getByTestId("automation-item")).toContainText(
     "Activation Visibility Demo",

@@ -32,6 +32,15 @@ export async function nav(page: Page, name: string) {
     page.url().includes("#/monitor")
   )
     await page.goto("/#/operations");
+  if (page.url().includes("#/operations") && name === "Overview") return; // Records now live below the working actions.
+  if (page.url().includes("#/operations") && name === "Outbox") {
+    await page
+      .locator(".ops-disclosure")
+      .filter({ hasText: "Messages & activity history" })
+      .locator("summary")
+      .click();
+    return;
+  }
   await page
     .getByRole("navigation")
     .getByRole("button", { name, exact: true })
@@ -40,6 +49,12 @@ export async function nav(page: Page, name: string) {
 export async function role(page: Page, name: string) {
   if (!page.url().includes("#/operations")) await page.goto("/#/operations");
   await page.getByLabel("Internal role").selectOption(name);
+  // Explicit test intent to work on the first available company; production never substitutes a stale selection.
+  if (
+    (await page.locator(".ops-company-row.selected").count()) === 0 &&
+    (await page.locator(".ops-company-row").count()) > 0
+  )
+    await page.locator(".ops-company-row").first().click();
 }
 export function card(page: Page, name: string): Locator {
   return page
@@ -112,10 +127,28 @@ export async function proceed(page: Page) {
 }
 /** Explicit broader discovery, never silently chooses a replacement company. */
 export async function inspectCompany(page: Page, name: string) {
+  if (!page.url().includes("#/operations")) await page.goto("/#/operations");
+  const myWork = page.getByRole("button", {
+    name: "Return to my work",
+    exact: true,
+  });
+  if (await myWork.isVisible()) await myWork.click();
   await page
     .getByRole("button", { name: "All companies", exact: true })
     .click();
-  await page.locator(".application-row").filter({ hasText: name }).click();
+  await page
+    .locator(".application-row")
+    .filter({ has: page.getByText(name, { exact: true }) })
+    .click();
+  for (const record of [
+    page.locator(".ops-disclosure").filter({
+      has: page.getByText("Company facts & readiness", { exact: true }),
+    }),
+    page.getByTestId("ops-stage-skills"),
+  ]) {
+    if ((await record.count()) && (await record.getAttribute("open")) === null)
+      await record.locator("summary").first().click();
+  }
 }
 export async function evidence(
   page: Page,

@@ -28,6 +28,7 @@ export function TaskCard({
   busy,
   automationExecution = false,
   contractorView = false,
+  operationsView = false,
 }: {
   task: WorkItem;
   state: State;
@@ -36,24 +37,33 @@ export function TaskCard({
   busy: boolean;
   automationExecution?: boolean;
   contractorView?: boolean;
+  operationsView?: boolean;
 }) {
   const run: Run = (action, message) =>
     invoke(
       action,
-      contractorView
-        ? [
-            "SubmitLicense",
-            "SubmitInsurance",
-            "SubmitFinancial",
-            "SubmitAgreement",
-          ].includes(t.activity)
-          ? "Documents submitted. The responsible team will review them."
-          : t.activity === "ProvideInformation"
-            ? "Response sent to Recruitment."
-            : t.activity === "SetupPortal"
-              ? "Company profile complete. Your training is ready."
-              : "Training submitted for confirmation."
-        : message,
+      operationsView
+        ? message.includes("Timeout")
+          ? "The verification service did not respond. Retry is available in Workflow Monitor."
+          : t.activity === "ScreenApplication"
+            ? "Application decision saved. Your work list has been updated."
+            : t.activity === "ConfirmTraining"
+              ? "Training confirmation saved. Current readiness has been updated."
+              : "Action completed. Company progress and next ownership have been updated."
+        : contractorView
+          ? [
+              "SubmitLicense",
+              "SubmitInsurance",
+              "SubmitFinancial",
+              "SubmitAgreement",
+            ].includes(t.activity)
+            ? "Documents submitted. The responsible team will review them."
+            : t.activity === "ProvideInformation"
+              ? "Response sent to Recruitment."
+              : t.activity === "SetupPortal"
+                ? "Company profile complete. Your training is ready."
+                : "Training submitted for confirmation."
+          : message,
     );
   const [fail, setFail] = useState(false),
     [fixture, setFixture] = useState<EvidenceFixture>("Valid demo document");
@@ -61,6 +71,16 @@ export function TaskCard({
     evidence = latestEvidence(s, t),
     attempts = s.attempts.filter((a) => a.workItemId === t.id),
     failed = attempts.at(-1)?.status === "Failed";
+  const timeoutControl = (
+    <label className="checkbox">
+      <input
+        type="checkbox"
+        checked={fail}
+        onChange={(event) => setFail(event.target.checked)}
+      />{" "}
+      Inject a simulated timeout on this attempt
+    </label>
+  );
   function form(
     e: FormEvent<HTMLFormElement>,
     action: (f: FormData) => Promise<unknown>,
@@ -207,21 +227,33 @@ export function TaskCard({
         <div>
           {failed ? (
             <div className="failure-box" role="status">
-              <strong>
-                Technical failure · attempt {attempts.at(-1)!.attempt}
-              </strong>
-              <p>{attempts.at(-1)!.technicalError}</p>
-              <p>The work item remains open. Completed work is preserved.</p>
+              {operationsView ? (
+                <>
+                  <strong>Verification failed — retry available</strong>
+                  <p>
+                    Waiting for external service. Review the attempt and retry
+                    in Workflow Monitor.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <strong>
+                    Technical failure · attempt {attempts.at(-1)!.attempt}
+                  </strong>
+                  <p>{attempts.at(-1)!.technicalError}</p>
+                  <p>
+                    The work item remains open. Completed work is preserved.
+                  </p>
+                </>
+              )}
             </div>
+          ) : operationsView ? (
+            <details className="ops-simulation-options">
+              <summary>Simulation options</summary>
+              {timeoutControl}
+            </details>
           ) : (
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                checked={fail}
-                onChange={(e) => setFail(e.target.checked)}
-              />{" "}
-              Inject a simulated timeout on this attempt
-            </label>
+            timeoutControl
           )}
           {(failed || t.owner === "Simulation") && !automationExecution ? (
             <a href={automationLink(t.companyId, t.id)}>

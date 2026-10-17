@@ -5,6 +5,7 @@ import {
   card,
   completion,
   evidence,
+  inspectCompany,
   nav,
   role,
   signIn,
@@ -331,6 +332,7 @@ test("prepared scenarios preview without writes, export coherent state and suppo
   await confirm(monitor);
   await expect(card(contractor, "Submit license evidence")).toBeVisible();
   await evidence(contractor, "Submit license evidence");
+  await inspectCompany(operations, "Summit Field Services");
   await verify(operations, "Verify license");
   expect((await snapshot(monitor)).qualifications[0].status).toBe(
     "Awaiting approval",

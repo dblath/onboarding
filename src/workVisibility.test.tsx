@@ -138,23 +138,22 @@ it("keeps the global parent count during role/company filtering and reloads coun
   await user.click(parent);
   expect(parent.getAttribute("aria-expanded")).toBe("true");
   expect(screen.getByTestId("queue-total").textContent).toBe("5");
-  const queue = screen.getByRole("region", { name: "Operations work queue" });
-  expect(within(queue).getAllByTestId("queue-item")).toHaveLength(1);
-  expect(within(queue).getByTestId("queue-item").textContent).toContain(
-    "Beta Work",
-  );
+  const queue = () =>
+    screen.getByRole("region", { name: "Operations work queue" });
+  expect(within(queue()).getAllByTestId("queue-item")).toHaveLength(1);
+  expect(screen.getByRole("heading", { name: "Beta Work" })).not.toBeNull();
   await user.click(screen.getByRole("button", { name: "Contractor work" }));
-  expect(within(queue).getAllByTestId("queue-item")).toHaveLength(4);
+  expect(within(queue()).getAllByTestId("queue-item")).toHaveLength(4);
   expect(screen.getByTestId("queue-total").textContent).toBe("5");
   await user.selectOptions(
     screen.getByLabelText("Work queue company"),
     beta.id,
   );
-  expect(within(queue).queryAllByTestId("queue-item")).toHaveLength(0);
+  expect(within(queue()).queryAllByTestId("queue-item")).toHaveLength(0);
   expect(screen.getByTestId("queue-total").textContent).toBe("5");
   await user.click(screen.getByRole("button", { name: "Recruitment work" }));
   await user.click(
-    within(queue).getByRole("button", { name: "Record decision →" }),
+    within(queue()).getByRole("button", { name: "Record decision →" }),
   );
   await waitFor(() =>
     expect(screen.getByTestId("queue-count-Recruitment").textContent).toBe("0"),

@@ -1,4 +1,4 @@
-# Unity fieldwork - Contractor onboarding, Iteration 3.9
+# Unity fieldwork - Contractor onboarding, Iteration 3.10
 
 End-to-end product discovery prototype: contractor application, screening, administrative approvals, independent skill qualification, vendor provisioning, portal, training, readiness and activation. Browser-only persistence and simulated integrations. Simulated company sign-in uses the application email and password 123. No backend, real authentication or live services.
 
@@ -8,7 +8,13 @@ Historical onboarding completion, current readiness and operational status are s
 
 ## Contractor experience
 
-Signed-in Contractor now leads with company identity, a clear next action or next team, job eligibility, and a compact business onboarding journey. Documents and qualification run alongside one another; setup, training and activation explain their prerequisites. Readiness/operational facts, reviews, evidence versions, qualification decisions and activity history are independently expandable. Completed onboarding remains historical; additional skills are separate company activities. Existing actions, simulated login and shared workspace behavior are preserved. The shared palette is now navy/blue/slate; Operations and Monitor keep their layouts. Unity text uses a wider native width axis with the same slim strokes; original logo/favicons remain unchanged. See [design reference and implementation](docs/contractor-experience.md).
+Signed-in Contractor leads with company identity, a clear next action or next team, job eligibility, and a compact business onboarding journey. Documents and qualification run alongside one another; setup, training and activation explain their prerequisites. Readiness/operational facts, reviews, evidence versions, qualification decisions and activity history are independently expandable. Completed onboarding remains historical; additional skills are separate company activities. Existing actions, simulated login and shared workspace behavior are preserved. Iteration 3.10 removes only the YOUR COMPANY eyebrow and prominent simulation strip; fictional-data/authentication clarification and browser-storage status remain in the footer. Unity retains wider native lettering and slim strokes; original logo/favicons remain unchanged. See [Contractor design](docs/contractor-experience.md).
+
+## Operations experience
+
+Operations now uses the same navy/blue/slate foundation. My active work lists companies with Open work owned by the selected role; selecting a company reveals the existing action forms immediately. Rows show actual task counts, business activities and due/escalation facts. Completing the last owned action removes that company and clears its selection without choosing another company. All companies supports explicit investigation while preserving role execution limits. At mobile width, Choose a company exposes the list without crowding the working form.
+
+A compact six-area business progress overview sits below the actions, with independent disclosures for requirements, evidence versions, decisions, qualification records, readiness and activity/messages. Work queue navigation retains all-role totals and secondary global inventory. Pending automation has a company/activity link to Monitor; technical inspection has a company-context Monitor link. Automations and retries still execute only there. No workflow, business, persistence or recorder changes; Monitor/Viz layouts are unchanged. See [Operations design and boundaries](docs/operations-experience.md).
 
 ## Demo Workspace
 
@@ -57,7 +63,7 @@ Open these in three Chrome tabs in the same profile and exact origin (do not mix
 | 2   | http://127.0.0.1:5174/#/operations | Onboarding Operations: internal role, human work queues, automation discovery |
 | 3   | http://127.0.0.1:5174/#/monitor    | Workflow Monitor: automations, integrations, execution diagnostics            |
 
-Operations and Monitor have links to open the other experiences in new tabs. Internal role and company selection are in sessionStorage for that tab/experience. Contractor and Monitor have no role selector. Contractor has no worker controls, monitor tools, ingress tests, timers or internal outbox.
+Operations company records link to Monitor diagnostics and pending automation; Monitor retains links to the other experiences. Internal role and company selection are in sessionStorage for that tab/experience. Contractor and Monitor have no role selector. Contractor has no worker controls, monitor tools, ingress tests, timers or internal outbox.
 
 Submit in Tab 1. Tab 2 receives Recruitment work; Tab 3 opens Automations & Integrations; choose Workflow monitor to inspect execution diagnostics. Sign in to Contractor with the application email and simulation password 123, choosing a company if the email matches several. Proceed in Recruitment; Tab 1 receives evidence requests. Submit an expired license, verify as Compliance in Tab 2, and watch correction work appear in Tab 1 and its trace in Tab 3. Replace with valid evidence and verify again. Field Manager approves the skill. Finish administration, vendor, portal and training as below. All tabs reach Ready without refreshing; revision indicators converge on the committed revision.
 
@@ -68,7 +74,7 @@ Each tab reloads authoritative state on change notification and again on focus, 
 Use fictional names and example.com emails. Document submission uses predefined fictional fixtures, with no file upload, bank account, tax ID or identity number fields.
 
 1. **Contractor:** New application, select HVAC or Plumbing, submit. Sign in using that email and simulation password 123; duplicate emails require an explicit company choice.
-2. **Recruitment:** Work queue → Proceed. Administrative and skill work start in parallel.
+2. **Recruitment:** Select the company in My active work, then record Proceed in Your actions. Administrative and skill work start in parallel.
 3. **Contractor:** Submit three administrative packs and license evidence. Choose Valid simulated document.
 4. **Compliance:** Run insurance and license verification.
 5. **Finance:** Run fictional financial verification.

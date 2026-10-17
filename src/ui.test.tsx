@@ -37,9 +37,12 @@ async function persona(p: Persona) {
     window.location.hash = `/${route}`;
     window.dispatchEvent(new HashChangeEvent("hashchange"));
   });
-  if (route === "operations")
+  if (route === "operations") {
     await user.selectOptions(screen.getByLabelText("Internal role"), p);
-  else if (route === "monitor") await go("Workflow monitor");
+    const first = document.querySelector<HTMLElement>(".ops-company-row");
+    if (first && !document.querySelector(".ops-company-row.selected"))
+      await user.click(first);
+  } else if (route === "monitor") await go("Workflow monitor");
   else if (route === "contractor") await go("Work queue");
 }
 async function go(name: string) {
@@ -53,7 +56,8 @@ async function go(name: string) {
           } as Record<string, string>
         )[name] ?? name)
       : name;
-  await user.click(screen.getAllByRole("button", { name: mapped })[0]);
+  if (!(name === "Overview" && window.location.hash === "#/operations"))
+    await user.click(screen.getAllByRole("button", { name: mapped })[0]);
   if (name === "Overview" && window.location.hash === "#/operations") {
     await user.click(screen.getByRole("button", { name: "All companies" }));
     await user.click(
@@ -61,6 +65,16 @@ async function go(name: string) {
         selector: ".application-row strong",
       }),
     );
+    for (const summary of document.querySelectorAll<HTMLElement>(
+      ".ops-disclosure>summary, .ops-stage>summary",
+    )) {
+      if (
+        summary.textContent?.includes("Company facts & readiness") ||
+        summary.textContent?.includes("Skill qualification")
+      )
+        if (!summary.parentElement?.hasAttribute("open"))
+          await user.click(summary);
+    }
   }
 }
 function card(name: string) {
@@ -209,9 +223,11 @@ async function happy() {
   await activate();
   await persona("Training");
   await go("Overview");
-  expect(
-    await screen.findByRole("heading", { name: "Eligible to receive jobs" }),
-  ).not.toBeNull();
+  await waitFor(() =>
+    expect(screen.getByTestId("lifecycle-eligibility").textContent).toBe(
+      "Eligible",
+    ),
+  );
 }
 describe("participant UI acceptance", () => {
   it("keeps the company non-ready when a mandatory administrative prerequisite is missing", async () => {
@@ -228,14 +244,12 @@ describe("participant UI acceptance", () => {
     await go("Overview");
     expect(
       screen.getByRole("heading", {
-        name: "Building a ready-to-work partnership",
+        name: "Onboarding at a glance",
       }),
     ).not.toBeNull();
-    expect(
-      screen.getByText(
-        "1 of 4 readiness requirements complete. Every condition is required.",
-      ),
-    ).not.toBeNull();
+    expect(screen.getByTestId("lifecycle-readiness").textContent).toBe(
+      "Not ready",
+    );
     expect(
       screen.queryByRole("heading", { name: "Create vendor record" }),
     ).toBeNull();
@@ -387,9 +401,14 @@ describe("participant UI acceptance", () => {
     await user.click(
       screen.getByRole("button", { name: "Invalidate skill approval" }),
     );
-    await screen.findByRole("heading", {
-      name: "Not ready; onboarding remains completed",
-    });
+    await waitFor(() =>
+      expect(screen.getByTestId("lifecycle-readiness").textContent).toBe(
+        "Not ready",
+      ),
+    );
+    expect(screen.getByTestId("lifecycle-onboarding").textContent).toBe(
+      "Completed",
+    );
     s = await service.getState();
     expect(isReady(s.companies[0], s.qualifications)).toBe(false);
     expect(s.companies[0].activationStatus).toBe("Suspended");
