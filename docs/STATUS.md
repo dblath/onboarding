@@ -111,8 +111,8 @@ The 3.10 readable local review file is **523,278 bytes** (about 511 KiB): 5 comp
 
 - `onboarding`, `C:\Users\david\Documents\Repositories\onboarding`; `main`, upstream `origin/main`; origin fetch/push `https://github.com/dblath/onboarding.git`.
 - Starting published tip `192fbbef28771425e69d8332fbbe7cc4ae22efb3`; previous 3.9 implementation `640f394cdb66a6e54b5e4fd49871a52561081ee4`.
-- **3.10 commit/push pending final verification.** Changes: UI/styles, presentation links, tests/fixtures, package version, README/docs. No force-push/reset/reinitialization, secrets or deployment.
-- Before delivery verify local HEAD equals `git ls-remote origin refs/heads/main`, clean tree/upstream, protected source/assets unchanged and HomeItem clean. Chet is excluded via `.git/info/exclude` and never tracked.
+- **3.10 implementation `c559f3c0717abca69d30c90d465208edef8908e3` committed and pushed on 2026-10-17.** Local HEAD matched `git ls-remote origin refs/heads/main`; tree was clean and branch/upstream `main...origin/main`. This publication record is a documentation-only follow-up; its final tip is reported in delivery and the local Chet handoff. Changes: UI/styles, presentation links, tests/fixtures, package version, README/docs. No force-push/reset/reinitialization, secrets or deployment.
+- Prettier, staged/working diff checks passed. Protected business/lifecycle/workflow, login, synchronization, IndexedDB, portable state, Viz and logo/favicon sources have no diff from the starting tip. HomeItem remains clean/read-only. No listener remained on 4173/5174; port 5173 was untouched. Chet is excluded via `.git/info/exclude` and no Chet files are tracked.
 - Original Unity PNG SHA256 `88ef0146e47c4f25fbb95372945eca19b65e6598c7a8a43a8eb39a5af337d1a1`; no image/favicon/font edits.
 - Docs: README, STATUS, Operations/Contractor design notes, observer/workspace/recording/shared-browser and domain/process/event/rule catalogs. Detailed handoff/materials local-only under `docs/chet/`.
 
