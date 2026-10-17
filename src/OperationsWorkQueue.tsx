@@ -199,6 +199,11 @@ export function OperationsWorkQueue({
             onChange={(event) => onCompanyChange(event.target.value)}
           >
             <option value="">All companies</option>
+            {companyId === "__choose_company__" && (
+              <option value="__choose_company__">
+                Previous company unavailable — choose a filter
+              </option>
+            )}
             {state.companies.map((company) => (
               <option key={company.id} value={company.id}>
                 {company.name} ({company.id.slice(0, 8)})

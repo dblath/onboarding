@@ -22,7 +22,8 @@ import {
   type OrchestrationPort,
 } from "./orchestration";
 import { migrateState } from "./migration";
-import { safelyCaptureVisuals, startRecording } from "./viz/recorder";
+import { project, safelyCaptureVisuals, startRecording } from "./viz/recorder";
+import { createWorkspaceFile, validateWorkspace } from "./workspace/format";
 import {
   UnavailableCoordinator,
   type CommandCoordinator,
@@ -116,6 +117,19 @@ export class SimulatedIntegrations implements IntegrationPort {
 }
 export class OnboardingService {
   private queue: Promise<unknown> = Promise.resolve();
+  private observedRevision = -1;
+  private observedEpoch: string | undefined;
+  private observe(s: State) {
+    if (s.revision >= this.observedRevision) {
+      this.observedRevision = s.revision;
+      this.observedEpoch = s.workspaceEpoch;
+    }
+  }
+  private enqueue<T>(run: () => Promise<T>): Promise<T> {
+    const next = this.queue.then(run);
+    this.queue = next.catch(() => {});
+    return next;
+  }
   constructor(
     private repository: Repository,
     private orchestration: OrchestrationPort = new LocalOrchestrator(),
@@ -129,10 +143,16 @@ export class OnboardingService {
     return this.coordinator.subscribe(listener);
   }
   private change<T>(action: (s: State) => T, forceSave = false): Promise<T> {
+    const expectedEpoch = this.observedEpoch,
+      observed = this.observedRevision >= 0;
     const run = async () => {
       let committedRevision: number | undefined;
       const result = await this.coordinator.exclusive(async () => {
         const raw = await this.repository.load();
+        if (observed && raw.workspaceEpoch !== expectedEpoch)
+          throw new Error(
+            "The workspace was replaced in another tab. Review the restored workspace before trying this action again.",
+          );
         const before = JSON.stringify(raw);
         const s = migrateState(raw);
         const value = action(s);
@@ -142,6 +162,7 @@ export class OnboardingService {
           await this.repository.save(s);
           committedRevision = s.revision;
         }
+        this.observe(s);
         return value;
       });
       // Publishing is deliberately outside the lock and after transaction completion.
@@ -149,16 +170,70 @@ export class OnboardingService {
         this.coordinator.publish(committedRevision);
       return result;
     };
-    const next = this.queue.then(run);
-    this.queue = next.catch(() => {});
-    return next;
+    return this.enqueue(run);
   }
   /** Persist migrations on first open, not just on the next business command. */
   initialize() {
     return this.change((s) => s, true);
   }
-  getState() {
-    return this.repository.load();
+  async getState() {
+    const s = await this.repository.load();
+    this.observe(s);
+    return s;
+  }
+  saveWorkspace(name: string, description = "") {
+    return this.enqueue(() =>
+      this.coordinator.exclusive(async () =>
+        createWorkspaceFile(await this.repository.load(), name, description),
+      ),
+    );
+  }
+  /** Replaces one snapshot atomically; no migration, event replay or Viz capture. */
+  restoreWorkspace(input: unknown, expectedRevision: number) {
+    const file = structuredClone(validateWorkspace(input));
+    const active = file.state.viz?.recordings.find(
+      (r) => r.id === file.state.viz?.activeRecordingId,
+    );
+    if (active && !active.captureError && !file.state.viz?.captureError) {
+      // JSON object keys have no semantic order. Values were validated equal;
+      // preserve all recorded content while aligning the live comparison order
+      // for the existing recorder. No frame is added or business command replayed.
+      const projected = project(file.state, active),
+        last = active.frames.at(-1)!;
+      if (
+        JSON.stringify(projected) !==
+        JSON.stringify({ nodes: last.nodes, edges: last.edges })
+      ) {
+        last.nodes = projected.nodes;
+        last.edges = projected.edges;
+      }
+    }
+    return this.replaceWorkspace(file.state, expectedRevision);
+  }
+  resetWorkspace(expectedRevision: number) {
+    return this.replaceWorkspace(emptyState(), expectedRevision);
+  }
+  private replaceWorkspace(snapshot: State, expectedRevision: number) {
+    return this.enqueue(async () => {
+      const revision = await this.coordinator.exclusive(async () => {
+        const current = await this.repository.load();
+        if (current.revision !== expectedRevision)
+          throw new Error(
+            "The workspace changed while you were reviewing. Preview the replacement again before confirming.",
+          );
+        const next = structuredClone(snapshot);
+        next.revision = Math.max(current.revision, next.revision) + 1;
+        if (!Number.isSafeInteger(next.revision))
+          throw new Error(
+            "Workspace revision limit reached. No state was replaced.",
+          );
+        next.workspaceEpoch = id();
+        await this.repository.save(next);
+        this.observe(next);
+        return next.revision;
+      });
+      this.coordinator.publish(revision);
+    });
   }
   startVizRecording(originEventId: string) {
     return this.change((s) => startRecording(s, originEventId));

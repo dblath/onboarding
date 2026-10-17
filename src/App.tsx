@@ -40,6 +40,7 @@ import {
 import "./style.css";
 import { VizBoundary } from "./viz/VizBoundary";
 const JourneyMap = lazy(() => import("./viz/JourneyMap"));
+const DemoWorkspace = lazy(() => import("./workspace/DemoWorkspace"));
 let browserService: OnboardingService | undefined;
 function getDefaultService() {
   return (browserService ??= createBrowserService());
@@ -48,6 +49,7 @@ type View =
   | "Overview"
   | "Work queue"
   | "Journey Map"
+  | "Demo Workspace"
   | "Workflow monitor"
   | "Automations & Integrations"
   | "Outbox";
@@ -63,7 +65,7 @@ export function App({
   }, []);
   const { state, refresh, loading, error, setError, refreshing } =
     useWorkspace(service);
-  const contractorSession = useContractorSession(state.companies);
+  const contractorSession = useContractorSession(state.companies, !loading);
   const anonymous = experience === "contractor" && !contractorSession.company;
   const [submitted, setSubmitted] = useState<{
     name: string;
@@ -116,6 +118,8 @@ export function App({
     setNotice("");
   }, [experience]);
   useEffect(() => {
+    if (experience === "monitor" && routeContext.workspace)
+      setView("Demo Workspace");
     if (experience === "monitor" && routeContext.journey)
       setView("Journey Map");
     if (experience === "monitor" && routeContext.automation) {
@@ -129,11 +133,15 @@ export function App({
       }
     }
   }, [experience, routeContext]);
+  useEffect(() => {
+    setSubmitted(null);
+  }, [state.workspaceEpoch]);
   const views: View[] =
     experience === "monitor"
       ? [
           "Automations & Integrations",
           "Journey Map",
+          "Demo Workspace",
           "Workflow monitor",
           "Outbox",
         ]
@@ -172,7 +180,7 @@ export function App({
       experience === "contractor"
         ? contractorSession.company
         : (state.companies.find((c) => c.id === selected) ??
-          state.companies[0]),
+          (selected ? undefined : state.companies[0])),
     a = state.applications.find((a) => a.companyId === c?.id),
     qualifications = state.qualifications.filter((q) => q.companyId === c?.id),
     tasks = state.workItems.filter(
@@ -200,6 +208,31 @@ export function App({
     sessionStorage.setItem(`fieldwork:${experience}:company`, companyId);
     setNotice("");
   }
+  useEffect(() => {
+    if (loading) return;
+    // Remember the initial default so a later replacement cannot silently swap
+    // the company already being shown in this tab.
+    if (experience !== "contractor" && !selected && state.companies[0]) {
+      setSelected(state.companies[0].id);
+      sessionStorage.setItem(
+        `fieldwork:${experience}:company`,
+        state.companies[0].id,
+      );
+    }
+    if (
+      selected &&
+      selected !== "__choose_company__" &&
+      !state.companies.some((c) => c.id === selected)
+    ) {
+      setSelected("__choose_company__");
+      sessionStorage.setItem(
+        `fieldwork:${experience}:company`,
+        "__choose_company__",
+      );
+    }
+    if (queueCompany && !state.companies.some((c) => c.id === queueCompany))
+      setQueueCompany("__choose_company__");
+  }, [loading, state.companies, selected, queueCompany, experience]);
   function chooseParticipant(participant: QueueParticipant) {
     if (participant === "Simulation") {
       window.location.hash = automationLink(queueCompany).slice(1);
@@ -287,7 +320,7 @@ export function App({
               </button>
             </>
           ) : (
-            views.map((v, i) =>
+            views.map((v) =>
               v === "Work queue" && experience === "operations" ? (
                 <OperationsQueueNavigation
                   active={view === "Work queue"}
@@ -314,7 +347,19 @@ export function App({
                     setNotice("");
                   }}
                 >
-                  <span>{["▦", "☷", "◎", "↗"][i]}</span>
+                  <span>
+                    {
+                      {
+                        Overview: "▦",
+                        "Work queue": "☷",
+                        "Journey Map": "◎",
+                        "Demo Workspace": "⇄",
+                        "Workflow monitor": "☷",
+                        "Automations & Integrations": "↗",
+                        Outbox: "◫",
+                      }[v]
+                    }
+                  </span>
                   <span>{viewName(v)}</span>
                   {v === "Automations & Integrations" && (
                     <span className="nav-count">
@@ -331,7 +376,7 @@ export function App({
         </nav>
         <div className="aside-bottom">
           <span className="live-dot" /> Browser-local workspace
-          <p>Iteration 3.5.1 · Living Journey Map</p>
+          <p>Iteration 3.6 · Demo Workspace</p>
         </div>
       </aside>
       <div className="main">
@@ -529,6 +574,12 @@ export function App({
               ✓ {notice}
             </div>
           )}
+          {experience !== "contractor" && selected === "__choose_company__" && (
+            <p role="status" className="notice">
+              The previously selected company is not in this workspace. Choose a
+              company from Contractor network to continue.
+            </p>
+          )}
           {experience !== "contractor" && (
             <div className="experience-links">
               <span>Open the other experiences:</span>
@@ -614,8 +665,21 @@ export function App({
                 setError("");
               }}
             />
+          ) : experience === "monitor" && view === "Demo Workspace" ? (
+            <Suspense
+              fallback={
+                <div className="panel empty">Opening Demo Workspace...</div>
+              }
+            >
+              <DemoWorkspace
+                state={state}
+                service={service}
+                run={run}
+                busy={writeDisabled}
+              />
+            </Suspense>
           ) : experience === "monitor" && view === "Journey Map" ? (
-            <VizBoundary>
+            <VizBoundary key={state.workspaceEpoch ?? "original"}>
               <Suspense
                 fallback={
                   <div className="panel empty">Opening Journey Map...</div>

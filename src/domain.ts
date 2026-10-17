@@ -362,6 +362,8 @@ export type BusinessEvent = {
   };
 }[EventType];
 export interface State {
+  /** Local replacement identity; excluded from portable files and never read by business rules. */
+  workspaceEpoch?: string;
   /** Optional auxiliary visual recording; no domain rule reads it. Schema 4 remains compatible. */
   viz?: VizState;
   schemaVersion: 4;

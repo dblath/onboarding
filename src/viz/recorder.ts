@@ -85,7 +85,7 @@ function context(s: State, r: VizRecording) {
   );
   return { root, workflows, events, tasks, attempts };
 }
-function causes(s: State, r: VizRecording): FrameCause[] {
+export function causes(s: State, r: VizRecording): FrameCause[] {
   const c = context(s, r);
   return [
     ...c.events.map((e) => ({

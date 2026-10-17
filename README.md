@@ -1,10 +1,18 @@
-# Unity fieldwork - Contractor onboarding, Iteration 3.5.1
+# Unity fieldwork - Contractor onboarding, Iteration 3.6
 
 End-to-end product discovery prototype: contractor application, screening, administrative approvals, independent skill qualification, vendor provisioning, portal, training, readiness and activation. Browser-only persistence and simulated integrations. Simulated company sign-in uses the application email and password 123. No backend, real authentication or live services.
 
 Unity branding uses the complete original logo across all three experiences. The square favicons add transparent padding and preserve its proportions. See [asset derivations](public/assets/README.md) and [branding acceptance](docs/acceptance-branding.md). Current verification, including the corrected asynchronous count-test wait, is recorded in [STATUS](docs/STATUS.md).
 
 Historical onboarding completion, current readiness and operational status are separate. Job eligibility requires Ready AND Active. Restoring qualifications never removes a suspension. [Operations queue acceptance](docs/acceptance-3.3.md) / [Iteration 3.2 UX acceptance](docs/acceptance-3.2.md) / [Lifecycle acceptance](docs/acceptance-3.1.md) · [Current status](docs/STATUS.md).
+
+## Demo Workspace
+
+Workflow Monitor -> Demo Workspace (`#/monitor?view=workspace`) provides Save State, Load State, Reset Workspace, and three prepared business scenarios. Name and describe your own scenario, then save the full logical workspace as versioned JSON. Chrome's save picker is used when available; Download JSON is always available. IndexedDB remains live storage; sign-ins and tab preferences are not exported.
+
+Load validates and previews the file before explicit replacement confirmation, offers a current-state backup, and restores atomically across tabs. Reset requires typing RESET. If another tab changes state during review, refresh the replacement review before confirming. Removed company selections require an explicit choice; no different company is silently signed in or substituted. Viz's active journey, pinned map, frames, causes, archives and processed identities restore together and continue through the existing workflow commands. No activities execute automatically.
+
+Prepared scenarios use Summit Field Services, contractor email `alex@example.com`, simulation password `123`: Awaiting contractor documents, Verification failure, Ready for activation. The last remains Not eligible until you explicitly publish activation in Monitor -> Automations & Integrations. Scenarios are generated through real business commands in isolation, then validated before preview. Saved files preserve exact IDs/history when reloaded. Supported: workspace format 1, state schema 4, Viz 1, up to 50 MiB. See [portable workspace design](docs/workspace.md) and [actual status/results](docs/STATUS.md).
 
 ## Viz - Journey Map
 

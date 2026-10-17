@@ -1,13 +1,19 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import type { ContractorCompany as Company } from "./domain";
 
 export const contractorSessionKey = "fieldwork:contractor:session";
 
 /** Presentation-only company selection. Never an authorization boundary. */
-export function useContractorSession(companies: Company[]) {
+export function useContractorSession(companies: Company[], loaded = true) {
   const [companyId, setCompanyId] = useState(
     () => sessionStorage.getItem(contractorSessionKey) ?? "",
   );
+  useEffect(() => {
+    if (loaded && companyId && !companies.some((c) => c.id === companyId)) {
+      sessionStorage.removeItem(contractorSessionKey);
+      setCompanyId("");
+    }
+  }, [loaded, companies, companyId]);
   return {
     company: companies.find((company) => company.id === companyId),
     signIn(id: string) {
