@@ -116,7 +116,9 @@ Business facts/events still use one snapshot; metadata/seen identities grow; rec
 ## 8. Repository and publication
 
 - `onboarding`, `C:\Users\david\Documents\Repositories\onboarding`; branch `main`, upstream `origin/main`; origin fetch/push `https://github.com/dblath/onboarding.git`.
-- Starting published tip `c0177f6d3dc8ca9c79f4f123d0c558cb7db2e6e8`; 3.8 implementation `3df108fb29e316172a60c909e32c7ab0af312567`. Final 3.9 implementation/publication verification is recorded before delivery. No force-push, reset, reinitialization, credentials or deployment.
+- Starting published tip `c0177f6d3dc8ca9c79f4f123d0c558cb7db2e6e8`; 3.8 implementation `3df108fb29e316172a60c909e32c7ab0af312567`.
+- **3.9 implementation `640f394cdb66a6e54b5e4fd49871a52561081ee4` committed and pushed on 2026-10-17.** `git ls-remote origin refs/heads/main` matched local HEAD; `git status --short` was empty, branch/upstream `main...origin/main`. This publication record is a documentation-only follow-up; final tip is in delivery and the local Chet report. No force-push, reset, reinitialization, credentials or deployment.
+- Publication checks: Prettier and staged/working diff checks passed; no tracked Chet files. Original logo/favicons and preserved business/persistence/Viz sources have no diff. HomeItem remained clean. No listener remained on 4173/5174; port 5173 was untouched.
 - HomeItem reference remains clean and read-only. Business, lifecycle, orchestration, authentication, persistence, workspace and Viz source/assets remain unchanged; only Contractor UI, theme/font styling, package version, tests and docs changed.
 - Original Unity PNG SHA256 `88ef0146e47c4f25fbb95372945eca19b65e6598c7a8a43a8eb39a5af337d1a1`; no favicon derivations or image edits this iteration.
 - Current docs: README, STATUS, [`contractor-experience.md`](contractor-experience.md), observer/workspace/recording/shared-browser and existing domain/process/event/rule docs. Earlier acceptance guides use historical UI wording.
