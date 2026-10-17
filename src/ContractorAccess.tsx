@@ -32,11 +32,13 @@ export function ContractorAccess({
   submitted,
   onSignIn,
   loading,
+  onApply,
 }: {
   companies: Company[];
   submitted: { name: string; email: string } | null;
   onSignIn: (companyId: string) => void;
   loading: boolean;
+  onApply: () => void;
 }) {
   const [email, setEmail] = useState(submitted?.email ?? "");
   const [password, setPassword] = useState("");
@@ -88,10 +90,18 @@ export function ContractorAccess({
       ) : (
         <div className="portal-welcome">
           <span className="eyebrow">YOUR COMPANY. YOUR NEXT STEP.</span>
-          <h2>A clear path to getting started.</h2>
+          <h2>Your next opportunity starts here.</h2>
           <p>
-            New here? Choose New application to join the contractor network.
-            One-person companies welcome. Already applied? Sign in below.
+            Join our contractor network. Bring your skills; we’ll guide your
+            company through the documents, qualifications and setup to get ready
+            for work. One-person companies welcome.
+          </p>
+          <button className="primary portal-marquee-cta" onClick={onApply}>
+            Start a new application <span aria-hidden>→</span>
+          </button>
+          <p className="portal-first-step">
+            First step: tell us about your company and the skill you offer. No
+            sign in needed.
           </p>
         </div>
       )}
@@ -150,7 +160,8 @@ export function ContractorAccess({
           </div>
         </form>
       ) : (
-        <form onSubmit={submit}>
+        <form className="portal-signin" onSubmit={submit}>
+          {!submitted && <span className="eyebrow">ALREADY APPLIED?</span>}
           <h3>Sign in to your company</h3>
           <div className="form-grid">
             <label>

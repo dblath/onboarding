@@ -123,7 +123,7 @@ it("ignores unrelated companies, duplicate delivery and initialization; capture 
   await replacement.recordScreeningDecision(x.app, "Proceed", "");
   expect((await x.record()).frames).toHaveLength(2);
 });
-it("independent same-company origins stay outside the selected lineage; switching stops previous capture and starts fresh Frame 0", async () => {
+it("independent same-company origins stay outside the selected lineage; completed roots stay complete while new captures start at Frame 0", async () => {
   const x = await setup();
   await x.service.recordScreeningDecision(x.app, "Proceed", "");
   for (const a of [
@@ -170,7 +170,8 @@ it("independent same-company origins stay outside the selected lineage; switchin
   expect(current.frames).toHaveLength(2);
   const old = (await x.service.getState()).viz!.recordings[0];
   expect(old.frames).toEqual(previous.frames);
-  expect(old.stoppedAtRevision).toBeDefined();
+  expect(old.status).toBe("Completed");
+  expect(old.stoppedAtRevision).toBeUndefined();
   // A second selection of an existing origin captures its current state without earlier frames.
   await x.service.startVizRecording(x.origin);
   expect((await x.record()).frames).toHaveLength(1);
@@ -226,7 +227,9 @@ it("reports a projection gap while allowing a valid business command to commit",
   await x.service.recordScreeningDecision(x.app, "Proceed", "");
   const after = await x.service.getState();
   expect(after.applications[0].status).toBe("Onboarding");
-  expect(after.viz!.captureError).toContain("Business processing continued");
+  expect(after.viz!.recordings[0].captureError).toContain(
+    "Business processing continued",
+  );
   expect(after.viz!.recordings[0].frames).toHaveLength(1);
 });
 it("preserves a cancelled activation as reached-but-cancelled visual work after readiness loss", async () => {

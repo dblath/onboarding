@@ -69,13 +69,24 @@ aside {
 .brand-caption {
   min-width: 0;
 }
+@font-face {
+  font-family: "Unity Narrow";
+  src: local("Bahnschrift");
+  font-weight: 100 900;
+  font-stretch: 75% 100%;
+  font-display: swap;
+}
 .brand-caption strong {
   display: block;
   font-size: 22px;
   letter-spacing: -0.4px;
   font-family:
-    ui-rounded, "Arial Rounded MT Bold", "Segoe UI", Arial, sans-serif;
-  font-weight: 800;
+    "Unity Narrow", "Bahnschrift Condensed", "Arial Narrow", sans-serif;
+  font-stretch: condensed;
+  font-variation-settings:
+    "wdth" 75,
+    "wght" 450;
+  font-weight: 450;
 }
 .brand-caption small {
   display: block;
@@ -85,8 +96,12 @@ aside {
 }
 .product-name strong {
   font-family:
-    ui-rounded, "Arial Rounded MT Bold", "Segoe UI", Arial, sans-serif;
-  font-weight: 800;
+    "Unity Narrow", "Bahnschrift Condensed", "Arial Narrow", sans-serif;
+  font-stretch: condensed;
+  font-variation-settings:
+    "wdth" 75,
+    "wght" 450;
+  font-weight: 450;
   font-size: 1.1em;
 }
 .product-name em {
@@ -1606,9 +1621,101 @@ main {
   grid-template-columns: minmax(0, 1fr);
 }
 .portal-access {
-  max-width: 840px;
+  max-width: 1060px;
   margin: 14px auto;
   padding: 24px 28px;
+}
+.portal-access:has(.portal-welcome) {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(240px, 1fr);
+  gap: 20px 36px;
+}
+.portal-welcome {
+  grid-row: 1 / 3;
+  padding: 18px 10px;
+}
+.portal-welcome h2 {
+  font-size: clamp(26px, 3vw, 38px);
+  max-width: 450px;
+}
+.portal-access .portal-welcome p {
+  font-size: 14px;
+  max-width: 460px;
+}
+.portal-marquee-cta {
+  margin-top: 14px;
+  padding: 16px 24px;
+  font-size: 16px;
+}
+.portal-signin {
+  padding: 16px;
+  border: 1px solid #e0e5da;
+  border-radius: 8px;
+  background: #f8faf6;
+}
+.portal-signin .form-grid {
+  grid-template-columns: 1fr;
+}
+.portal-access:has(.portal-welcome) .demo-auth-note {
+  grid-column: 2;
+  grid-row: 2;
+  margin: 0;
+}
+.portal-access:has(.portal-welcome) > .alert {
+  grid-column: 1 / -1;
+}
+.portal-access:has(.portal-welcome) > form {
+  grid-column: 2;
+  grid-row: 1;
+}
+.trigger-manager {
+  padding: 24px;
+}
+.trigger-manager form {
+  border-block: 1px solid #e0e5da;
+  padding: 16px 0;
+}
+.trigger-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid #e0e5da;
+  padding: 14px 0;
+}
+.trigger-row h3 {
+  margin: 0;
+}
+.trigger-row p {
+  margin: 6px 0;
+}
+.inline-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.inline-check input {
+  width: auto;
+}
+@media (max-width: 760px) {
+  .portal-access:has(.portal-welcome) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .portal-welcome {
+    padding: 0;
+  }
+  .portal-signin {
+    order: 2;
+  }
+  .portal-access .demo-auth-note {
+    order: 3;
+  }
+  .trigger-row {
+    align-items: start;
+    flex-direction: column;
+  }
 }
 .portal-access p {
   font-size: 12px;

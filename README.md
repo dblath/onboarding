@@ -1,4 +1,4 @@
-# Unity fieldwork - Contractor onboarding, Iteration 3.6
+# Unity fieldwork - Contractor onboarding, Iteration 3.7
 
 End-to-end product discovery prototype: contractor application, screening, administrative approvals, independent skill qualification, vendor provisioning, portal, training, readiness and activation. Browser-only persistence and simulated integrations. Simulated company sign-in uses the application email and password 123. No backend, real authentication or live services.
 
@@ -12,13 +12,15 @@ Workflow Monitor -> Demo Workspace (`#/monitor?view=workspace`) provides Save St
 
 Load validates and previews the file before explicit replacement confirmation, offers a current-state backup, and restores atomically across tabs. Reset requires typing RESET. If another tab changes state during review, refresh the replacement review before confirming. Removed company selections require an explicit choice; no different company is silently signed in or substituted. Viz's active journey, pinned map, frames, causes, archives and processed identities restore together and continue through the existing workflow commands. No activities execute automatically.
 
-Prepared scenarios use Summit Field Services, contractor email `alex@example.com`, simulation password `123`: Awaiting contractor documents, Verification failure, Ready for activation. The last remains Not eligible until you explicitly publish activation in Monitor -> Automations & Integrations. Scenarios are generated through real business commands in isolation, then validated before preview. Saved files preserve exact IDs/history when reloaded. Supported: workspace format 1, state schema 4, Viz 1, up to 50 MiB. See [portable workspace design](docs/workspace.md) and [actual status/results](docs/STATUS.md).
+Prepared scenarios use Summit Field Services, contractor email `alex@example.com`, simulation password `123`: Awaiting contractor documents, Verification failure, Ready for activation. The last remains Not eligible until you explicitly publish activation in Monitor -> Automations & Integrations. Scenarios are generated through real business commands in isolation, then validated before preview. Saved files preserve exact IDs/history when reloaded. New exports use workspace format 2 / Viz 2; original 3.6 format 1 / Viz 1 files remain supported through an explicit metadata upgrade. Business state stays schema 4; maximum file size is 50 MiB. See [portable workspace design](docs/workspace.md) and [actual status/results](docs/STATUS.md).
 
 ## Viz - Journey Map
 
-Workflow Monitor now includes Journey Map: select an application or skill-request event, then Track journey to capture its current state as Frame 0. Recording continues inside committed commands when Monitor is closed; one origin records at a time. Group/expand the real company and initial-skill lanes, inspect blockers, pan/zoom, or use presentation view. Playback is read-only; it never changes live work. Previous recordings remain archived when tracking switches. The v2 company adapter has 37 map nodes, including 16 activity types and their decisions/joins/routes; a standalone skill map has 9. No earlier visual history is synthesized.
+Workflow Monitor includes Recording Triggers (`#/monitor?view=triggers`): name and explicitly enable a catalog rule to catch new applications, Recruitment approval, readiness, or skill requests. Matching and Frame 0 happen inside the committed command pipeline, including when Monitor is closed. Equivalent rules share one automatic recording per event/workflow scope and retain all matched rule names. No triggers are enabled on upgrade; no historical events are replayed. See [recording semantics](docs/viz-recording.md).
 
-Shared Unity wordmark text is bold sans-serif; the original logo/favicons are unchanged. Recording metadata/frames persist in optional State.viz in the existing locked IndexedDB snapshot, not a second workflow engine. React Flow and Dagre are presentation/layout dependencies. See STATUS for scope, test results, atomic frame semantics and limitations. Chet review instructions/screenshots remain local-only in docs/chet.
+Journey Map supports independent simultaneous recordings, a filterable company/trigger/state browser, manual capture, individual Stop and automatic completion when the tracked root completes. Viewing and playback are local presentation state and never stop other captures. Group/expand real company and initial-skill lanes, inspect blockers, pan/zoom, or use presentation view. The v2 company adapter has 37 map nodes, including 16 activity types and their decisions/joins/routes; a standalone skill map has 9. No earlier visual history is synthesized. No commands run when every application tab is closed.
+
+Shared Unity wordmark text uses a native condensed sans-serif with slimmer strokes; the original logo/favicons are unchanged. The anonymous portal leads with Start a new application; sign-in remains secondary. Recording rules/metadata/frames persist in optional State.viz in the existing locked IndexedDB snapshot. React Flow and Dagre remain presentation/layout dependencies. See STATUS for scope, actual test results and limitations. Chet review instructions/screenshots remain local-only in docs/chet.
 
 Iteration 3.5.1 adds compact 154 x 44 activity nodes, independent business-area accents and execution symbols/fills, two-level automatic lane layout, changed-route illumination, a business change/next-owner summary, visible join counts, Follow changes, and Play/Pause with 0.5x/1x/2x playback. Turn Follow changes off to preserve your viewport. Rewinding keeps recording in the background and shows newer-frame availability. Details remain in node inspection. The recorder, pinned definitions, business rules, persistence and event contracts are unchanged. A clearly labeled 80-step synthetic layout fixture is test-only, not an executable workflow.
 
@@ -43,11 +45,11 @@ Vite prints the local URL, for this review http://127.0.0.1:5174/. Deploy `dist/
 
 Open these in three Chrome tabs in the same profile and exact origin (do not mix localhost/127.0.0.1, ports or schemes):
 
-| Tab | URL                                | Experience                                                                |
-| --- | ---------------------------------- | ------------------------------------------------------------------------- |
-| 1   | http://127.0.0.1:5174/#/contractor | Contractor Portal: Your journey, Required actions, Messages               |
+| Tab | URL                                | Experience                                                                    |
+| --- | ---------------------------------- | ----------------------------------------------------------------------------- |
+| 1   | http://127.0.0.1:5174/#/contractor | Contractor Portal: Your journey, Required actions, Messages                   |
 | 2   | http://127.0.0.1:5174/#/operations | Onboarding Operations: internal role, human work queues, automation discovery |
-| 3   | http://127.0.0.1:5174/#/monitor    | Workflow Monitor: automations, integrations, execution diagnostics                 |
+| 3   | http://127.0.0.1:5174/#/monitor    | Workflow Monitor: automations, integrations, execution diagnostics            |
 
 Operations and Monitor have links to open the other experiences in new tabs. Internal role and company selection are in sessionStorage for that tab/experience. Contractor and Monitor have no role selector. Contractor has no worker controls, monitor tools, ingress tests, timers or internal outbox.
 
@@ -75,20 +77,20 @@ Contractor → Your journey and Operations → Overview show relevant facts, req
 
 ## Exception and operations scenarios
 
-| Scenario                      | UI behavior                                                                                                                                                            |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Screening information request | Recruitment requests details with a reason; Contractor responds; review resumes on the same instance.                                                                  |
-| Decline                       | Required reason; close without administrative/skill work.                                                                                                              |
-| Missing prerequisite          | Leave any administrative approval missing: no vendor. Leave training or first skill incomplete: no readiness.                                                          |
+| Scenario                      | UI behavior                                                                                                                                                                 |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Screening information request | Recruitment requests details with a reason; Contractor responds; review resumes on the same instance.                                                                       |
+| Decline                       | Required reason; close without administrative/skill work.                                                                                                                   |
+| Missing prerequisite          | Leave any administrative approval missing: no vendor. Leave training or first skill incomplete: no readiness.                                                               |
 | Expired license               | Submit Expired simulated document; Compliance verifies; Contractor receives a specific replacement task; submit Valid and verify again. Same qualification, retained v1/v2. |
-| Other corrections             | Expired/incomplete insurance, financial or agreement evidence repeats the same correction/review pattern without losing other approvals.                               |
-| Failure / recovery            | Inject a timeout on any simulated integration. Failed attempt persists, no business outcome; retry in Monitor -> Automations & Integrations continues the same task.                                            |
-| Durable waiting               | Refresh while work is open; return to its company/persona. Evidence, events, waits, tasks, attempts and history persist.                                               |
-| Timer / escalation            | Workflow monitor → Advance 3 days → Advance 2 days. Outbox shows reminders and escalations for overdue human work.                                                     |
-| Skill expansion               | After activation, Contractor → Overview → Add another company skill. Independent workflow, no repeated company setup.                                                  |
-| Skill rejection               | Field Manager rejects with reason. Only that skill closes; another approval preserves readiness.                                                                       |
-| Readiness reevaluation        | Compliance → Overview → Invalidate approval with reason. Sole approval lost → Not ready and Suspended. Another approval → still Ready.                                 |
-| Event protection              | Workflow monitor → redeliver last event or unrelated correlation; no business/work/history mutation.                                                                   |
+| Other corrections             | Expired/incomplete insurance, financial or agreement evidence repeats the same correction/review pattern without losing other approvals.                                    |
+| Failure / recovery            | Inject a timeout on any simulated integration. Failed attempt persists, no business outcome; retry in Monitor -> Automations & Integrations continues the same task.        |
+| Durable waiting               | Refresh while work is open; return to its company/persona. Evidence, events, waits, tasks, attempts and history persist.                                                    |
+| Timer / escalation            | Workflow monitor → Advance 3 days → Advance 2 days. Outbox shows reminders and escalations for overdue human work.                                                          |
+| Skill expansion               | After activation, Contractor → Overview → Add another company skill. Independent workflow, no repeated company setup.                                                       |
+| Skill rejection               | Field Manager rejects with reason. Only that skill closes; another approval preserves readiness.                                                                            |
+| Readiness reevaluation        | Compliance → Overview → Invalidate approval with reason. Sole approval lost → Not ready and Suspended. Another approval → still Ready.                                      |
+| Event protection              | Workflow monitor → redeliver last event or unrelated correlation; no business/work/history mutation.                                                                        |
 
 ## Architecture
 
@@ -133,6 +135,5 @@ Iteration 3 introduced snapshot schema 3 and a shared revision. Iteration 3.1 us
 Concurrent tabs on the same exact origin/profile are supported. There is no cross-browser/profile/device synchronization. Close tabs running any older release before using the latest release: old code does not understand the current schema/lifecycle rules. Browser data can be cleared/evicted. Fixtures determine verification, not real document/legal/financial rules. No live training, actual signature, portal account, external messages, automatic expiry or reinstatement journey. Timers run on simulated time advancement only. A rejected first skill leaves company onboarding waiting; recovery policy remains a discovery question.
 
 No real authentication, payments, backend, hosted persistence, C#/.NET or hosting deployment. Simulation sign-in is not a security boundary. Source is published at https://github.com/dblath/onboarding on main.
-
 
 Operations Overview and Contractor Your journey explain unsatisfied requirements, next participants, pending activation and suspension. Zero work for one role does not mean all company work is complete. Ready remains Not eligible until explicit activation publication in Workflow Monitor -> Automations & Integrations. [Current status](docs/STATUS.md). Detailed Iteration 3.4 acceptance and screenshots are local-only under docs/chet; older acceptance documents retain historical UI locations.

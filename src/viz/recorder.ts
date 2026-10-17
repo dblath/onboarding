@@ -6,22 +6,38 @@ import {
 } from "../domain";
 import { activityLabel, simulationMessage } from "../presentation";
 import { mapDefinition } from "./definition";
+import { matchesTrigger, recordingStatus, upgradeViz } from "./triggers";
 import type {
   FrameCause,
   VisualFrame,
   VisualNode,
   VisualStatus,
   VizRecording,
+  RecordingTrigger,
 } from "./types";
 
 export function originatingEvents(s: State) {
   return s.events.filter(
     (e) =>
       e.eventType === "ApplicationSubmitted" ||
-      e.eventType === "SkillRequested",
+      e.eventType === "SkillRequested" ||
+      (e.eventType === "ScreeningDecisionRecorded" &&
+        e.payload.decision === "Proceed") ||
+      (e.eventType === "ContractorReadinessChanged" && e.payload.ready),
   );
 }
 export function originWorkflow(s: State, e: BusinessEvent) {
+  if (e.eventType === "ContractorReadinessChanged" && e.payload.ready) {
+    // A company lifecycle policy can publish outside a running root correlation.
+    // Resolve its explicit company/application identity, never history text.
+    const roots = s.workflows.filter(
+      (w) =>
+        w.companyId === e.companyId &&
+        w.definitionId === "CompanyOnboarding" &&
+        (!e.applicationId || w.applicationId === e.applicationId),
+    );
+    return roots.length === 1 ? roots[0] : undefined;
+  }
   return s.workflows.find(
     (w) =>
       w.companyId === e.companyId &&
@@ -87,6 +103,9 @@ function context(s: State, r: VizRecording) {
 }
 export function causes(s: State, r: VizRecording): FrameCause[] {
   const c = context(s, r);
+  const origin = s.events.find((e) => e.eventId === r.originEventId);
+  if (origin && !c.events.some((e) => e.eventId === origin.eventId))
+    c.events.push(origin);
   return [
     ...c.events.map((e) => ({
       id: e.eventId,
@@ -191,7 +210,9 @@ export function project(
   set(
     "origin",
     "complete",
-    "Originating event accepted. Frame 0 starts when tracking was selected, not when this event occurred.",
+    r.triggerMatches?.length
+      ? "Originating event accepted. Frame 0 is the atomic triggering commit; earlier visual history is not reconstructed."
+      : "Originating event accepted. Frame 0 starts when tracking was selected, not when this event occurred.",
     [r.originEventId],
   );
   function decision(
@@ -433,10 +454,15 @@ export function project(
   return { nodes, edges };
 }
 
-export function startRecording(s: State, originEventId: string) {
+export function startRecording(
+  s: State,
+  originEventId: string,
+  triggers: RecordingTrigger[] = [],
+) {
+  upgradeViz(s);
   const origin = originatingEvents(s).find((e) => e.eventId === originEventId);
   if (!origin)
-    throw new Error("Choose an accepted application or skill-request event.");
+    throw new Error("Choose a supported accepted originating event.");
   const workflow = originWorkflow(s, origin);
   if (!workflow)
     throw new Error(
@@ -445,10 +471,12 @@ export function startRecording(s: State, originEventId: string) {
   const definition = mapDefinition(workflow);
   definition.nodes.find((n) => n.id === "origin")!.owner =
     origin.actor === "Workflow" ? "Onboarding process" : origin.actor;
-  const previous = s.viz?.recordings.find(
-    (r) => r.id === s.viz?.activeRecordingId,
-  );
-  if (previous) previous.stoppedAtRevision = s.revision + 1;
+  if (origin.eventType === "ScreeningDecisionRecorded")
+    definition.nodes.find((n) => n.id === "origin")!.label =
+      "Recruitment approval recorded";
+  if (origin.eventType === "ContractorReadinessChanged")
+    definition.nodes.find((n) => n.id === "origin")!.label =
+      "Contractor becomes ready";
   const recording: VizRecording = {
     id: id(),
     originEventId,
@@ -457,13 +485,30 @@ export function startRecording(s: State, originEventId: string) {
     originLabel:
       origin.eventType === "ApplicationSubmitted"
         ? "Company application"
-        : "Skill qualification request",
+        : origin.eventType === "SkillRequested"
+          ? "Skill qualification request"
+          : origin.eventType === "ScreeningDecisionRecorded"
+            ? "Recruitment approved"
+            : "Contractor ready",
     workflowId: workflow.id,
     startedAt: new Date().toISOString(),
     definition,
     workflowIds: lineage(s, workflow).map((w) => w.id),
     seen: [],
     frames: [],
+    status: workflow.status === "Completed" ? "Completed" : "Recording",
+    ...(workflow.status === "Completed"
+      ? { completedAtRevision: s.revision + 1 }
+      : {}),
+    ...(triggers.length
+      ? {
+          triggerMatches: triggers.map(({ id, name, kind }) => ({
+            id,
+            name,
+            kind,
+          })),
+        }
+      : {}),
   };
   recording.seen = causes(s, recording).map((c) => c.id);
   recording.frames.push({
@@ -474,34 +519,41 @@ export function startRecording(s: State, originEventId: string) {
       {
         id: originEventId,
         kind: "transition",
-        label: "Tracking started · current state only",
+        label: triggers.length
+          ? `${recording.originLabel} · triggering commit`
+          : "Tracking started · current state only",
       },
     ],
     ...project(s, recording),
   });
   s.viz = {
-    version: 1,
-    activeRecordingId: recording.id,
+    ...s.viz,
+    version: 2,
+    activeRecordingId: triggers.length
+      ? s.viz?.activeRecordingId || recording.id
+      : recording.id,
     recordings: [...(s.viz?.recordings ?? []), recording],
+    triggers: s.viz?.triggers ?? [],
   };
   return recording.id;
 }
 
 /** Called inside the existing command lock before the single atomic save, never from React or notifications. */
-export function captureCommittedVisuals(s: State) {
-  const r = s.viz?.recordings.find((r) => r.id === s.viz?.activeRecordingId);
-  if (!r) return;
+function captureRecording(s: State, r: VizRecording) {
   const all = causes(s, r),
     seen = new Set(r.seen),
     next = all.filter((c) => !seen.has(c.id));
-  if (!next.length) return;
+  const terminal =
+    s.workflows.find((w) => w.id === r.workflowId)?.status === "Completed";
+  if (!next.length && !terminal) return;
   const projection = project(s, r),
     previous = r.frames.at(-1)!;
   r.seen = all.map((c) => c.id);
   r.workflowIds = context(s, r).workflows.map((w) => w.id);
   if (
+    (terminal && next.length > 0) ||
     JSON.stringify(projection) !==
-    JSON.stringify({ nodes: previous.nodes, edges: previous.edges })
+      JSON.stringify({ nodes: previous.nodes, edges: previous.edges })
   ) {
     r.frames.push({
       number: r.frames.length,
@@ -511,18 +563,98 @@ export function captureCommittedVisuals(s: State) {
       ...projection,
     });
   }
+  if (terminal) {
+    r.status = "Completed";
+    r.completedAtRevision = s.revision + 1;
+  }
+}
+
+export function stopRecording(s: State, recordingId: string) {
+  upgradeViz(s);
+  const r = s.viz?.recordings.find((r) => r.id === recordingId);
+  if (!r) throw new Error("Recording no longer exists.");
+  if (
+    recordingStatus(s, r) === "Completed" ||
+    r.stoppedAtRevision !== undefined
+  )
+    return;
+  r.status = "Stopped";
+  r.stoppedAtRevision = s.revision + 1;
+}
+
+export function captureCommittedVisuals(s: State) {
+  for (const r of s.viz?.recordings ?? [])
+    if (recordingStatus(s, r) === "Recording") captureRecording(s, r);
 }
 
 /** Projection failure is reported without rejecting or undoing a valid business command. */
-export function safelyCaptureVisuals(s: State) {
-  if (!s.viz?.activeRecordingId) return;
+function captureSafely(
+  s: State,
+  previousEventIds = new Set(s.events.map((e) => e.eventId)),
+) {
+  upgradeViz(s);
+  const gap = (error: unknown) =>
+    `Viz capture gap: ${error instanceof Error ? error.message : String(error)} Business processing continued. Missing intermediate frames are not reconstructed.`;
+  // Only newly accepted persisted events in this command, in authoritative array order.
+  for (const e of s.events.filter((e) => !previousEventIds.has(e.eventId))) {
+    const matches = (s.viz?.triggers ?? []).filter((t) => matchesTrigger(t, e));
+    if (!matches.length) continue;
+    const firedAt = new Date().toISOString();
+    for (const t of matches) {
+      t.fireCount += 1;
+      t.lastFiredAt = firedAt;
+      t.lastEventId = e.eventId;
+    }
+    try {
+      const root = originWorkflow(s, e);
+      if (!root || root.definitionVersion !== 2)
+        throw new Error(
+          "Trigger scope is unsupported: a correlated version 2 workflow is required.",
+        );
+      let r = s.viz!.recordings.find(
+        (r) =>
+          r.originEventId === e.eventId &&
+          r.workflowId === root.id &&
+          r.triggerMatches?.length,
+      );
+      if (!r) {
+        const recordingId = startRecording(s, e.eventId, matches);
+        r = s.viz!.recordings.find((r) => r.id === recordingId)!;
+      }
+      for (const t of matches) {
+        delete t.captureError;
+      }
+    } catch (error) {
+      for (const t of matches) t.captureError = gap(error);
+      s.viz!.captureError = gap(error);
+    }
+  }
+  for (const r of s.viz?.recordings ?? []) {
+    if (recordingStatus(s, r) !== "Recording") continue;
+    try {
+      captureRecording(s, r);
+    } catch (error) {
+      r.captureError = gap(error);
+      r.status = "Capture issue";
+      // Quarantine this capture; later commits never silently fill the gap.
+    }
+  }
+}
+
+export function safelyCaptureVisuals(
+  s: State,
+  previousEventIds = new Set(s.events.map((e) => e.eventId)),
+) {
   try {
-    captureCommittedVisuals(s);
+    captureSafely(s, previousEventIds);
   } catch (error) {
-    s.viz.captureError = `Viz capture gap: ${error instanceof Error ? error.message : String(error)} Business processing continued. Missing intermediate frames are not reconstructed.`;
-    const recording = s.viz.recordings.find(
-      (r) => r.id === s.viz!.activeRecordingId,
-    );
-    if (recording) recording.captureError = s.viz.captureError;
+    if (s.viz)
+      s.viz.captureError = `Viz capture gap: ${error instanceof Error ? error.message : String(error)} Business processing continued. Missing intermediate frames are not reconstructed.`;
+    for (const r of Array.isArray(s.viz?.recordings) ? s.viz.recordings : []) {
+      if (recordingStatus(s, r) === "Recording") {
+        r.status = "Capture issue";
+        r.captureError = s.viz!.captureError;
+      }
+    }
   }
 }

@@ -32,6 +32,10 @@ const labels: Record<string, string> = {
   complete: "Onboarding complete",
 };
 export function compactLabel(node: MapNode) {
+  if (node.id === "origin" && node.label === "Recruitment approval recorded")
+    return "Recruitment approved";
+  if (node.id === "origin" && node.label === "Contractor becomes ready")
+    return "Contractor ready";
   if (node.id === "origin" && node.label.toLowerCase().includes("skill"))
     return "Skill requested";
   if (labels[node.id]) return labels[node.id];

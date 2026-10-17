@@ -94,7 +94,8 @@ it("round-trips exact Frame 13, archive, identities and clock, then continues wi
     skill: "HVAC",
   });
   const origin = x.get().events[0].eventId;
-  await service.startVizRecording(origin);
+  const archive = await service.startVizRecording(origin);
+  await service.stopVizRecording(archive);
   await service.startVizRecording(origin);
   await service.recordScreeningDecision(app, "Proceed", "");
   const task = (a: Activity) =>
@@ -241,20 +242,40 @@ it("rejects old-tab and queued commands across replacement, then allows a refres
   expect(x.get().attempts.at(-1)?.status).toBe("Succeeded");
 });
 
-it("accepts reordered JSON object keys without changing recorded content or producing false visual changes", async () => {
-  const file = await buildScenario("failure");
-  const json = JSON.stringify(file, (_key, value) =>
-    value && typeof value === "object" && !Array.isArray(value)
-      ? Object.fromEntries(Object.entries(value).reverse())
-      : value,
-  );
-  const parsed = parseWorkspaceFile(json),
-    x = setup();
-  await x.service.restoreWorkspace(parsed, 0);
-  expect(x.get().viz).toEqual(file.state.viz);
-  await x.service.initialize();
-  expect(x.get().viz).toEqual(file.state.viz);
-});
+it.each([false, true])(
+  "accepts reordered JSON keys without false frames, including an unrelated trigger gap (%s)",
+  async (gap) => {
+    const file = await buildScenario("failure");
+    if (gap)
+      file.state.viz!.captureError =
+        "Viz capture gap: a different trigger could not start. Business processing continued.";
+    const json = JSON.stringify(file, (_key, value) =>
+      value && typeof value === "object" && !Array.isArray(value)
+        ? Object.fromEntries(Object.entries(value).reverse())
+        : value,
+    );
+    const parsed = parseWorkspaceFile(json),
+      x = setup();
+    await x.service.restoreWorkspace(parsed, 0);
+    expect(x.get().viz).toEqual(file.state.viz);
+    await x.service.initialize();
+    expect(x.get().viz).toEqual(file.state.viz);
+    const seen = structuredClone(x.get().viz!.recordings[0].seen);
+    // Another identical timeout adds a real attempt identity, but no visual change.
+    await x.service.executeActivity(
+      x
+        .get()
+        .workItems.find(
+          (t) => t.activity === "ReviewInsurance" && t.status === "Open",
+        )!.id,
+      true,
+    );
+    expect(x.get().viz!.recordings[0].seen).not.toEqual(seen);
+    expect(x.get().viz!.recordings[0].frames).toEqual(
+      file.state.viz!.recordings[0].frames,
+    );
+  },
+);
 
 it("serializes competing confirmed replacements so the stale confirmation cannot overwrite the winner", async () => {
   const coord = new TestCoordinator(),
@@ -329,7 +350,7 @@ it("rejects unsupported, damaged or inconsistent business and visual state befor
   const file = await buildScenario("failure");
   const corruptions: ((f: typeof file) => void)[] = [
     (f) => {
-      f.formatVersion = 2 as 1;
+      f.formatVersion = 999 as 1;
     },
     (f) => {
       f.state.schemaVersion = 3 as 4;

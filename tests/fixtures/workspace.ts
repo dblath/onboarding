@@ -17,7 +17,8 @@ export async function frame13Workspace() {
     contact: "Alex Rivera",
     skill: "HVAC",
   });
-  await service.startVizRecording(state.events[0].eventId);
+  const archive = await service.startVizRecording(state.events[0].eventId);
+  await service.stopVizRecording(archive);
   await service.startVizRecording(state.events[0].eventId);
   await service.recordScreeningDecision(app, "Proceed", "");
   const task = (a: Activity) =>

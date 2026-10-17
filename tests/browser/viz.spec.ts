@@ -367,7 +367,7 @@ test("Viz records a real 37-step journey across tabs, failure, joins and immutab
     .getByLabel("Recording", { exact: true })
     .selectOption(completed.id);
   await expect(
-    monitor.getByText("Archived · capture stopped", { exact: true }),
+    monitor.getByText("Completed · recorded history", { exact: true }),
   ).toBeVisible();
   expect((await snapshot(monitor)).viz!.recordings[0].frames).toEqual(
     completed.frames,
@@ -438,7 +438,7 @@ test("Viz pan, zoom, minimap, blocker focus and logical groups are read-only", a
   expect(await snapshot(monitor)).toEqual(before);
 });
 
-test("duplicate notifications and event redelivery cannot append frames; concurrent selections keep one active recording", async ({
+test("duplicate notifications and event redelivery cannot append frames; concurrent manual captures both remain running", async ({
   context,
 }) => {
   const contractor = await workspace(context, "contractor"),
@@ -457,7 +457,7 @@ test("duplicate notifications and event redelivery cannot append frames; concurr
   expect(s.viz!.recordings).toHaveLength(2);
   expect(
     s.viz!.recordings.filter((r) => r.stoppedAtRevision === undefined),
-  ).toHaveLength(1);
+  ).toHaveLength(2);
   const activeId = s.viz!.activeRecordingId;
   await proceed(operations);
   const before = await snapshot(monitor);

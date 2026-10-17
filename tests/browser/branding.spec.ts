@@ -34,7 +34,8 @@ test("Unity branding preserves the original proportions and complete logo in pro
       }));
       expect(font.family).toContain("sans-serif");
       expect(font.family).not.toContain("Georgia");
-      expect(font.weight).toBeGreaterThanOrEqual(700);
+      expect(font.weight).toBe(450);
+      expect(font.family).toContain("Unity Narrow");
     }
     const logo = page
       .getByRole("link", { name: "Unity fieldwork" })

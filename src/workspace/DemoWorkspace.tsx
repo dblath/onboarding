@@ -11,6 +11,7 @@ import {
 } from "./format";
 import { buildScenario, scenarios, type ScenarioId } from "./scenarios";
 import "./workspace.css";
+import { recordingStatus } from "../viz/triggers";
 
 type SaveHandle = {
   createWritable(): Promise<{
@@ -206,9 +207,22 @@ export default function DemoWorkspace({
         <span>
           <strong>{current.frames}</strong> recorded frames
         </span>
+        <span>
+          <strong>
+            {state.viz?.recordings.filter(
+              (r) => recordingStatus(state, r) === "Recording",
+            ).length ?? 0}
+          </strong>{" "}
+          recording journeys ·{" "}
+          <strong>
+            {state.viz?.triggers?.filter((t) => t.enabled).length ?? 0}
+          </strong>{" "}
+          enabled triggers
+        </span>
         {active && (
           <span>
-            Active Viz: <strong>Frame {active.frames.at(-1)?.number}</strong>
+            Selected journey:{" "}
+            <strong>Frame {active.frames.at(-1)?.number}</strong>
           </span>
         )}
         <span>Clock: {new Date(state.clock).toLocaleString()}</span>
@@ -348,16 +362,26 @@ export default function DemoWorkspace({
                   {new Date(preview.file.state.clock).toLocaleString()}.
                 </p>
                 <p>
+                  {preview.file.state.viz?.triggers?.length ?? 0} recording
+                  triggers ·{" "}
+                  {preview.file.state.viz?.recordings.filter(
+                    (r) =>
+                      recordingStatus(preview.file!.state, r) === "Recording",
+                  ).length ?? 0}{" "}
+                  journeys will continue recording. Historical events will not
+                  fire triggers again.
+                </p>
+                <p>
                   {preview.file.state.viz?.activeRecordingId
-                    ? `Active journey restores at Frame ${preview.file.state.viz.recordings.find((r) => r.id === preview.file!.state.viz!.activeRecordingId)!.frames.at(-1)!.number}.`
-                    : "No active Viz journey in this file."}
+                    ? `Default journey restores at Frame ${preview.file.state.viz.recordings.find((r) => r.id === preview.file!.state.viz!.activeRecordingId)!.frames.at(-1)!.number}.`
+                    : "No default Viz journey in this file."}
                 </p>
               </>
             ) : (
               <p>
                 This permanently removes all companies, processes, events, work
-                and Viz recordings from this browser workspace. It cannot be
-                undone without a saved file.
+                and Viz recordings and recording triggers from this browser
+                workspace. It cannot be undone without a saved file.
               </p>
             )}
             <p>

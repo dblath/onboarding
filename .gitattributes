@@ -1,0 +1,2 @@
+# Original exported workspaces are compatibility evidence; preserve exact bytes.
+tests/fixtures/workspace-v1/*.json -text

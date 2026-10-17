@@ -39,6 +39,7 @@ export function monitorContext() {
     automation: path === "/monitor" && params.get("view") === "automations",
     journey: path === "/monitor" && params.get("view") === "journey",
     workspace: path === "/monitor" && params.get("view") === "workspace",
+    triggers: path === "/monitor" && params.get("view") === "triggers",
     companyId: params.get("company") ?? "",
     activityId: params.get("activity") ?? "",
   };

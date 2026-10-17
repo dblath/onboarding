@@ -22,7 +22,14 @@ import {
   type OrchestrationPort,
 } from "./orchestration";
 import { migrateState } from "./migration";
-import { project, safelyCaptureVisuals, startRecording } from "./viz/recorder";
+import {
+  project,
+  safelyCaptureVisuals,
+  startRecording,
+  stopRecording,
+} from "./viz/recorder";
+import { recordingStatus, triggerCatalog, upgradeViz } from "./viz/triggers";
+import type { TriggerKind } from "./viz/types";
 import { createWorkspaceFile, validateWorkspace } from "./workspace/format";
 import {
   UnavailableCoordinator,
@@ -155,8 +162,9 @@ export class OnboardingService {
           );
         const before = JSON.stringify(raw);
         const s = migrateState(raw);
+        const previousEventIds = new Set(s.events.map((e) => e.eventId));
         const value = action(s);
-        safelyCaptureVisuals(s);
+        safelyCaptureVisuals(s, previousEventIds);
         if (forceSave || JSON.stringify(s) !== before) {
           s.revision += 1;
           await this.repository.save(s);
@@ -188,24 +196,24 @@ export class OnboardingService {
       ),
     );
   }
-  /** Replaces one snapshot atomically; no migration, event replay or Viz capture. */
+  /** Replaces one snapshot atomically; only Viz metadata upgrades, no business replay or capture. */
   restoreWorkspace(input: unknown, expectedRevision: number) {
     const file = structuredClone(validateWorkspace(input));
-    const active = file.state.viz?.recordings.find(
-      (r) => r.id === file.state.viz?.activeRecordingId,
-    );
-    if (active && !active.captureError && !file.state.viz?.captureError) {
-      // JSON object keys have no semantic order. Values were validated equal;
-      // preserve all recorded content while aligning the live comparison order
-      // for the existing recorder. No frame is added or business command replayed.
-      const projected = project(file.state, active),
-        last = active.frames.at(-1)!;
-      if (
-        JSON.stringify(projected) !==
-        JSON.stringify({ nodes: last.nodes, edges: last.edges })
-      ) {
-        last.nodes = projected.nodes;
-        last.edges = projected.edges;
+    upgradeViz(file.state);
+    for (const active of file.state.viz?.recordings ?? []) {
+      if (recordingStatus(file.state, active) === "Recording") {
+        // JSON object keys have no semantic order. Values were validated equal;
+        // preserve all recorded content while aligning the live comparison order
+        // for the existing recorder. No frame is added or business command replayed.
+        const projected = project(file.state, active),
+          last = active.frames.at(-1)!;
+        if (
+          JSON.stringify(projected) !==
+          JSON.stringify({ nodes: last.nodes, edges: last.edges })
+        ) {
+          last.nodes = projected.nodes;
+          last.edges = projected.edges;
+        }
       }
     }
     return this.replaceWorkspace(file.state, expectedRevision);
@@ -237,6 +245,58 @@ export class OnboardingService {
   }
   startVizRecording(originEventId: string) {
     return this.change((s) => startRecording(s, originEventId));
+  }
+  stopVizRecording(recordingId: string) {
+    return this.change((s) => stopRecording(s, recordingId));
+  }
+  saveRecordingTrigger(input: {
+    id?: string;
+    name: string;
+    kind: TriggerKind;
+    enabled: boolean;
+  }) {
+    return this.change((s) => {
+      if (!input.name.trim() || input.name.length > 120)
+        throw new Error("Give this trigger a name of 1–120 characters.");
+      if (!triggerCatalog.some((t) => t.kind === input.kind))
+        throw new Error(
+          "Unsupported recording trigger. Choose a supported catalog entry.",
+        );
+      s.viz ??= {
+        version: 2,
+        activeRecordingId: "",
+        recordings: [],
+        triggers: [],
+      };
+      const rules = (s.viz.triggers ??= []);
+      const existing = input.id
+        ? rules.find((t) => t.id === input.id)
+        : undefined;
+      if (input.id && !existing)
+        throw new Error("Trigger no longer exists. Refresh and try again.");
+      if (existing)
+        Object.assign(existing, {
+          name: input.name.trim(),
+          kind: input.kind,
+          enabled: input.enabled,
+        });
+      else
+        rules.push({
+          id: id(),
+          name: input.name.trim(),
+          kind: input.kind,
+          enabled: input.enabled,
+          fireCount: 0,
+        });
+    });
+  }
+  removeRecordingTrigger(triggerId: string) {
+    return this.change((s) => {
+      if (s.viz)
+        s.viz.triggers = (s.viz.triggers ?? []).filter(
+          (t) => t.id !== triggerId,
+        );
+    });
   }
   async getApplication(applicationId: string) {
     return (await this.getState()).applications.find(

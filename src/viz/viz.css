@@ -627,9 +627,66 @@
 }
 .viz-presentation-brand strong {
   font-family:
-    ui-rounded, "Arial Rounded MT Bold", "Segoe UI", Arial, sans-serif;
-  font-weight: 800;
+    "Unity Narrow", "Bahnschrift Condensed", "Arial Narrow", sans-serif;
+  font-stretch: condensed;
+  font-variation-settings:
+    "wdth" 75,
+    "wght" 450;
+  font-weight: 450;
   color: #27483e;
+}
+.recording-browser {
+  background: #f8faf7;
+  border: 1px solid #dce5db;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+.recording-browser summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.recording-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 10px 0;
+}
+.recording-filters label {
+  flex: 1;
+  min-width: 150px;
+  font-size: 11px;
+}
+.recording-table {
+  max-height: 205px;
+  overflow: auto;
+}
+.recording-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: left;
+}
+.recording-table th {
+  position: sticky;
+  top: 0;
+  background: #f0f4ed;
+}
+.recording-table td,
+.recording-table th {
+  padding: 7px 10px;
+  border-bottom: 1px solid #e0e7dc;
+}
+.recording-table small {
+  display: block;
+  margin-top: 3px;
+  color: #617266;
+}
+.recording-table tr[aria-selected="true"] {
+  background: #e7f1e3;
+}
+.viz-presentation .recording-browser {
+  display: none;
 }
 .viz-presentation-brand b {
   padding: 0 10px;

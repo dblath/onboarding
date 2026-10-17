@@ -41,6 +41,7 @@ import "./style.css";
 import { VizBoundary } from "./viz/VizBoundary";
 const JourneyMap = lazy(() => import("./viz/JourneyMap"));
 const DemoWorkspace = lazy(() => import("./workspace/DemoWorkspace"));
+const TriggerManager = lazy(() => import("./viz/TriggerManager"));
 let browserService: OnboardingService | undefined;
 function getDefaultService() {
   return (browserService ??= createBrowserService());
@@ -50,6 +51,7 @@ type View =
   | "Work queue"
   | "Journey Map"
   | "Demo Workspace"
+  | "Recording Triggers"
   | "Workflow monitor"
   | "Automations & Integrations"
   | "Outbox";
@@ -118,6 +120,8 @@ export function App({
     setNotice("");
   }, [experience]);
   useEffect(() => {
+    if (experience === "monitor" && routeContext.triggers)
+      setView("Recording Triggers");
     if (experience === "monitor" && routeContext.workspace)
       setView("Demo Workspace");
     if (experience === "monitor" && routeContext.journey)
@@ -141,6 +145,7 @@ export function App({
       ? [
           "Automations & Integrations",
           "Journey Map",
+          "Recording Triggers",
           "Demo Workspace",
           "Workflow monitor",
           "Outbox",
@@ -353,6 +358,7 @@ export function App({
                         Overview: "▦",
                         "Work queue": "☷",
                         "Journey Map": "◎",
+                        "Recording Triggers": "⊕",
                         "Demo Workspace": "⇄",
                         "Workflow monitor": "☷",
                         "Automations & Integrations": "↗",
@@ -376,7 +382,7 @@ export function App({
         </nav>
         <div className="aside-bottom">
           <span className="live-dot" /> Browser-local workspace
-          <p>Iteration 3.6 · Demo Workspace</p>
+          <p>Iteration 3.7 · The Viz Fishing Net</p>
         </div>
       </aside>
       <div className="main">
@@ -656,6 +662,10 @@ export function App({
               key={submitted?.email ?? "welcome"}
               companies={state.companies}
               submitted={submitted}
+              onApply={() => {
+                setCreating(true);
+                setNotice("");
+              }}
               loading={loading}
               onSignIn={(companyId) => {
                 contractorSession.signIn(companyId);
@@ -665,6 +675,19 @@ export function App({
                 setError("");
               }}
             />
+          ) : experience === "monitor" && view === "Recording Triggers" ? (
+            <Suspense
+              fallback={
+                <div className="panel empty">Opening Recording Triggers...</div>
+              }
+            >
+              <TriggerManager
+                state={state}
+                service={service}
+                run={run}
+                busy={writeDisabled}
+              />
+            </Suspense>
           ) : experience === "monitor" && view === "Demo Workspace" ? (
             <Suspense
               fallback={

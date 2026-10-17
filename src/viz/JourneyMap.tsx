@@ -28,6 +28,8 @@ import type { OnboardingService } from "../application";
 import { automationLink } from "../presentation";
 import type { Run } from "../TaskCard";
 import { originatingEvents, originWorkflow } from "./recorder";
+import { recordingStatus } from "./triggers";
+import { RecordingBrowser } from "./RecordingBrowser";
 import type {
   MapNode,
   VisualFrame,
@@ -490,6 +492,11 @@ export default function JourneyMap({
   const [playing, setPlaying] = useState(false);
   const [pace, setPace] = useState(1600);
   const recordings = state.viz?.recordings ?? [];
+  useEffect(() => {
+    // Bind the initial view once. A manual start in another tab must not move it.
+    if (!viewedId && recordings.length)
+      setViewedId(state.viz?.activeRecordingId || recordings[0].id);
+  }, [viewedId, recordings, state.viz?.activeRecordingId]);
   const recording = recordings.find(
     (r) => r.id === (viewedId || state.viz?.activeRecordingId),
   );
@@ -499,7 +506,8 @@ export default function JourneyMap({
       : Math.min(index, recording.frames.length - 1)
     : 0;
   const frame = recording?.frames[currentIndex];
-  const active = recording?.id === state.viz?.activeRecordingId;
+  const active =
+    !!recording && recordingStatus(state, recording) === "Recording";
   const live = active && index === null;
   const story = recording && frame ? frameStory(recording, frame) : undefined;
   useEffect(() => {
@@ -583,7 +591,7 @@ export default function JourneyMap({
             value={originChoice}
             onChange={(e) => setOriginChoice(e.target.value)}
           >
-            <option value="">Choose an application or skill request…</option>
+            <option value="">Choose an accepted capture point…</option>
             {sources.map((e) => {
               const w = originWorkflow(state, e);
               const q = state.qualifications.find(
@@ -598,7 +606,11 @@ export default function JourneyMap({
                   {state.companies.find((c) => c.id === e.companyId)?.name} ·{" "}
                   {e.eventType === "ApplicationSubmitted"
                     ? "Application"
-                    : `${q?.skill ?? "Skill"} request`}{" "}
+                    : e.eventType === "SkillRequested"
+                      ? `${q?.skill ?? "Skill"} request`
+                      : e.eventType === "ScreeningDecisionRecorded"
+                        ? "Recruitment approved"
+                        : "Contractor ready"}{" "}
                   · {w?.stage ?? "Unavailable"} · {e.eventId.slice(0, 8)}
                   {w?.definitionVersion !== 2 ? " (legacy unsupported)" : ""}
                 </option>
@@ -631,14 +643,17 @@ export default function JourneyMap({
             {recordings.map((r, i) => (
               <option key={r.id} value={r.id}>
                 {i + 1}. {r.companyName} · {r.originLabel} ·{" "}
-                {r.id === state.viz?.activeRecordingId
-                  ? "Recording"
-                  : "Archived"}
+                {recordingStatus(state, r)}
               </option>
             ))}
           </select>
         </label>
       </div>
+      <RecordingBrowser
+        state={state}
+        selected={recording?.id}
+        onSelect={chooseRecording}
+      />
       {(recording?.captureError ?? state.viz?.captureError) && (
         <p className="alert" role="alert">
           {recording?.captureError ?? state.viz?.captureError}
@@ -659,8 +674,8 @@ export default function JourneyMap({
             <span>03 Rewind what was recorded</span>
           </div>
           <small>
-            No automatic capture. No invented past. Business processing runs
-            independently of Viz.
+            Configure Recording Triggers to catch future journeys automatically.
+            No invented past. Business processing runs independently of Viz.
           </small>
         </div>
       ) : (
@@ -679,9 +694,23 @@ export default function JourneyMap({
                   ? "Recording live"
                   : active
                     ? "Historical playback · still recording"
-                    : "Archived · capture stopped"}
+                    : `${recordingStatus(state, recording)} · recorded history`}
               </span>
             </div>
+            {active && (
+              <button
+                className="secondary"
+                disabled={busy}
+                onClick={() =>
+                  void run(
+                    () => service.stopVizRecording(recording.id),
+                    "Recording stopped. Other journeys continue.",
+                  )
+                }
+              >
+                Stop recording
+              </button>
+            )}
             <button className="text-button" onClick={() => setLarge(!large)}>
               {large ? "Exit presentation" : "Presentation view"}
             </button>
@@ -1039,12 +1068,18 @@ export default function JourneyMap({
             </span>
             <small>
               {recording.definition.nodes.length} definition steps ·{" "}
-              {recording.frames.length} immutable states · only the active
-              selection records
+              {recording.frames.length} immutable states · journeys record
+              independently
             </small>
           </div>
           <details className="viz-recording-reference">
             <summary>Recording scope & causation</summary>
+            <p>
+              {recordingStatus(state, recording)} · {recording.originLabel} ·{" "}
+              {recording.triggerMatches?.length
+                ? `Matched rules: ${recording.triggerMatches.map((t) => `${t.name} (${t.id})`).join(", ")}`
+                : "Manual capture"}
+            </p>
             <p>
               Origin: {recording.originEventId} · Workflow:{" "}
               {recording.workflowId}

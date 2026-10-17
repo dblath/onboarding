@@ -57,6 +57,9 @@ export interface VizRecording {
   originLabel: string;
   startedAt: string;
   stoppedAtRevision?: number;
+  completedAtRevision?: number;
+  status?: "Recording" | "Completed" | "Stopped" | "Capture issue";
+  triggerMatches?: { id: string; name: string; kind: TriggerKind }[];
   captureError?: string;
   definition: MapDefinition;
   workflowIds: string[];
@@ -64,8 +67,21 @@ export interface VizRecording {
   frames: VisualFrame[];
 }
 export interface VizState {
-  version: 1;
+  version: 1 | 2;
+  /** Legacy preferred view only; never controls capture in version 2. */
   activeRecordingId: string;
   recordings: VizRecording[];
+  triggers?: RecordingTrigger[];
+  captureError?: string;
+}
+export type TriggerKind = "application" | "recruitment" | "ready" | "skill";
+export interface RecordingTrigger {
+  id: string;
+  name: string;
+  kind: TriggerKind;
+  enabled: boolean;
+  fireCount: number;
+  lastFiredAt?: string;
+  lastEventId?: string;
   captureError?: string;
 }

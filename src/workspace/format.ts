@@ -4,14 +4,21 @@ import {
   isReady,
   type State,
 } from "../domain";
-import { causes, lineage, originWorkflow, project } from "../viz/recorder";
+import {
+  causes,
+  lineage,
+  originWorkflow,
+  originatingEvents,
+  project,
+} from "../viz/recorder";
 import { mapDefinition } from "../viz/definition";
+import { recordingStatus, upgradeViz } from "../viz/triggers";
 
 export const workspaceFormat = "unity-fieldwork-workspace";
 export const maxWorkspaceBytes = 50 * 1024 * 1024;
 export interface WorkspaceFile {
   format: typeof workspaceFormat;
-  formatVersion: 1;
+  formatVersion: 1 | 2;
   exportedAt: string;
   scenario: { name: string; description: string };
   state: State;
@@ -205,6 +212,17 @@ const recording = object({
   originLabel: text,
   startedAt: date,
   stoppedAtRevision: optional(number),
+  completedAtRevision: optional(number),
+  status: optional(one("Recording", "Completed", "Stopped", "Capture issue")),
+  triggerMatches: optional(
+    list(
+      object({
+        id: key,
+        name: nonempty,
+        kind: one("application", "recruitment", "ready", "skill"),
+      }),
+    ),
+  ),
   captureError: optional(text),
   workflowIds: ids,
   seen: ids,
@@ -428,9 +446,23 @@ const stateShape = object({
   ),
   viz: optional(
     object({
-      version: one(1),
+      version: one(1, 2),
       activeRecordingId: text,
       recordings: list(recording),
+      triggers: optional(
+        list(
+          object({
+            id: key,
+            name: nonempty,
+            kind: one("application", "recruitment", "ready", "skill"),
+            enabled: bool,
+            fireCount: number,
+            lastFiredAt: optional(date),
+            lastEventId: optional(key),
+            captureError: optional(text),
+          }),
+        ),
+      ),
       captureError: optional(text),
     }),
   ),
@@ -455,7 +487,7 @@ const canonical = (value: unknown) =>
 export function validateWorkspace(value: unknown): WorkspaceFile {
   object({
     format: one(workspaceFormat),
-    formatVersion: one(1),
+    formatVersion: one(1, 2),
     exportedAt: date,
     scenario: object({ name: nonempty, description: text }),
     state: stateShape,
@@ -652,6 +684,42 @@ export function validateWorkspace(value: unknown): WorkspaceFile {
       fail(c.id, "has inconsistent administrative approval");
   }
   if (s.viz) {
+    if (file.formatVersion === 2 && s.viz.version !== 2)
+      fail("format version", "requires version 2 Viz metadata");
+    if (
+      file.formatVersion === 1 &&
+      (s.viz.version !== 1 ||
+        s.viz.triggers !== undefined ||
+        s.viz.recordings.some(
+          (r) =>
+            r.status !== undefined ||
+            r.triggerMatches !== undefined ||
+            r.completedAtRevision !== undefined,
+        ))
+    )
+      fail("format version", "does not support version 2 Viz metadata");
+    if (
+      s.viz.version === 2 &&
+      (!s.viz.triggers || s.viz.recordings.some((r) => !r.status))
+    )
+      fail("Viz", "requires version 2 capture and trigger metadata");
+    unique(
+      (s.viz.triggers ?? []).map((t) => t.id),
+      "trigger IDs",
+    );
+    for (const t of s.viz.triggers ?? []) {
+      if (!t.name.trim() || t.name.length > 120)
+        fail(t.id, "needs a name of 1-120 characters");
+      if (t.lastEventId) ref("event", t.lastEventId);
+      if (t.fireCount > 0 !== !!(t.lastEventId && t.lastFiredAt))
+        fail(t.id, "has inconsistent firing metadata");
+    }
+    unique(
+      s.viz.recordings
+        .filter((r) => r.triggerMatches?.length)
+        .map((r) => `${r.originEventId}:${r.workflowId}`),
+      "automatic recording occurrences",
+    );
     unique(
       s.viz.recordings.map((r) => r.id),
       "recording IDs",
@@ -662,13 +730,17 @@ export function validateWorkspace(value: unknown): WorkspaceFile {
     )
       fail("active recording", "is missing");
     for (const r of s.viz.recordings) {
+      if (r.status === "Capture issue" && !r.captureError)
+        fail(r.id, "omits its capture issue");
+      unique(
+        (r.triggerMatches ?? []).map((t) => t.id),
+        r.id,
+      );
       ref("company", r.companyId);
       const root = ref("workflow", r.workflowId, r.companyId),
         origin = ref("event", r.originEventId, r.companyId);
       if (
-        !["ApplicationSubmitted", "SkillRequested"].includes(
-          origin.eventType,
-        ) ||
+        !originatingEvents(s).some((e) => e.eventId === origin.eventId) ||
         originWorkflow(s, origin)?.id !== root.id
       )
         fail(r.id, "has an invalid originating event");
@@ -740,10 +812,13 @@ export function validateWorkspace(value: unknown): WorkspaceFile {
           if (c.causedByEventId) ref("event", c.causedByEventId, r.companyId);
         }
       }
-      if (r.id === s.viz.activeRecordingId) {
+      if (
+        recordingStatus(s, r) === "Recording" ||
+        (r.status === "Capture issue" && r.stoppedAtRevision === undefined)
+      ) {
         if (r.stoppedAtRevision !== undefined)
           fail(r.id, "is both active and archived");
-        if (!r.captureError && !s.viz.captureError) {
+        if (!r.captureError) {
           if (
             JSON.stringify(r.workflowIds) !==
               JSON.stringify(lineage(s, root).map((w) => w.id)) ||
@@ -760,6 +835,14 @@ export function validateWorkspace(value: unknown): WorkspaceFile {
           )
             fail(r.id, "does not match its live recorded state");
         }
+      } else if (r.status === "Completed") {
+        if (
+          root.status !== "Completed" ||
+          r.completedAtRevision === undefined ||
+          r.completedAtRevision > s.revision ||
+          r.stoppedAtRevision !== undefined
+        )
+          fail(r.id, "has invalid completion metadata");
       } else if (
         r.stoppedAtRevision === undefined ||
         r.stoppedAtRevision > s.revision
@@ -775,9 +858,10 @@ export function createWorkspaceFile(
   description = "",
 ): WorkspaceFile {
   const { workspaceEpoch: _local, ...portable } = structuredClone(state);
+  upgradeViz(portable);
   return validateWorkspace({
     format: workspaceFormat,
-    formatVersion: 1,
+    formatVersion: 2,
     exportedAt: new Date().toISOString(),
     scenario: { name: name.trim(), description: description.trim() },
     state: portable,

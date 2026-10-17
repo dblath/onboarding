@@ -136,7 +136,7 @@ test("file round trip restores exact Frame 13 and archive across tabs, resets in
     .selectOption(fixture.state.viz!.recordings[0].id);
   await expect(viz.getByTestId("viz-frame-number")).toHaveText("Frame 0 / 0");
   await expect(
-    viz.getByText("Archived · capture stopped", { exact: true }),
+    viz.getByText("Stopped · recorded history", { exact: true }),
   ).toBeVisible();
   await viz
     .getByLabel("Recording", { exact: true })

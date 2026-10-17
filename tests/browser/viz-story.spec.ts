@@ -176,7 +176,9 @@ test("80-step synthetic layout fixture is compact, navigable and clearly identif
     "false",
   );
   await expect(
-    monitor.getByText("LAYOUT FIXTURE — 80 synthetic steps", { exact: true }),
+    monitor
+      .locator(".viz-recording-bar")
+      .getByText("LAYOUT FIXTURE — 80 synthetic steps", { exact: true }),
   ).toBeVisible();
   await expect(monitor.locator(".react-flow__minimap-node")).toHaveCount(80);
   const sizes = await monitor.locator(".viz-node").evaluateAll((nodes) =>
