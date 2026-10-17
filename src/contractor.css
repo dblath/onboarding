@@ -1,0 +1,820 @@
+/* Contractor: business story first. Layout intentionally scoped to this experience. */
+.experience-contractor {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.experience-contractor aside {
+  width: 224px;
+  padding: 28px 20px;
+}
+.experience-contractor .main {
+  margin-left: 224px;
+  width: calc(100% - 224px);
+}
+.experience-contractor aside nav {
+  margin-top: 32px;
+  gap: 6px;
+}
+.experience-contractor aside nav button {
+  min-height: 44px;
+  font-size: 13px;
+  border-radius: 7px;
+}
+.experience-contractor aside .brand-image {
+  width: 62px;
+}
+.experience-contractor aside .workspace {
+  font-size: 10px;
+  letter-spacing: 1.4px;
+}
+.experience-contractor .main > header {
+  min-height: 56px;
+  height: auto;
+  padding: 10px 32px;
+  gap: 12px;
+}
+.experience-contractor .main > main {
+  max-width: 1240px;
+  padding: 20px 32px 32px;
+}
+.experience-contractor h1,
+.experience-contractor h2,
+.experience-contractor h3 {
+  font-family: inherit;
+  letter-spacing: -0.025em;
+}
+.experience-contractor .title-row {
+  margin-bottom: 20px;
+}
+.experience-contractor .title-row h1 {
+  font-family: inherit;
+  font-weight: 650;
+  font-size: 24px;
+}
+.experience-contractor .title-row .eyebrow {
+  display: none;
+}
+.experience-contractor .title-row .subtitle {
+  display: block;
+  font-size: 13px;
+  margin-top: 6px;
+}
+.experience-contractor .demo-banner {
+  margin: 0 0 24px;
+  padding: 8px 12px;
+  font-size: 11px;
+  gap: 8px;
+}
+.experience-contractor .demo-banner span {
+  line-height: 1.5;
+}
+.experience-contractor .primary,
+.experience-contractor .secondary {
+  min-height: 42px;
+  font-size: 13px;
+  border-radius: 7px;
+  white-space: normal;
+}
+.experience-contractor input,
+.experience-contractor select,
+.experience-contractor textarea {
+  font-size: 14px;
+  min-height: 42px;
+}
+.experience-contractor .text-button {
+  font-size: 13px;
+  min-height: 36px;
+}
+.contractor-product {
+  min-width: 0;
+}
+.contractor-company {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 24px;
+}
+.company-monogram {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  background: #e5edf5;
+  color: #254966;
+  border: 1px solid #c7d6e4;
+  border-radius: 10px;
+  font-weight: 650;
+  flex-shrink: 0;
+}
+.contractor-kicker {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 1.2px;
+  margin-bottom: 4px;
+}
+.contractor-company h1 {
+  font-size: 23px;
+  font-weight: 650;
+  line-height: 1.2;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.contractor-company p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.contractor-company p span {
+  margin: 0 4px;
+}
+.contractor-now {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 28px;
+}
+.contractor-now-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+.contractor-now h2 {
+  font-size: 26px;
+  font-weight: 650;
+  line-height: 1.25;
+  margin: 0;
+}
+.contractor-job-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.contractor-job-status small {
+  font-size: 12px;
+}
+.contractor-lead {
+  max-width: 780px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+  margin: 12px 0 0;
+}
+.contractor-next-action {
+  margin-top: 22px;
+  padding: 18px 20px;
+  background: var(--soft);
+  border: 1px solid #c8dcec;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.contractor-next-action h3 {
+  font-size: 17px;
+  margin: 8px 0 4px;
+}
+.contractor-next-action p {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 0;
+}
+.contractor-next-action .primary {
+  min-width: 112px;
+  flex-shrink: 0;
+}
+.contractor-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 650;
+  border-radius: 5px;
+  padding: 3px 7px;
+  line-height: 1.6;
+}
+.contractor-status.complete,
+.contractor-job-status.complete {
+  background: var(--success-bg);
+  color: var(--success);
+}
+.contractor-status.you {
+  background: #e2effc;
+  color: #174f80;
+}
+.contractor-status.waiting {
+  background: #edf2f7;
+  color: #455e74;
+}
+.contractor-status.correction {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.contractor-status.upcoming,
+.contractor-job-status.upcoming {
+  background: #f1f4f7;
+  color: #526575;
+}
+.contractor-waiting-list {
+  padding: 0;
+  list-style: none;
+  margin: 20px 0 0;
+  border-top: 1px solid var(--line);
+}
+.contractor-waiting-list li {
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: baseline;
+  font-size: 13px;
+}
+.contractor-waiting-list li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.contractor-waiting-list strong {
+  font-size: 12px;
+  color: var(--muted);
+}
+.contractor-section-heading {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: 0 0 16px;
+}
+.contractor-section-heading h2 {
+  font-size: 18px;
+  line-height: 1.35;
+}
+.contractor-section-heading p {
+  margin: 7px 0 0;
+  max-width: 720px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.contractor-stages {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+.contractor-stage {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+.contractor-stage.stage-application {
+  grid-column: span 6;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 5px 18px;
+  align-items: center;
+}
+.contractor-stage.stage-administration,
+.contractor-stage.stage-skills {
+  grid-column: span 3;
+}
+.contractor-stage.stage-application .contractor-stage-top {
+  grid-row: 1;
+  grid-column: 1;
+}
+.contractor-stage.stage-application > .contractor-status {
+  grid-row: 1;
+  grid-column: 2;
+  justify-self: end;
+}
+.contractor-stage.stage-application > p {
+  grid-column: 1;
+  margin: 3px 0;
+}
+.contractor-stage.stage-application > .text-button {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+}
+.contractor-stage-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0 0 10px;
+}
+.contractor-stage-top h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+}
+.contractor-stage-symbol {
+  font-size: 14px;
+  color: var(--muted);
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.contractor-stage.complete .contractor-stage-symbol {
+  color: var(--success);
+  border-color: #95b8a2;
+  background: var(--success-bg);
+}
+.contractor-stage.you .contractor-stage-symbol {
+  color: var(--accent);
+  border-color: #8aafcf;
+  background: var(--soft);
+}
+.contractor-stage.correction .contractor-stage-symbol {
+  color: var(--danger);
+  border-color: #cf949b;
+}
+.contractor-stage-number {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 10px;
+}
+.contractor-stage p {
+  margin: 12px 0;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.contractor-stage .text-button {
+  margin-top: auto;
+  padding: 0;
+}
+.contractor-stage.upcoming {
+  background: var(--surface-2);
+}
+.contractor-company-activity,
+.contractor-details,
+.contractor-actions,
+.contractor-messages {
+  margin-top: 28px;
+}
+.contractor-company-activity,
+.contractor-messages {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 20px;
+}
+.contractor-details {
+  margin-top: 32px;
+}
+.contractor-details > .contractor-section-heading h2 {
+  font-size: 15px;
+  color: var(--muted);
+}
+.contractor-disclosure {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  margin: 8px 0;
+  scroll-margin-top: 20px;
+  padding: 0;
+}
+.contractor-disclosure > summary {
+  padding: 15px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  list-style: none;
+  min-height: 60px;
+  color: var(--text);
+}
+.contractor-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+.contractor-disclosure > summary strong {
+  font-size: 13px;
+  font-weight: 650;
+}
+.contractor-disclosure > summary small {
+  float: none;
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 3px;
+}
+.disclosure-chevron {
+  font-size: 24px;
+  line-height: 1;
+  color: var(--muted);
+}
+.contractor-disclosure[open] .disclosure-chevron {
+  transform: rotate(90deg);
+}
+.contractor-disclosure[open] > summary {
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-2);
+}
+.contractor-disclosure-body {
+  padding: 18px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.contractor-disclosure-body > p {
+  color: var(--muted);
+}
+.contractor-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0 0 14px;
+}
+.contractor-facts dt {
+  color: var(--muted);
+  font-size: 12px;
+}
+.contractor-facts dd {
+  margin: 4px 0 0;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+.contractor-checklist {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+.contractor-checklist li {
+  padding: 4px 0;
+}
+.contractor-record-row {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  overflow-wrap: anywhere;
+}
+.contractor-record-row:last-child {
+  border: 0;
+}
+.contractor-record-row > strong {
+  margin-right: auto;
+}
+.contractor-record-row > small,
+.contractor-record-row > p {
+  width: 100%;
+  color: var(--muted);
+  margin: 0;
+  font-size: 12px;
+}
+.contractor-skill-request {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.contractor-skill-request label {
+  flex: 1;
+  margin: 0;
+}
+.contractor-section-note,
+.contractor-empty-note {
+  font-size: 13px;
+  color: var(--muted);
+}
+.contractor-actions .task-card {
+  padding: 22px;
+  margin: 14px 0;
+  background: var(--surface);
+}
+.contractor-actions .task-card h3 {
+  font-size: 17px;
+  margin: 12px 0 8px;
+}
+.contractor-actions .task-instructions,
+.contractor-actions .muted {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.contractor-actions .task-top .pill,
+.contractor-actions .task-kind,
+.contractor-actions .task-due,
+.contractor-actions .evidence-chip small {
+  font-size: 11px;
+}
+.contractor-actions .task-card label {
+  font-size: 13px;
+}
+.contractor-focused-action > .task-card {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.contractor-correction-note {
+  padding: 10px 14px;
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-size: 13px;
+  border-radius: 6px;
+}
+.contractor-message {
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.contractor-message p {
+  font-size: 13px;
+}
+.contractor-message small {
+  color: var(--muted);
+  font-size: 11px;
+}
+.experience-contractor .portal-access {
+  padding: 32px;
+  border-color: var(--line);
+}
+.experience-contractor .portal-welcome h2 {
+  font-family: inherit;
+  font-size: 32px;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+.experience-contractor .portal-access .portal-welcome p {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.experience-contractor .portal-signin {
+  background: var(--surface-2);
+  border-color: var(--line);
+  padding: 22px;
+}
+.experience-contractor .portal-access .demo-auth-note {
+  border-color: var(--line);
+  color: var(--muted);
+  font-size: 11px;
+}
+.experience-contractor .portal-access h3 {
+  font-size: 17px;
+}
+.experience-contractor .portal-first-step {
+  font-size: 12px !important;
+}
+.experience-contractor .form-panel {
+  padding: 28px;
+}
+.experience-contractor footer {
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 30px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+@media (max-width: 1100px) and (min-width: 801px) {
+  .experience-contractor .main > main {
+    padding: 20px 24px;
+  }
+  .contractor-now h2 {
+    font-size: 23px;
+  }
+  .contractor-stages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .contractor-stage,
+  .contractor-stage.stage-administration,
+  .contractor-stage.stage-skills {
+    grid-column: span 1;
+  }
+  .contractor-stage.stage-application,
+  .contractor-stage.stage-activation {
+    grid-column: span 2;
+  }
+}
+@media (max-width: 800px) {
+  .experience-contractor aside {
+    width: 100%;
+    padding: 14px 16px;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .experience-contractor aside .brand-image {
+    width: 36px;
+  }
+  .experience-contractor aside .brand-caption {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+  }
+  .experience-contractor aside .brand-caption small {
+    margin: 0;
+    font-size: 14px;
+  }
+  .experience-contractor aside .brand {
+    gap: 10px;
+  }
+  .experience-contractor aside nav {
+    margin: 0;
+    display: flex;
+    overflow: auto;
+    width: 100%;
+    gap: 4px;
+    border-top: 1px solid #385064;
+    padding-top: 8px;
+  }
+  .experience-contractor aside nav button {
+    flex-shrink: 0;
+    min-height: 42px;
+    padding: 8px 10px;
+    white-space: nowrap;
+    font-size: 12px;
+  }
+  .experience-contractor aside nav button > span:first-child:not(.nav-count) {
+    display: none;
+  }
+  .experience-contractor aside nav button .nav-count {
+    font-size: 10px;
+  }
+  .experience-contractor .main {
+    width: 100%;
+    margin: 0;
+  }
+  .experience-contractor .main > header {
+    padding: 10px 16px;
+    min-height: 48px;
+  }
+  .experience-contractor .app-identity {
+    font-size: 11px;
+  }
+  .experience-contractor .app-identity .header-brand-image,
+  .experience-contractor .app-identity .product-name {
+    display: none;
+  }
+  .experience-contractor .app-identity > b {
+    display: none;
+  }
+  .experience-contractor .session-controls {
+    gap: 8px;
+  }
+  .experience-contractor .session-controls .experience-badge {
+    display: none;
+  }
+  .experience-contractor .main > main {
+    padding: 16px 16px 24px;
+  }
+  .experience-contractor .demo-banner {
+    align-items: start;
+    gap: 5px;
+    padding: 9px 10px;
+    margin-bottom: 20px;
+  }
+  .experience-contractor .demo-banner > span {
+    font-size: 10px;
+  }
+  .experience-contractor .demo-banner .sync-status {
+    text-align: left;
+  }
+  .contractor-company {
+    margin-bottom: 18px;
+    gap: 10px;
+  }
+  .company-monogram {
+    height: 40px;
+    width: 40px;
+  }
+  .contractor-company h1 {
+    font-size: 21px;
+  }
+  .contractor-company p {
+    font-size: 11px;
+  }
+  .contractor-now {
+    padding: 18px;
+    margin-bottom: 24px;
+  }
+  .contractor-now-heading {
+    display: block;
+  }
+  .contractor-now h2 {
+    font-size: 23px;
+  }
+  .contractor-job-status {
+    width: fit-content;
+    margin-top: 12px;
+    padding: 5px 9px;
+    font-size: 12px;
+  }
+  .contractor-lead {
+    font-size: 13px;
+  }
+  .contractor-next-action {
+    display: block;
+    padding: 14px;
+    margin-top: 16px;
+  }
+  .contractor-next-action .primary {
+    margin-top: 14px;
+    width: 100%;
+  }
+  .contractor-next-action h3 {
+    font-size: 16px;
+  }
+  .contractor-waiting-list li {
+    grid-template-columns: 16px minmax(0, 1fr);
+    font-size: 12px;
+  }
+  .contractor-waiting-list strong {
+    grid-column: 2;
+    font-size: 11px;
+  }
+  .contractor-stages {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .contractor-stage,
+  .contractor-stage.stage-application,
+  .contractor-stage.stage-administration,
+  .contractor-stage.stage-skills {
+    grid-column: 1;
+    display: flex;
+    padding: 16px;
+  }
+  .contractor-stage.stage-application > .contractor-status {
+    align-self: start;
+  }
+  .contractor-stage.stage-application > .text-button {
+    align-self: start;
+  }
+  .contractor-stage-top {
+    margin-bottom: 8px;
+  }
+  .contractor-stage p {
+    margin: 8px 0;
+  }
+  .contractor-section-heading {
+    gap: 10px;
+  }
+  .contractor-section-heading h2 {
+    font-size: 17px;
+  }
+  .contractor-section-heading > .contractor-status {
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+  .contractor-disclosure > summary {
+    padding: 14px;
+  }
+  .contractor-disclosure-body {
+    padding: 14px;
+  }
+  .contractor-facts {
+    grid-template-columns: 1fr;
+  }
+  .contractor-skill-request {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .contractor-actions .task-card {
+    padding: 16px;
+  }
+  .experience-contractor .portal-access {
+    padding: 22px 18px;
+  }
+  .experience-contractor .portal-welcome h2 {
+    font-size: 29px;
+  }
+  .experience-contractor .portal-signin {
+    padding: 18px;
+  }
+  .experience-contractor .portal-access .portal-welcome p {
+    font-size: 13px;
+  }
+}

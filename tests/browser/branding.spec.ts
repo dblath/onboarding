@@ -145,7 +145,7 @@ test("Unity branding preserves the original proportions and complete logo in pro
   const mobileSize = await pages.contractor
     .locator(".brand-image")
     .boundingBox();
-  expect(mobileSize!.width).toBe(44);
+  expect(mobileSize!.width).toBe(36);
   expect(
     Math.abs(mobileSize!.width / mobileSize!.height - 267 / 331),
   ).toBeLessThan(0.001);

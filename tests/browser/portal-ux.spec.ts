@@ -76,11 +76,10 @@ test("anonymous application confirms before login; failed credentials, reload an
     path: testInfo.outputPath("contractor-signed-in.png"),
     fullPage: true,
   });
+  await expect(contractor.locator(".stats")).toHaveCount(0);
   expect(
-    await contractor
-      .locator(".stats")
-      .evaluate((node) => node.getBoundingClientRect().bottom),
-  ).toBeLessThanOrEqual(168);
+    (await contractor.locator(".contractor-company").boundingBox())!.y,
+  ).toBeLessThan(180);
   const session = await contractor.evaluate(() =>
     Object.fromEntries(Object.entries(sessionStorage)),
   );

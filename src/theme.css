@@ -1,0 +1,249 @@
+/* HomeItem reference: cool slate surfaces, navy chrome, blue actions, semantic status only.
+   Shared colors are intentionally separate from experience-specific layout. */
+:root {
+  --bg: #f3f6f8;
+  --surface: #fff;
+  --surface-2: #f8fafc;
+  --text: #17222c;
+  --muted: #526575;
+  --line: #d8e0e6;
+  --line-strong: #a9bac8;
+  --accent: #205f98;
+  --accent-hover: #174a77;
+  --soft: #eaf2f9;
+  --nav: #122331;
+  --success: #22653e;
+  --success-bg: #edf7f0;
+  --warning: #845219;
+  --warning-bg: #fff5e8;
+  --danger: #a02f39;
+  --danger-bg: #fff0f1;
+  color: var(--text);
+  background: var(--bg);
+  text-rendering: optimizeLegibility;
+}
+body {
+  min-width: 320px;
+}
+aside {
+  background: var(--nav);
+  color: #f1f5f9;
+}
+.brand-caption small,
+.workspace,
+.aside-bottom {
+  color: #c6d3df;
+}
+aside nav button {
+  color: #d2deea;
+}
+aside nav button:hover,
+aside nav button.nav-active,
+.operations-queue-navigation [role="group"] button[aria-pressed="true"] {
+  background: #25445e;
+  color: #fff;
+}
+.nav-count {
+  background: #344d62;
+  color: #fff;
+}
+header {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--muted);
+}
+header b {
+  color: #738496;
+}
+.eyebrow,
+.subtitle,
+.muted,
+.contact-line,
+.experience-links,
+.stats span,
+.stats small,
+.stats strong small,
+.task-kind,
+.task-instructions,
+.task-due,
+.evidence-chip small,
+.queue-company-context small,
+.network-scope small,
+.application-row span:not(.pill),
+footer,
+.portal-access p,
+.portal-access .portal-welcome p,
+.session-controls .experience-badge {
+  color: var(--muted);
+}
+.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  font-weight: 650;
+}
+.primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+.secondary {
+  background: var(--surface);
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+.secondary:hover:not(:disabled) {
+  background: var(--soft);
+}
+.text-button,
+.experience-links a {
+  color: var(--accent);
+}
+.network-scope button[aria-pressed="true"] {
+  background: var(--accent);
+  color: #fff;
+}
+button:focus-visible,
+a:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid #2b74b5;
+  outline-offset: 3px;
+}
+button:disabled,
+button.primary:disabled,
+button.secondary:disabled,
+button:disabled:hover {
+  opacity: 1;
+  background: #e4ebf1;
+  border-color: #cbd5df;
+  color: #596b7b;
+  cursor: not-allowed;
+}
+input,
+select,
+textarea {
+  color: var(--text);
+  background: var(--surface);
+  border-color: var(--line-strong);
+  accent-color: var(--accent);
+}
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+}
+label {
+  color: var(--text);
+}
+.panel,
+.task-card,
+.stats,
+.diagnostic-panel,
+.queue-item,
+.automation-item {
+  border-color: var(--line);
+  background: var(--surface);
+}
+.stats > div,
+.applications > .section-heading,
+.application-row {
+  border-color: var(--line);
+}
+.application-row.selected {
+  background: var(--soft);
+  box-shadow: inset 3px 0 var(--accent);
+}
+.avatar {
+  background: var(--soft);
+  color: var(--accent);
+  border-color: var(--line);
+}
+.pill {
+  background: var(--soft);
+  color: var(--accent);
+}
+.pill.neutral {
+  background: #edf1f5;
+  color: #4b6072;
+}
+.pill.red {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.demo-banner,
+.queue-empty,
+.queue-company-context,
+.portal-signin,
+.time-console,
+.automation-signpost {
+  background: var(--surface-2);
+  color: var(--muted);
+  border-color: var(--line);
+}
+.demo-banner b {
+  background: #e2ebf3;
+  color: #254966;
+}
+.notice {
+  background: var(--soft);
+  color: #214c73;
+  border-color: #bdd2e4;
+}
+.alert,
+.suspension-notice {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-color: #e8b8be;
+}
+.failure-box {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.evidence-chip {
+  background: var(--surface-2);
+  color: var(--text);
+}
+.eligibility-guidance {
+  background: var(--surface-2);
+  border-color: var(--line);
+}
+.diagnostic-panel > h3 > button {
+  background: var(--surface-2);
+  color: var(--text);
+}
+.page-tabs {
+  border-color: var(--line);
+}
+.page-tabs button.active {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.progress-track > div.done {
+  background: var(--success-bg);
+  color: var(--success);
+}
+.readiness,
+.lifecycle-status {
+  border-color: var(--line);
+  background: var(--surface-2);
+}
+.live-dot {
+  background: #39825b;
+}
+.experience-badge {
+  background: var(--surface-2);
+  border-color: var(--line);
+  color: var(--muted);
+}
+.aside-bottom p {
+  color: #afc0ce;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}

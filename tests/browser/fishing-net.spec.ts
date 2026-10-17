@@ -418,8 +418,31 @@ test("anonymous application CTA leads on desktop and mobile; native condensed br
     transform: getComputedStyle(e).transform,
   }));
   expect(style.weight).toBe("450");
-  expect(style.variation).toContain("75");
+  expect(style.variation).toContain("95");
   expect(style.transform).toBe("none");
+  const widths = await page
+    .locator(".brand-caption strong")
+    .evaluate((element) => {
+      const sample = document.createElement("span");
+      const style = getComputedStyle(element);
+      Object.assign(sample.style, {
+        fontFamily: style.fontFamily,
+        fontSize: style.fontSize,
+        fontWeight: style.fontWeight,
+        fontStretch: "95%",
+        position: "absolute",
+        visibility: "hidden",
+      });
+      sample.textContent = "Unity";
+      document.body.append(sample);
+      sample.style.fontVariationSettings = '"wdth" 75, "wght" 450';
+      const narrow = sample.getBoundingClientRect().width;
+      sample.style.fontVariationSettings = '"wdth" 95, "wght" 450';
+      const wider = sample.getBoundingClientRect().width;
+      sample.remove();
+      return { narrow, wider };
+    });
+  expect(widths.wider).toBeGreaterThan(widths.narrow * 1.1);
   await page
     .getByRole("button", { name: "Start a new application", exact: false })
     .click();

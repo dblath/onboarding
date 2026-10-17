@@ -99,11 +99,10 @@ aside {
   display: block;
   font-size: 22px;
   letter-spacing: -0.4px;
-  font-family:
-    "Unity Narrow", "Bahnschrift Condensed", "Arial Narrow", sans-serif;
-  font-stretch: condensed;
+  font-family: "Unity Narrow", "Bahnschrift", "Segoe UI", sans-serif;
+  font-stretch: 95%;
   font-variation-settings:
-    "wdth" 75,
+    "wdth" 95,
     "wght" 450;
   font-weight: 450;
 }
@@ -114,11 +113,10 @@ aside {
   color: #c3cfc4;
 }
 .product-name strong {
-  font-family:
-    "Unity Narrow", "Bahnschrift Condensed", "Arial Narrow", sans-serif;
-  font-stretch: condensed;
+  font-family: "Unity Narrow", "Bahnschrift", "Segoe UI", sans-serif;
+  font-stretch: 95%;
   font-variation-settings:
-    "wdth" 75,
+    "wdth" 95,
     "wght" 450;
   font-weight: 450;
   font-size: 1.1em;

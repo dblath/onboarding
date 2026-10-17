@@ -124,7 +124,7 @@ test("three simultaneous experiences complete correction, independent branches a
   await nav(operations, "Overview");
   await inspectCompany(operations, "Summit Three Tabs");
   await expect(
-    contractor.getByRole("heading", { name: "Eligible to receive jobs" }),
+    contractor.getByRole("heading", { name: "You're ready for your next job" }),
   ).toBeVisible();
   await expect(
     operations.getByRole("heading", { name: "Eligible to receive jobs" }),

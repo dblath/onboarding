@@ -89,7 +89,7 @@ test("completed onboarding stays frozen through last-skill invalidation and late
   await nav(contractor, "Your journey");
   await expect(
     contractor.getByRole("heading", {
-      name: "Ready; initial activation pending",
+      name: "You're ready. Activation is next.",
     }),
   ).toBeVisible();
   await publishInitialActivation(operations);
@@ -105,13 +105,16 @@ test("completed onboarding stays frozen through last-skill invalidation and late
     .getByRole("button", { name: "＋ Request qualification" })
     .click();
   await expect(
-    contractor.getByText("Additional company skill · independent lifecycle"),
+    contractor
+      .getByRole("region", { name: "Separate company activities" })
+      .locator(".contractor-record-row strong")
+      .filter({ hasText: /^Plumbing$/ }),
   ).toBeVisible();
   await invalidate(operations);
   await states(pages, "Completed", "Not ready", "Suspended", "Not eligible");
   await expect(
     contractor.getByRole("heading", {
-      name: "Not ready; onboarding remains completed",
+      name: "Your company is suspended",
     }),
   ).toBeVisible();
   await expect(
@@ -135,12 +138,12 @@ test("completed onboarding stays frozen through last-skill invalidation and late
   await nav(contractor, "Your journey");
   await expect(
     contractor.getByRole("heading", {
-      name: "Ready, but operationally suspended",
+      name: "Your company is suspended",
     }),
   ).toBeVisible();
   await expect(
     contractor.getByText(
-      /Removing it requires a separate administrative request and approval in Iteration 4/,
+      /Removing suspension requires a separate administrative request and approval/,
     ),
   ).toBeVisible();
   await expect(

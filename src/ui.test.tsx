@@ -353,7 +353,7 @@ describe("participant UI acceptance", () => {
     await user.click(
       screen.getByRole("button", { name: "＋ Request qualification" }),
     );
-    await screen.findByText("Additional company skill · independent lifecycle");
+    await screen.findByText("Additional company skill · separate activity");
     await qualify(false);
     let s = await service.getState();
     expect(isReady(s.companies[0], s.qualifications)).toBe(true);

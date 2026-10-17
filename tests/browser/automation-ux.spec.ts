@@ -78,7 +78,9 @@ test("Operations discovers automations without executing them; deep links preser
     contractor.getByText("Demo verification passed.", { exact: true }),
   ).toHaveCount(0);
   await expect(
-    contractor.getByText("Simulated verification passed.", { exact: true }),
+    contractor
+      .locator("#contractor-requirements")
+      .getByText("Simulated verification passed.", { exact: true }),
   ).toHaveCount(3);
   await expect(contractor.getByTestId("eligibility-guidance")).toContainText(
     "awaiting publication",

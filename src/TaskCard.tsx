@@ -24,9 +24,10 @@ export function TaskCard({
   task: t,
   state: s,
   service,
-  run,
+  run: invoke,
   busy,
   automationExecution = false,
+  contractorView = false,
 }: {
   task: WorkItem;
   state: State;
@@ -34,7 +35,26 @@ export function TaskCard({
   run: Run;
   busy: boolean;
   automationExecution?: boolean;
+  contractorView?: boolean;
 }) {
+  const run: Run = (action, message) =>
+    invoke(
+      action,
+      contractorView
+        ? [
+            "SubmitLicense",
+            "SubmitInsurance",
+            "SubmitFinancial",
+            "SubmitAgreement",
+          ].includes(t.activity)
+          ? "Documents submitted. The responsible team will review them."
+          : t.activity === "ProvideInformation"
+            ? "Response sent to Recruitment."
+            : t.activity === "SetupPortal"
+              ? "Company profile complete. Your training is ready."
+              : "Training submitted for confirmation."
+        : message,
+    );
   const [fail, setFail] = useState(false),
     [fixture, setFixture] = useState<EvidenceFixture>("Valid demo document");
   const q = s.qualifications.find((q) => q.id === t.qualificationId),
