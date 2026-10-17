@@ -54,6 +54,14 @@ async function go(name: string) {
         )[name] ?? name)
       : name;
   await user.click(screen.getAllByRole("button", { name: mapped })[0]);
+  if (name === "Overview" && window.location.hash === "#/operations") {
+    await user.click(screen.getByRole("button", { name: "All companies" }));
+    await user.click(
+      screen.getByText("Summit UI Demo", {
+        selector: ".application-row strong",
+      }),
+    );
+  }
 }
 function card(name: string) {
   return screen.getByRole("heading", { name }).closest("article")!;
@@ -294,7 +302,13 @@ describe("participant UI acceptance", () => {
       screen.getByRole("button", { name: "Timer & escalation lab" }),
     );
     await user.click(screen.getByRole("button", { name: "Advance 3 days" }));
+    await screen.findByText(/Simulation clock advanced 3 days/);
     await user.click(screen.getByRole("button", { name: "Advance 2 days" }));
+    await waitFor(async () =>
+      expect(
+        (await service.getState()).outbox.some((m) => m.kind === "Escalation"),
+      ).toBe(true),
+    );
     await go("Outbox");
     expect(
       screen.getByText(/Escalation: Contractor has overdue work/),

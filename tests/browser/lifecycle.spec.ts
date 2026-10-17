@@ -4,6 +4,7 @@ import {
   evidence,
   initialReadiness,
   nav,
+  inspectCompany,
   publishInitialActivation,
   role,
   snapshot,
@@ -20,6 +21,8 @@ async function states(
   eligibility: string,
 ) {
   for (const page of pages) {
+    if (page.url().includes("#/operations"))
+      await inspectCompany(page, "Summit Three Tabs");
     await expect(page.getByTestId("lifecycle-onboarding")).toHaveText(
       onboarding,
     );
@@ -36,6 +39,7 @@ async function states(
 async function invalidate(operations: Page) {
   await role(operations, "Compliance");
   await nav(operations, "Overview");
+  await inspectCompany(operations, "Summit Three Tabs");
   await operations
     .getByLabel("Invalidation reason")
     .fill("Demo: approval withdrawn");

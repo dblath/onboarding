@@ -5,6 +5,7 @@ import {
   completion,
   evidence,
   nav,
+  inspectCompany,
   proceed,
   role,
   snapshot,
@@ -335,6 +336,7 @@ test("Viz records a real 37-step journey across tabs, failure, joins and immutab
     .click();
   await nav(contractor, "Your journey");
   await nav(operations, "Overview");
+  await inspectCompany(operations, "Viz Parallel Partners");
   await nav(monitor, "Workflow monitor");
   for (const page of [contractor, operations, monitor])
     await expect(page.getByTestId("lifecycle-eligibility")).toHaveText(

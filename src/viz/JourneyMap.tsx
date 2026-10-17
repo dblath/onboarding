@@ -30,6 +30,7 @@ import type { Run } from "../TaskCard";
 import { originatingEvents, originWorkflow } from "./recorder";
 import { recordingStatus } from "./triggers";
 import { RecordingBrowser } from "./RecordingBrowser";
+import { groupProgress } from "./groupProgress";
 import type {
   MapNode,
   VisualFrame,
@@ -62,6 +63,7 @@ type JourneyNode = Node<
     model: MapNode;
     visual: VisualNode;
     count?: number;
+    progress?: string;
     selected: boolean;
     changed?: boolean;
     frameNumber?: number;
@@ -75,7 +77,7 @@ function JourneyNodeCard({ data }: NodeProps<JourneyNode>) {
       key={data.changed ? data.frameNumber : "steady"}
       className={`viz-node ${data.model.kind} ${data.visual.status}${data.selected ? " selected" : ""}${data.changed ? " changed" : ""}`}
       data-changed={!!data.changed}
-      title={`${data.model.label} — ${visualLabel(data.visual)}`}
+      title={`${data.model.label} — ${visualLabel(data.visual)}${data.progress ? ` · ${data.progress}. Unfinished applicable activity stages on this recorded route; correction stages count once. Future decisions can add work.` : ""}`}
       style={
         {
           "--area-color": areaColors[data.model.group],
@@ -95,9 +97,16 @@ function JourneyNodeCard({ data }: NodeProps<JourneyNode>) {
           ? "×"
           : icons[data.visual.status]}
       </span>
-      <strong>
-        {data.count ? data.model.label : compactLabel(data.model)}
-      </strong>
+      {data.count ? (
+        <span className="viz-group-label">
+          <strong>{data.model.label}</strong>
+          <small data-testid={`remaining-${data.model.group}`}>
+            {data.progress}
+          </small>
+        </span>
+      ) : (
+        <strong>{compactLabel(data.model)}</strong>
+      )}
       {data.visual.satisfied !== undefined && data.model.kind === "join" && (
         <b
           className={`viz-join-count ${data.visual.satisfied === data.visual.total ? "satisfied" : "outstanding"}`}
@@ -194,11 +203,12 @@ function diagram(
           model,
           visual,
           count: members.length,
+          progress: groupProgress(r.definition, frame, group).label,
           changed: members.some((n) => changes.nodes.has(n.id)),
           frameNumber: frame.number,
           selected: selected === model.id,
         },
-        ariaLabel: `${model.label}, ${statusLabels[status]}, ${members.length} steps${visual.satisfied !== undefined ? `, ${visual.satisfied} of ${visual.total} complete` : ""}`,
+        ariaLabel: `${model.label}, ${statusLabels[status]}, ${groupProgress(r.definition, frame, group).label}, ${members.length} steps${visual.satisfied !== undefined ? `, ${visual.satisfied} of ${visual.total} prerequisites complete` : ""}`,
         focusable: true,
       });
       members.forEach((n) => replacement.set(n.id, model.id));
@@ -914,6 +924,17 @@ export default function JourneyMap({
                     <span className="eyebrow">LOGICAL GROUP</span>
                     <h3>{groupName}</h3>
                     <p>
+                      <strong>
+                        {
+                          groupProgress(recording.definition, frame, groupName)
+                            .label
+                        }
+                      </strong>{" "}
+                      · unfinished applicable activity stages in Frame{" "}
+                      {frame.number}. Correction stages count once; future
+                      decisions may add work.
+                    </p>
+                    <p>
                       Expand this group to inspect its recorded activities,
                       conditional routes and dependencies.
                     </p>
@@ -948,7 +969,17 @@ export default function JourneyMap({
                             {icons[frame.nodes[n.id].status]}
                           </span>
                           {n.label}
-                          <small>{visualLabel(frame.nodes[n.id])}</small>
+                          <small>
+                            {groupProgress(
+                              recording.definition,
+                              frame,
+                              groupName,
+                            ).activities.includes(n.id)
+                              ? frame.nodes[n.id].status === "complete"
+                                ? "Required again after correction"
+                                : `Remaining · ${visualLabel(frame.nodes[n.id])}`
+                              : visualLabel(frame.nodes[n.id])}
+                          </small>
                         </button>
                       ))}
                   </>

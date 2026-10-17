@@ -104,7 +104,7 @@ test("file round trip restores exact Frame 13 and archive across tabs, resets in
   ).toBeNull();
   await expect(
     operations.getByText(
-      "The previously selected company is not in this workspace.",
+      "The previously selected company is unavailable in this view.",
       { exact: false },
     ),
   ).toBeVisible();
@@ -197,6 +197,9 @@ test("file round trip restores exact Frame 13 and archive across tabs, resets in
     "Complete initial training",
     "Complete initial training →",
   );
+  await operations
+    .getByRole("button", { name: "All companies", exact: true })
+    .click();
   await operations
     .locator(".application-row")
     .filter({ hasText: "Frame Thirteen Services" })

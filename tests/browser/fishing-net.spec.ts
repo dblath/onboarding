@@ -462,6 +462,7 @@ test("mid-workflow catalog triggers start at the committed Recruitment and readi
     "Complete initial training →",
   );
   s = await snapshot(monitor);
+  await ops.getByRole("button", { name: "All companies", exact: true }).click();
   await ops
     .locator(".application-row")
     .filter({ hasText: s.companies[0].name })

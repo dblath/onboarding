@@ -51,7 +51,10 @@ export function TaskCard({
     void run(() => action(f), message);
   }
   return (
-    <article className={"task-card " + (failed ? "failed" : "")}>
+    <article
+      data-work-item={t.id}
+      className={"task-card " + (failed ? "failed" : "")}
+    >
       <div className="task-top">
         <span className="task-kind">
           {q ? `${q.skill} qualification` : "Company onboarding"}

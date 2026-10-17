@@ -33,6 +33,11 @@ export default function TriggerManager({
   }
   return (
     <section className="panel trigger-manager" aria-label="Recording Triggers">
+      {state.viz?.captureError && (
+        <p className="alert" role="alert">
+          {state.viz.captureError}
+        </p>
+      )}
       <div className="section-heading">
         <div>
           <span className="eyebrow">THE VIZ FISHING NET</span>

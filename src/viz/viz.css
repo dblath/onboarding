@@ -329,6 +329,24 @@
   font-weight: 650;
   letter-spacing: -0.15px;
 }
+.viz-group-label {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.viz-group-label strong {
+  font-size: 12px;
+  line-height: 1.05;
+  font-weight: 650;
+}
+.viz-group-label small {
+  font-size: 10px;
+  line-height: 1;
+  color: #516b71;
+  font-variant-numeric: tabular-nums;
+}
 .viz-node-icon {
   display: grid;
   place-items: center;

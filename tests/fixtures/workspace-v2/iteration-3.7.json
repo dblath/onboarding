@@ -1,0 +1,4907 @@
+{
+  "format": "unity-fieldwork-workspace",
+  "formatVersion": 2,
+  "exportedAt": "2026-10-17T00:59:55.599Z",
+  "scenario": {
+    "name": "Fishing net meeting",
+    "description": ""
+  },
+  "state": {
+    "schemaVersion": 4,
+    "revision": 20,
+    "clock": "2026-10-17T00:59:44.957Z",
+    "companies": [
+      {
+        "id": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "name": "Net Alpha",
+        "contact": "Alex Demo",
+        "email": "alpha@example.com",
+        "adminComplete": false,
+        "portalSetupComplete": false,
+        "initialTrainingComplete": false,
+        "readinessPublished": false,
+        "activationStatus": "Pending"
+      },
+      {
+        "id": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "name": "Net Beta",
+        "contact": "Alex Demo",
+        "email": "beta@example.com",
+        "adminComplete": false,
+        "portalSetupComplete": false,
+        "initialTrainingComplete": false,
+        "readinessPublished": false,
+        "activationStatus": "Pending"
+      },
+      {
+        "id": "45b13348-30ad-42f4-b10c-3cb23137124d",
+        "name": "Net Gamma",
+        "contact": "Alex Demo",
+        "email": "gamma@example.com",
+        "adminComplete": false,
+        "portalSetupComplete": false,
+        "initialTrainingComplete": false,
+        "readinessPublished": false,
+        "activationStatus": "Pending"
+      },
+      {
+        "id": "1e0351ef-cdbd-4172-9f52-ee2866a81af9",
+        "name": "No net",
+        "contact": "Alex Demo",
+        "email": "none@example.com",
+        "adminComplete": false,
+        "portalSetupComplete": false,
+        "initialTrainingComplete": false,
+        "readinessPublished": false,
+        "activationStatus": "Pending"
+      }
+    ],
+    "applications": [
+      {
+        "id": "b288bd8c-db76-4961-b37f-97ce072e5789",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "source": "Contractor portal",
+        "skill": "HVAC",
+        "submittedAt": "2026-10-17T00:59:44.957Z",
+        "status": "Onboarding",
+        "responses": [],
+        "screeningDecisions": [
+          {
+            "decision": "Proceed",
+            "reason": "",
+            "at": "2026-10-17T00:59:44.957Z"
+          }
+        ],
+        "reason": ""
+      },
+      {
+        "id": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "source": "Contractor portal",
+        "skill": "HVAC",
+        "submittedAt": "2026-10-17T00:59:44.957Z",
+        "status": "Onboarding",
+        "responses": [],
+        "screeningDecisions": [
+          {
+            "decision": "Proceed",
+            "reason": "",
+            "at": "2026-10-17T00:59:44.957Z"
+          }
+        ],
+        "reason": ""
+      },
+      {
+        "id": "9d57f4f7-82ef-42bc-a6e0-4eb62d0759f6",
+        "companyId": "45b13348-30ad-42f4-b10c-3cb23137124d",
+        "source": "Contractor portal",
+        "skill": "HVAC",
+        "submittedAt": "2026-10-17T00:59:44.957Z",
+        "status": "Screening",
+        "responses": [],
+        "screeningDecisions": []
+      },
+      {
+        "id": "c500059a-73c7-4bc6-80f7-677fe778c9a8",
+        "companyId": "1e0351ef-cdbd-4172-9f52-ee2866a81af9",
+        "source": "Contractor portal",
+        "skill": "HVAC",
+        "submittedAt": "2026-10-17T00:59:44.957Z",
+        "status": "Screening",
+        "responses": [],
+        "screeningDecisions": []
+      }
+    ],
+    "requirements": [
+      {
+        "id": "82e66d45-d9f8-4fb7-9898-c593cfc8306e",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "type": "Insurance",
+        "applicable": true,
+        "status": "Awaiting evidence",
+        "evidenceIds": []
+      },
+      {
+        "id": "0eee48bb-2e00-4d32-ba2d-2f13266d7355",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "type": "Financial",
+        "applicable": true,
+        "status": "Awaiting evidence",
+        "evidenceIds": []
+      },
+      {
+        "id": "112b0863-3228-457a-ab23-6caa03e157d7",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "type": "Agreement",
+        "applicable": true,
+        "status": "Awaiting evidence",
+        "evidenceIds": []
+      },
+      {
+        "id": "1c722339-fec5-4006-98dc-1364cb1ae0c3",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "type": "Insurance",
+        "applicable": true,
+        "status": "Under review",
+        "evidenceIds": [
+          "c8ab0739-19af-425a-968a-899d0cef0c00"
+        ]
+      },
+      {
+        "id": "04f1be78-d03b-4493-aa81-86c33d28cfbf",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "type": "Financial",
+        "applicable": true,
+        "status": "Awaiting evidence",
+        "evidenceIds": []
+      },
+      {
+        "id": "990095fc-9ddf-414a-82dd-ef2295062a86",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "type": "Agreement",
+        "applicable": true,
+        "status": "Awaiting evidence",
+        "evidenceIds": []
+      }
+    ],
+    "qualifications": [
+      {
+        "id": "9e45dd16-1392-4fe4-900b-7c4c38df749a",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "originatingApplicationId": "b288bd8c-db76-4961-b37f-97ce072e5789",
+        "skill": "HVAC",
+        "status": "Awaiting evidence",
+        "evidenceIds": []
+      },
+      {
+        "id": "6e40e8c3-58d9-446a-a967-9a5c8c0bafde",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "originatingApplicationId": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "skill": "HVAC",
+        "status": "Under review",
+        "evidenceIds": [
+          "a78a4e4a-0b92-4e46-8385-fac5ae508884"
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "id": "c8ab0739-19af-425a-968a-899d0cef0c00",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "requirementId": "1c722339-fec5-4006-98dc-1364cb1ae0c3",
+        "version": 1,
+        "submittedAt": "2026-10-17T00:59:44.957Z",
+        "description": "Valid demo document — Submit insurance evidence. Fictional test data only.",
+        "fixture": "Valid demo document",
+        "verificationState": "Submitted"
+      },
+      {
+        "id": "a78a4e4a-0b92-4e46-8385-fac5ae508884",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "qualificationId": "6e40e8c3-58d9-446a-a967-9a5c8c0bafde",
+        "version": 1,
+        "submittedAt": "2026-10-17T00:59:44.957Z",
+        "description": "Valid demo document — Submit license evidence. Fictional test data only.",
+        "fixture": "Valid demo document",
+        "verificationState": "Submitted"
+      }
+    ],
+    "workItems": [
+      {
+        "id": "088fd1f2-e445-4686-bfa5-6b66a68697f6",
+        "workflowId": "7d55d341-07fe-4297-9b71-cf9c2ec14c84",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "applicationId": "b288bd8c-db76-4961-b37f-97ce072e5789",
+        "activity": "ScreenApplication",
+        "owner": "Recruitment",
+        "status": "Completed",
+        "dueAt": "2026-10-19T00:59:44.957Z",
+        "createdAt": "2026-10-17T00:59:44.957Z",
+        "expectedOutcome": "ScreeningDecisionRecorded",
+        "instructions": "Review the company and its requested initial skill.",
+        "completionHistory": [
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "outcome": "Proceed",
+            "eventId": "fc4d006f-79cb-4ae1-bcdf-a9c4e1d3f2e5"
+          }
+        ],
+        "outcome": "Proceed",
+        "completedAt": "2026-10-17T00:59:44.957Z"
+      },
+      {
+        "id": "12a1ac56-a195-4539-bd25-4a00ebc49809",
+        "workflowId": "f3b8118f-b32d-4503-8353-59d14a3fdf6f",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "applicationId": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "activity": "ScreenApplication",
+        "owner": "Recruitment",
+        "status": "Completed",
+        "dueAt": "2026-10-19T00:59:44.957Z",
+        "createdAt": "2026-10-17T00:59:44.957Z",
+        "expectedOutcome": "ScreeningDecisionRecorded",
+        "instructions": "Review the company and its requested initial skill.",
+        "completionHistory": [
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "outcome": "Proceed",
+            "eventId": "e6322cda-da8e-452f-9f54-8b99e5b0cc00"
+          }
+        ],
+        "outcome": "Proceed",
+        "completedAt": "2026-10-17T00:59:44.957Z"
+      },
+      {
+        "id": "18f66b8a-bac3-4c59-a27c-d1e70fa7472c",
+        "workflowId": "a4a3f7ba-0dd1-42f1-8bc5-a0600b7b21a7",
+        "companyId": "45b13348-30ad-42f4-b10c-3cb23137124d",
+        "applicationId": "9d57f4f7-82ef-42bc-a6e0-4eb62d0759f6",
+        "activity": "ScreenApplication",
+        "owner": "Recruitment",
+        "status": "Open",
+        "dueAt": "2026-10-19T00:59:44.957Z",
+        "createdAt": "2026-10-17T00:59:44.957Z",
+        "expectedOutcome": "ScreeningDecisionRecorded",
+        "instructions": "Review the company and its requested initial skill.",
+        "completionHistory": []
+      },
+      {
+        "id": "c4afdf38-f8d1-473c-a423-108a181a95ae",
+        "workflowId": "7d55d341-07fe-4297-9b71-cf9c2ec14c84",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "applicationId": "b288bd8c-db76-4961-b37f-97ce072e5789",
+        "requirementId": "82e66d45-d9f8-4fb7-9898-c593cfc8306e",
+        "activity": "SubmitInsurance",
+        "owner": "Contractor",
+        "status": "Open",
+        "dueAt": "2026-10-19T00:59:44.957Z",
+        "createdAt": "2026-10-17T00:59:44.957Z",
+        "expectedOutcome": "EvidenceSubmitted",
+        "instructions": "Submit a fictional insurance demo pack. Never enter real tax, banking or identity numbers.",
+        "completionHistory": []
+      },
+      {
+        "id": "47bf8edc-2887-4880-a18f-3c135e513075",
+        "workflowId": "7d55d341-07fe-4297-9b71-cf9c2ec14c84",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "applicationId": "b288bd8c-db76-4961-b37f-97ce072e5789",
+        "requirementId": "0eee48bb-2e00-4d32-ba2d-2f13266d7355",
+        "activity": "SubmitFinancial",
+        "owner": "Contractor",
+        "status": "Open",
+        "dueAt": "2026-10-19T00:59:44.957Z",
+        "createdAt": "2026-10-17T00:59:44.957Z",
+        "expectedOutcome": "EvidenceSubmitted",
+        "instructions": "Submit a fictional financial demo pack. Never enter real tax, banking or identity numbers.",
+        "completionHistory": []
+      },
+      {
+        "id": "71d4ace6-7500-4cb7-b21c-25c5fb0437c8",
+        "workflowId": "7d55d341-07fe-4297-9b71-cf9c2ec14c84",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "applicationId": "b288bd8c-db76-4961-b37f-97ce072e5789",
+        "requirementId": "112b0863-3228-457a-ab23-6caa03e157d7",
+        "activity": "SubmitAgreement",
+        "owner": "Contractor",
+        "status": "Open",
+        "dueAt": "2026-10-19T00:59:44.957Z",
+        "createdAt": "2026-10-17T00:59:44.957Z",
+        "expectedOutcome": "EvidenceSubmitted",
+        "instructions": "Submit a fictional agreement demo pack. Never enter real tax, banking or identity numbers.",
+        "completionHistory": []
+      },
+      {
+        "id": "1de5ab2e-32fc-4e5e-b9dc-b742c5a73944",
+        "workflowId": "ed68bfc6-7567-4136-a367-ea1e94f6a442",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "applicationId": "b288bd8c-db76-4961-b37f-97ce072e5789",
+        "qualificationId": "9e45dd16-1392-4fe4-900b-7c4c38df749a",
+        "activity": "SubmitLicense",
+        "owner": "Contractor",
+        "status": "Open",
+        "dueAt": "2026-10-19T00:59:44.957Z",
+        "createdAt": "2026-10-17T00:59:44.957Z",
+        "expectedOutcome": "EvidenceSubmitted",
+        "instructions": "Submit fictional license evidence for HVAC.",
+        "completionHistory": []
+      },
+      {
+        "id": "538e4bee-d8fe-474a-8d14-bb0c6861dfe5",
+        "workflowId": "f3b8118f-b32d-4503-8353-59d14a3fdf6f",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "applicationId": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "requirementId": "1c722339-fec5-4006-98dc-1364cb1ae0c3",
+        "activity": "SubmitInsurance",
+        "owner": "Contractor",
+        "status": "Completed",
+        "dueAt": "2026-10-19T00:59:44.957Z",
+        "createdAt": "2026-10-17T00:59:44.957Z",
+        "expectedOutcome": "EvidenceSubmitted",
+        "instructions": "Submit a fictional insurance demo pack. Never enter real tax, banking or identity numbers.",
+        "completionHistory": [
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "outcome": "Evidence v1 submitted",
+            "eventId": "15fa335b-7948-4299-90e7-868065bdf671"
+          }
+        ],
+        "outcome": "Evidence v1 submitted",
+        "completedAt": "2026-10-17T00:59:44.957Z"
+      },
+      {
+        "id": "f6c86c0d-ed0b-48cd-9ecd-f361f3bd5734",
+        "workflowId": "f3b8118f-b32d-4503-8353-59d14a3fdf6f",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "applicationId": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "requirementId": "04f1be78-d03b-4493-aa81-86c33d28cfbf",
+        "activity": "SubmitFinancial",
+        "owner": "Contractor",
+        "status": "Open",
+        "dueAt": "2026-10-19T00:59:44.957Z",
+        "createdAt": "2026-10-17T00:59:44.957Z",
+        "expectedOutcome": "EvidenceSubmitted",
+        "instructions": "Submit a fictional financial demo pack. Never enter real tax, banking or identity numbers.",
+        "completionHistory": []
+      },
+      {
+        "id": "5b4ae6ee-780a-483a-bf3d-eca89fc3ed43",
+        "workflowId": "f3b8118f-b32d-4503-8353-59d14a3fdf6f",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "applicationId": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "requirementId": "990095fc-9ddf-414a-82dd-ef2295062a86",
+        "activity": "SubmitAgreement",
+        "owner": "Contractor",
+        "status": "Open",
+        "dueAt": "2026-10-19T00:59:44.957Z",
+        "createdAt": "2026-10-17T00:59:44.957Z",
+        "expectedOutcome": "EvidenceSubmitted",
+        "instructions": "Submit a fictional agreement demo pack. Never enter real tax, banking or identity numbers.",
+        "completionHistory": []
+      },
+      {
+        "id": "58850847-34fb-4386-9acc-826e77979c05",
+        "workflowId": "a1ff74a9-5111-4b4f-b2c3-ec191c37fdf4",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "applicationId": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "qualificationId": "6e40e8c3-58d9-446a-a967-9a5c8c0bafde",
+        "activity": "SubmitLicense",
+        "owner": "Contractor",
+        "status": "Completed",
+        "dueAt": "2026-10-19T00:59:44.957Z",
+        "createdAt": "2026-10-17T00:59:44.957Z",
+        "expectedOutcome": "EvidenceSubmitted",
+        "instructions": "Submit fictional license evidence for HVAC.",
+        "completionHistory": [
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "outcome": "Evidence v1 submitted",
+            "eventId": "560dfcd2-ef2d-4b4c-9af2-ab92d13a5b51"
+          }
+        ],
+        "outcome": "Evidence v1 submitted",
+        "completedAt": "2026-10-17T00:59:44.957Z"
+      },
+      {
+        "id": "711ea314-9329-4e34-a646-c55e623c550c",
+        "workflowId": "f3b8118f-b32d-4503-8353-59d14a3fdf6f",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "applicationId": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "requirementId": "1c722339-fec5-4006-98dc-1364cb1ae0c3",
+        "activity": "ReviewInsurance",
+        "owner": "Compliance",
+        "status": "Open",
+        "dueAt": "2026-10-19T00:59:44.957Z",
+        "createdAt": "2026-10-17T00:59:44.957Z",
+        "expectedOutcome": "InsuranceReviewCompleted",
+        "instructions": "Review insurance evidence v1 using the simulated verifier.",
+        "completionHistory": []
+      },
+      {
+        "id": "369304b3-76cc-406e-a3f5-0109b13a3818",
+        "workflowId": "00a7eb9e-391d-41ec-9a3f-96d77b323c22",
+        "companyId": "1e0351ef-cdbd-4172-9f52-ee2866a81af9",
+        "applicationId": "c500059a-73c7-4bc6-80f7-677fe778c9a8",
+        "activity": "ScreenApplication",
+        "owner": "Recruitment",
+        "status": "Open",
+        "dueAt": "2026-10-19T00:59:44.957Z",
+        "createdAt": "2026-10-17T00:59:44.957Z",
+        "expectedOutcome": "ScreeningDecisionRecorded",
+        "instructions": "Review the company and its requested initial skill.",
+        "completionHistory": []
+      },
+      {
+        "id": "2bdc22e2-123f-4921-9186-2fe1d5468629",
+        "workflowId": "a1ff74a9-5111-4b4f-b2c3-ec191c37fdf4",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "applicationId": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "qualificationId": "6e40e8c3-58d9-446a-a967-9a5c8c0bafde",
+        "activity": "VerifyLicense",
+        "owner": "Compliance",
+        "status": "Open",
+        "dueAt": "2026-10-19T00:59:44.957Z",
+        "createdAt": "2026-10-17T00:59:44.957Z",
+        "expectedOutcome": "LicenseReviewCompleted",
+        "instructions": "Verify the latest demo license. An expired result requires replacement; a timeout is retryable.",
+        "completionHistory": []
+      }
+    ],
+    "workflows": [
+      {
+        "id": "7d55d341-07fe-4297-9b71-cf9c2ec14c84",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "applicationId": "b288bd8c-db76-4961-b37f-97ce072e5789",
+        "definitionId": "CompanyOnboarding",
+        "definitionVersion": 2,
+        "correlationId": "39fce231-62c6-47c0-8076-ae8b9ea4caed",
+        "status": "Running",
+        "stage": "Administrative checks",
+        "waitingFor": "EvidenceSubmitted, EvidenceSubmitted, EvidenceSubmitted",
+        "awaitedEvents": [
+          {
+            "eventType": "EvidenceSubmitted",
+            "workItemId": "c4afdf38-f8d1-473c-a423-108a181a95ae",
+            "subjectId": "82e66d45-d9f8-4fb7-9898-c593cfc8306e"
+          },
+          {
+            "eventType": "EvidenceSubmitted",
+            "workItemId": "47bf8edc-2887-4880-a18f-3c135e513075",
+            "subjectId": "0eee48bb-2e00-4d32-ba2d-2f13266d7355"
+          },
+          {
+            "eventType": "EvidenceSubmitted",
+            "workItemId": "71d4ace6-7500-4cb7-b21c-25c5fb0437c8",
+            "subjectId": "112b0863-3228-457a-ab23-6caa03e157d7"
+          }
+        ],
+        "processedEventIds": [
+          "d3f3c84e-7298-4ec8-9c91-5af8401ddf14",
+          "fc4d006f-79cb-4ae1-bcdf-a9c4e1d3f2e5"
+        ],
+        "history": [
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Lifecycle",
+            "message": "Started CompanyOnboarding v2"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Event",
+            "message": "Received ApplicationSubmitted · Contractor",
+            "eventId": "d3f3c84e-7298-4ec8-9c91-5af8401ddf14"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Scheduled Review application → Recruitment"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Wait",
+            "message": "Waiting for ScreeningDecisionRecorded",
+            "eventId": "d3f3c84e-7298-4ec8-9c91-5af8401ddf14"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Rule",
+            "message": "Readiness = admin false ∧ portal false ∧ training false ∧ approved skills 0 ≥ 1 → false",
+            "eventId": "d3f3c84e-7298-4ec8-9c91-5af8401ddf14"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Event",
+            "message": "Received ScreeningDecisionRecorded · Recruitment",
+            "eventId": "fc4d006f-79cb-4ae1-bcdf-a9c4e1d3f2e5"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Completed Review application: Proceed",
+            "eventId": "fc4d006f-79cb-4ae1-bcdf-a9c4e1d3f2e5"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Scheduled Submit insurance evidence → Contractor"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Scheduled Submit fictional tax / banking pack → Contractor"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Scheduled Submit demo agreement → Contractor"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Rule",
+            "message": "Readiness = admin false ∧ portal false ∧ training false ∧ approved skills 0 ≥ 1 → false",
+            "eventId": "a97b48f7-7e92-4297-acc8-54f776178242"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Wait",
+            "message": "Waiting for EvidenceSubmitted, EvidenceSubmitted, EvidenceSubmitted",
+            "eventId": "fc4d006f-79cb-4ae1-bcdf-a9c4e1d3f2e5"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Rule",
+            "message": "Readiness = admin false ∧ portal false ∧ training false ∧ approved skills 0 ≥ 1 → false",
+            "eventId": "fc4d006f-79cb-4ae1-bcdf-a9c4e1d3f2e5"
+          }
+        ]
+      },
+      {
+        "id": "f3b8118f-b32d-4503-8353-59d14a3fdf6f",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "applicationId": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "definitionId": "CompanyOnboarding",
+        "definitionVersion": 2,
+        "correlationId": "14dcc374-7cd0-4988-9166-5dce6402133b",
+        "status": "Running",
+        "stage": "Administrative checks",
+        "waitingFor": "EvidenceSubmitted, EvidenceSubmitted, InsuranceReviewCompleted",
+        "awaitedEvents": [
+          {
+            "eventType": "EvidenceSubmitted",
+            "workItemId": "f6c86c0d-ed0b-48cd-9ecd-f361f3bd5734",
+            "subjectId": "04f1be78-d03b-4493-aa81-86c33d28cfbf"
+          },
+          {
+            "eventType": "EvidenceSubmitted",
+            "workItemId": "5b4ae6ee-780a-483a-bf3d-eca89fc3ed43",
+            "subjectId": "990095fc-9ddf-414a-82dd-ef2295062a86"
+          },
+          {
+            "eventType": "InsuranceReviewCompleted",
+            "workItemId": "711ea314-9329-4e34-a646-c55e623c550c",
+            "subjectId": "1c722339-fec5-4006-98dc-1364cb1ae0c3"
+          }
+        ],
+        "processedEventIds": [
+          "75df5026-9a43-4dd7-95bd-99ba085b6225",
+          "e6322cda-da8e-452f-9f54-8b99e5b0cc00",
+          "15fa335b-7948-4299-90e7-868065bdf671"
+        ],
+        "history": [
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Lifecycle",
+            "message": "Started CompanyOnboarding v2"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Event",
+            "message": "Received ApplicationSubmitted · Contractor",
+            "eventId": "75df5026-9a43-4dd7-95bd-99ba085b6225"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Scheduled Review application → Recruitment"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Wait",
+            "message": "Waiting for ScreeningDecisionRecorded",
+            "eventId": "75df5026-9a43-4dd7-95bd-99ba085b6225"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Rule",
+            "message": "Readiness = admin false ∧ portal false ∧ training false ∧ approved skills 0 ≥ 1 → false",
+            "eventId": "75df5026-9a43-4dd7-95bd-99ba085b6225"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Event",
+            "message": "Received ScreeningDecisionRecorded · Recruitment",
+            "eventId": "e6322cda-da8e-452f-9f54-8b99e5b0cc00"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Completed Review application: Proceed",
+            "eventId": "e6322cda-da8e-452f-9f54-8b99e5b0cc00"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Scheduled Submit insurance evidence → Contractor"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Scheduled Submit fictional tax / banking pack → Contractor"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Scheduled Submit demo agreement → Contractor"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Rule",
+            "message": "Readiness = admin false ∧ portal false ∧ training false ∧ approved skills 0 ≥ 1 → false",
+            "eventId": "c79b3a57-044f-40f1-ae85-bd3a66259344"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Wait",
+            "message": "Waiting for EvidenceSubmitted, EvidenceSubmitted, EvidenceSubmitted",
+            "eventId": "e6322cda-da8e-452f-9f54-8b99e5b0cc00"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Rule",
+            "message": "Readiness = admin false ∧ portal false ∧ training false ∧ approved skills 0 ≥ 1 → false",
+            "eventId": "e6322cda-da8e-452f-9f54-8b99e5b0cc00"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Event",
+            "message": "Received EvidenceSubmitted · Contractor",
+            "eventId": "15fa335b-7948-4299-90e7-868065bdf671"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Completed Submit insurance evidence: Evidence v1 submitted",
+            "eventId": "15fa335b-7948-4299-90e7-868065bdf671"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Scheduled Review insurance → Compliance"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Wait",
+            "message": "Waiting for EvidenceSubmitted, EvidenceSubmitted, InsuranceReviewCompleted",
+            "eventId": "15fa335b-7948-4299-90e7-868065bdf671"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Rule",
+            "message": "Readiness = admin false ∧ portal false ∧ training false ∧ approved skills 0 ≥ 1 → false",
+            "eventId": "15fa335b-7948-4299-90e7-868065bdf671"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Rule",
+            "message": "Readiness = admin false ∧ portal false ∧ training false ∧ approved skills 0 ≥ 1 → false",
+            "eventId": "560dfcd2-ef2d-4b4c-9af2-ab92d13a5b51"
+          }
+        ]
+      },
+      {
+        "id": "a4a3f7ba-0dd1-42f1-8bc5-a0600b7b21a7",
+        "companyId": "45b13348-30ad-42f4-b10c-3cb23137124d",
+        "applicationId": "9d57f4f7-82ef-42bc-a6e0-4eb62d0759f6",
+        "definitionId": "CompanyOnboarding",
+        "definitionVersion": 2,
+        "correlationId": "748f4f50-2439-4cfa-b22d-7dcc84b0fee9",
+        "status": "Running",
+        "stage": "Screening",
+        "waitingFor": "ScreeningDecisionRecorded",
+        "awaitedEvents": [
+          {
+            "eventType": "ScreeningDecisionRecorded",
+            "workItemId": "18f66b8a-bac3-4c59-a27c-d1e70fa7472c"
+          }
+        ],
+        "processedEventIds": [
+          "be821a83-127b-4e13-a81c-1ddb675a91b4"
+        ],
+        "history": [
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Lifecycle",
+            "message": "Started CompanyOnboarding v2"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Event",
+            "message": "Received ApplicationSubmitted · Contractor",
+            "eventId": "be821a83-127b-4e13-a81c-1ddb675a91b4"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Scheduled Review application → Recruitment"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Wait",
+            "message": "Waiting for ScreeningDecisionRecorded",
+            "eventId": "be821a83-127b-4e13-a81c-1ddb675a91b4"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Rule",
+            "message": "Readiness = admin false ∧ portal false ∧ training false ∧ approved skills 0 ≥ 1 → false",
+            "eventId": "be821a83-127b-4e13-a81c-1ddb675a91b4"
+          }
+        ]
+      },
+      {
+        "id": "ed68bfc6-7567-4136-a367-ea1e94f6a442",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "applicationId": "b288bd8c-db76-4961-b37f-97ce072e5789",
+        "qualificationId": "9e45dd16-1392-4fe4-900b-7c4c38df749a",
+        "definitionId": "SkillQualification",
+        "definitionVersion": 2,
+        "correlationId": "8c95cc9d-c563-478d-b1e7-89d9c09bd8b8",
+        "status": "Running",
+        "stage": "Awaiting evidence",
+        "waitingFor": "EvidenceSubmitted",
+        "awaitedEvents": [
+          {
+            "eventType": "EvidenceSubmitted",
+            "workItemId": "1de5ab2e-32fc-4e5e-b9dc-b742c5a73944",
+            "subjectId": "9e45dd16-1392-4fe4-900b-7c4c38df749a"
+          }
+        ],
+        "processedEventIds": [
+          "a97b48f7-7e92-4297-acc8-54f776178242"
+        ],
+        "history": [
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Lifecycle",
+            "message": "Started SkillQualification v2"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Event",
+            "message": "Received SkillRequested · Workflow",
+            "eventId": "a97b48f7-7e92-4297-acc8-54f776178242"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Scheduled Submit license evidence → Contractor"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Wait",
+            "message": "Waiting for EvidenceSubmitted",
+            "eventId": "a97b48f7-7e92-4297-acc8-54f776178242"
+          }
+        ]
+      },
+      {
+        "id": "a1ff74a9-5111-4b4f-b2c3-ec191c37fdf4",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "applicationId": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "qualificationId": "6e40e8c3-58d9-446a-a967-9a5c8c0bafde",
+        "definitionId": "SkillQualification",
+        "definitionVersion": 2,
+        "correlationId": "a4a13f79-d8f1-41d3-9331-7c45cb4efa1c",
+        "status": "Running",
+        "stage": "License verification",
+        "waitingFor": "LicenseReviewCompleted",
+        "awaitedEvents": [
+          {
+            "eventType": "LicenseReviewCompleted",
+            "workItemId": "2bdc22e2-123f-4921-9186-2fe1d5468629",
+            "subjectId": "6e40e8c3-58d9-446a-a967-9a5c8c0bafde"
+          }
+        ],
+        "processedEventIds": [
+          "c79b3a57-044f-40f1-ae85-bd3a66259344",
+          "560dfcd2-ef2d-4b4c-9af2-ab92d13a5b51"
+        ],
+        "history": [
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Lifecycle",
+            "message": "Started SkillQualification v2"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Event",
+            "message": "Received SkillRequested · Workflow",
+            "eventId": "c79b3a57-044f-40f1-ae85-bd3a66259344"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Scheduled Submit license evidence → Contractor"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Wait",
+            "message": "Waiting for EvidenceSubmitted",
+            "eventId": "c79b3a57-044f-40f1-ae85-bd3a66259344"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Event",
+            "message": "Received EvidenceSubmitted · Contractor",
+            "eventId": "560dfcd2-ef2d-4b4c-9af2-ab92d13a5b51"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Completed Submit license evidence: Evidence v1 submitted",
+            "eventId": "560dfcd2-ef2d-4b4c-9af2-ab92d13a5b51"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Scheduled Verify license → Compliance"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Wait",
+            "message": "Waiting for LicenseReviewCompleted",
+            "eventId": "560dfcd2-ef2d-4b4c-9af2-ab92d13a5b51"
+          }
+        ]
+      },
+      {
+        "id": "00a7eb9e-391d-41ec-9a3f-96d77b323c22",
+        "companyId": "1e0351ef-cdbd-4172-9f52-ee2866a81af9",
+        "applicationId": "c500059a-73c7-4bc6-80f7-677fe778c9a8",
+        "definitionId": "CompanyOnboarding",
+        "definitionVersion": 2,
+        "correlationId": "085c0390-3195-4c07-bbe1-e760291c81b9",
+        "status": "Running",
+        "stage": "Screening",
+        "waitingFor": "ScreeningDecisionRecorded",
+        "awaitedEvents": [
+          {
+            "eventType": "ScreeningDecisionRecorded",
+            "workItemId": "369304b3-76cc-406e-a3f5-0109b13a3818"
+          }
+        ],
+        "processedEventIds": [
+          "11a90127-42c4-40e3-a4e2-75e7254cb219"
+        ],
+        "history": [
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Lifecycle",
+            "message": "Started CompanyOnboarding v2"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Event",
+            "message": "Received ApplicationSubmitted · Contractor",
+            "eventId": "11a90127-42c4-40e3-a4e2-75e7254cb219"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Activity",
+            "message": "Scheduled Review application → Recruitment"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Wait",
+            "message": "Waiting for ScreeningDecisionRecorded",
+            "eventId": "11a90127-42c4-40e3-a4e2-75e7254cb219"
+          },
+          {
+            "at": "2026-10-17T00:59:44.957Z",
+            "kind": "Rule",
+            "message": "Readiness = admin false ∧ portal false ∧ training false ∧ approved skills 0 ≥ 1 → false",
+            "eventId": "11a90127-42c4-40e3-a4e2-75e7254cb219"
+          }
+        ]
+      }
+    ],
+    "events": [
+      {
+        "eventId": "d3f3c84e-7298-4ec8-9c91-5af8401ddf14",
+        "eventType": "ApplicationSubmitted",
+        "eventVersion": 1,
+        "occurredAt": "2026-10-17T00:59:44.957Z",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "applicationId": "b288bd8c-db76-4961-b37f-97ce072e5789",
+        "correlationId": "39fce231-62c6-47c0-8076-ae8b9ea4caed",
+        "actor": "Contractor",
+        "payload": {
+          "skill": "HVAC"
+        }
+      },
+      {
+        "eventId": "75df5026-9a43-4dd7-95bd-99ba085b6225",
+        "eventType": "ApplicationSubmitted",
+        "eventVersion": 1,
+        "occurredAt": "2026-10-17T00:59:44.957Z",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "applicationId": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "correlationId": "14dcc374-7cd0-4988-9166-5dce6402133b",
+        "actor": "Contractor",
+        "payload": {
+          "skill": "HVAC"
+        }
+      },
+      {
+        "eventId": "be821a83-127b-4e13-a81c-1ddb675a91b4",
+        "eventType": "ApplicationSubmitted",
+        "eventVersion": 1,
+        "occurredAt": "2026-10-17T00:59:44.957Z",
+        "companyId": "45b13348-30ad-42f4-b10c-3cb23137124d",
+        "applicationId": "9d57f4f7-82ef-42bc-a6e0-4eb62d0759f6",
+        "correlationId": "748f4f50-2439-4cfa-b22d-7dcc84b0fee9",
+        "actor": "Contractor",
+        "payload": {
+          "skill": "HVAC"
+        }
+      },
+      {
+        "eventId": "fc4d006f-79cb-4ae1-bcdf-a9c4e1d3f2e5",
+        "eventType": "ScreeningDecisionRecorded",
+        "eventVersion": 1,
+        "occurredAt": "2026-10-17T00:59:44.957Z",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "applicationId": "b288bd8c-db76-4961-b37f-97ce072e5789",
+        "correlationId": "39fce231-62c6-47c0-8076-ae8b9ea4caed",
+        "actor": "Recruitment",
+        "payload": {
+          "decision": "Proceed",
+          "reason": ""
+        }
+      },
+      {
+        "eventId": "a97b48f7-7e92-4297-acc8-54f776178242",
+        "eventType": "SkillRequested",
+        "eventVersion": 1,
+        "occurredAt": "2026-10-17T00:59:44.957Z",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "applicationId": "b288bd8c-db76-4961-b37f-97ce072e5789",
+        "qualificationId": "9e45dd16-1392-4fe4-900b-7c4c38df749a",
+        "correlationId": "8c95cc9d-c563-478d-b1e7-89d9c09bd8b8",
+        "actor": "Workflow",
+        "payload": {
+          "qualificationId": "9e45dd16-1392-4fe4-900b-7c4c38df749a",
+          "skill": "HVAC"
+        }
+      },
+      {
+        "eventId": "e6322cda-da8e-452f-9f54-8b99e5b0cc00",
+        "eventType": "ScreeningDecisionRecorded",
+        "eventVersion": 1,
+        "occurredAt": "2026-10-17T00:59:44.957Z",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "applicationId": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "correlationId": "14dcc374-7cd0-4988-9166-5dce6402133b",
+        "actor": "Recruitment",
+        "payload": {
+          "decision": "Proceed",
+          "reason": ""
+        }
+      },
+      {
+        "eventId": "c79b3a57-044f-40f1-ae85-bd3a66259344",
+        "eventType": "SkillRequested",
+        "eventVersion": 1,
+        "occurredAt": "2026-10-17T00:59:44.957Z",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "applicationId": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "qualificationId": "6e40e8c3-58d9-446a-a967-9a5c8c0bafde",
+        "correlationId": "a4a13f79-d8f1-41d3-9331-7c45cb4efa1c",
+        "actor": "Workflow",
+        "payload": {
+          "qualificationId": "6e40e8c3-58d9-446a-a967-9a5c8c0bafde",
+          "skill": "HVAC"
+        }
+      },
+      {
+        "eventId": "15fa335b-7948-4299-90e7-868065bdf671",
+        "eventType": "EvidenceSubmitted",
+        "eventVersion": 1,
+        "occurredAt": "2026-10-17T00:59:44.957Z",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "applicationId": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "correlationId": "14dcc374-7cd0-4988-9166-5dce6402133b",
+        "actor": "Contractor",
+        "payload": {
+          "workItemId": "538e4bee-d8fe-474a-8d14-bb0c6861dfe5",
+          "evidenceId": "c8ab0739-19af-425a-968a-899d0cef0c00",
+          "fixture": "Valid demo document",
+          "description": "Valid demo document — Submit insurance evidence. Fictional test data only."
+        }
+      },
+      {
+        "eventId": "11a90127-42c4-40e3-a4e2-75e7254cb219",
+        "eventType": "ApplicationSubmitted",
+        "eventVersion": 1,
+        "occurredAt": "2026-10-17T00:59:44.957Z",
+        "companyId": "1e0351ef-cdbd-4172-9f52-ee2866a81af9",
+        "applicationId": "c500059a-73c7-4bc6-80f7-677fe778c9a8",
+        "correlationId": "085c0390-3195-4c07-bbe1-e760291c81b9",
+        "actor": "Contractor",
+        "payload": {
+          "skill": "HVAC"
+        }
+      },
+      {
+        "eventId": "560dfcd2-ef2d-4b4c-9af2-ab92d13a5b51",
+        "eventType": "EvidenceSubmitted",
+        "eventVersion": 1,
+        "occurredAt": "2026-10-17T00:59:44.957Z",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "applicationId": "cf30940f-16d0-4006-9309-c2439fe7755e",
+        "qualificationId": "6e40e8c3-58d9-446a-a967-9a5c8c0bafde",
+        "correlationId": "a4a13f79-d8f1-41d3-9331-7c45cb4efa1c",
+        "actor": "Contractor",
+        "payload": {
+          "workItemId": "58850847-34fb-4386-9acc-826e77979c05",
+          "evidenceId": "a78a4e4a-0b92-4e46-8385-fac5ae508884",
+          "fixture": "Valid demo document",
+          "description": "Valid demo document — Submit license evidence. Fictional test data only."
+        }
+      }
+    ],
+    "attempts": [],
+    "outbox": [
+      {
+        "id": "5fef1d3d-2dec-4799-8c29-8380083da35c",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "at": "2026-10-17T00:59:44.957Z",
+        "recipient": "Recruitment",
+        "kind": "Task",
+        "message": "Review the company and its requested initial skill.",
+        "workItemId": "088fd1f2-e445-4686-bfa5-6b66a68697f6"
+      },
+      {
+        "id": "895b136b-cf75-4504-8dc5-43d7ca6388d7",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "at": "2026-10-17T00:59:44.957Z",
+        "recipient": "Recruitment",
+        "kind": "Task",
+        "message": "Review the company and its requested initial skill.",
+        "workItemId": "12a1ac56-a195-4539-bd25-4a00ebc49809"
+      },
+      {
+        "id": "d8e04b06-ab9c-4846-8774-bcac5bd91ebc",
+        "companyId": "45b13348-30ad-42f4-b10c-3cb23137124d",
+        "at": "2026-10-17T00:59:44.957Z",
+        "recipient": "Recruitment",
+        "kind": "Task",
+        "message": "Review the company and its requested initial skill.",
+        "workItemId": "18f66b8a-bac3-4c59-a27c-d1e70fa7472c"
+      },
+      {
+        "id": "24fa84d9-0c17-4fdd-bd3c-1994877377d8",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "at": "2026-10-17T00:59:44.957Z",
+        "recipient": "Contractor",
+        "kind": "Task",
+        "message": "Submit a fictional insurance demo pack. Never enter real tax, banking or identity numbers.",
+        "workItemId": "c4afdf38-f8d1-473c-a423-108a181a95ae"
+      },
+      {
+        "id": "d88bea37-2f86-4a6f-92ba-122f10b2255f",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "at": "2026-10-17T00:59:44.957Z",
+        "recipient": "Contractor",
+        "kind": "Task",
+        "message": "Submit a fictional financial demo pack. Never enter real tax, banking or identity numbers.",
+        "workItemId": "47bf8edc-2887-4880-a18f-3c135e513075"
+      },
+      {
+        "id": "4f5e9f46-3d67-4561-8489-0a2cf3716b5b",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "at": "2026-10-17T00:59:44.957Z",
+        "recipient": "Contractor",
+        "kind": "Task",
+        "message": "Submit a fictional agreement demo pack. Never enter real tax, banking or identity numbers.",
+        "workItemId": "71d4ace6-7500-4cb7-b21c-25c5fb0437c8"
+      },
+      {
+        "id": "c3b2e471-0c06-4004-8649-2fd0ef0eac02",
+        "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+        "at": "2026-10-17T00:59:44.957Z",
+        "recipient": "Contractor",
+        "kind": "Task",
+        "message": "Submit fictional license evidence for HVAC.",
+        "workItemId": "1de5ab2e-32fc-4e5e-b9dc-b742c5a73944"
+      },
+      {
+        "id": "3f3ce90e-a212-4a2d-9b24-ba166a7cd523",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "at": "2026-10-17T00:59:44.957Z",
+        "recipient": "Contractor",
+        "kind": "Task",
+        "message": "Submit a fictional insurance demo pack. Never enter real tax, banking or identity numbers.",
+        "workItemId": "538e4bee-d8fe-474a-8d14-bb0c6861dfe5"
+      },
+      {
+        "id": "4715e0aa-c611-4238-bfaf-3dc83af7d1be",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "at": "2026-10-17T00:59:44.957Z",
+        "recipient": "Contractor",
+        "kind": "Task",
+        "message": "Submit a fictional financial demo pack. Never enter real tax, banking or identity numbers.",
+        "workItemId": "f6c86c0d-ed0b-48cd-9ecd-f361f3bd5734"
+      },
+      {
+        "id": "6b20bfa0-0da8-4d80-a8e7-152554c5f8e4",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "at": "2026-10-17T00:59:44.957Z",
+        "recipient": "Contractor",
+        "kind": "Task",
+        "message": "Submit a fictional agreement demo pack. Never enter real tax, banking or identity numbers.",
+        "workItemId": "5b4ae6ee-780a-483a-bf3d-eca89fc3ed43"
+      },
+      {
+        "id": "25c2f3d7-1793-4fd6-a4e5-ad87bf955726",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "at": "2026-10-17T00:59:44.957Z",
+        "recipient": "Contractor",
+        "kind": "Task",
+        "message": "Submit fictional license evidence for HVAC.",
+        "workItemId": "58850847-34fb-4386-9acc-826e77979c05"
+      },
+      {
+        "id": "bef9e5a5-44c1-460a-80c9-2ac7914d06c3",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "at": "2026-10-17T00:59:44.957Z",
+        "recipient": "Compliance",
+        "kind": "Task",
+        "message": "Review insurance evidence v1 using the simulated verifier.",
+        "workItemId": "711ea314-9329-4e34-a646-c55e623c550c"
+      },
+      {
+        "id": "42cb4bdd-6506-406c-9f17-b73f7b6d4d9c",
+        "companyId": "1e0351ef-cdbd-4172-9f52-ee2866a81af9",
+        "at": "2026-10-17T00:59:44.957Z",
+        "recipient": "Recruitment",
+        "kind": "Task",
+        "message": "Review the company and its requested initial skill.",
+        "workItemId": "369304b3-76cc-406e-a3f5-0109b13a3818"
+      },
+      {
+        "id": "6680573b-b411-4e39-8b9c-d8c0250fac12",
+        "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+        "at": "2026-10-17T00:59:44.957Z",
+        "recipient": "Compliance",
+        "kind": "Task",
+        "message": "Verify the latest demo license. An expired result requires replacement; a timeout is retryable.",
+        "workItemId": "2bdc22e2-123f-4921-9186-2fe1d5468629"
+      }
+    ],
+    "viz": {
+      "version": 2,
+      "activeRecordingId": "5df61ccc-b906-43e4-8166-efe5e9bdf309",
+      "recordings": [
+        {
+          "id": "5df61ccc-b906-43e4-8166-efe5e9bdf309",
+          "originEventId": "d3f3c84e-7298-4ec8-9c91-5af8401ddf14",
+          "companyId": "37c5d727-f98a-487a-8930-1b91c486819a",
+          "companyName": "Net Alpha",
+          "originLabel": "Company application",
+          "workflowId": "7d55d341-07fe-4297-9b71-cf9c2ec14c84",
+          "startedAt": "2026-10-17T00:59:48.617Z",
+          "definition": {
+            "adapterVersion": 1,
+            "workflowName": "CompanyOnboarding",
+            "workflowVersion": 2,
+            "nodes": [
+              {
+                "id": "origin",
+                "label": "Company application received",
+                "group": "Starting point",
+                "kind": "event",
+                "owner": "Contractor"
+              },
+              {
+                "id": "ScreenApplication",
+                "label": "Review application",
+                "group": "Starting point",
+                "kind": "activity",
+                "owner": "Recruitment",
+                "activity": "ScreenApplication",
+                "scope": "company"
+              },
+              {
+                "id": "screening-decision",
+                "label": "Proceed with onboarding?",
+                "group": "Starting point",
+                "kind": "decision",
+                "owner": "Recruitment"
+              },
+              {
+                "id": "ProvideInformation",
+                "label": "Provide additional information",
+                "group": "Starting point",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "ProvideInformation",
+                "scope": "company"
+              },
+              {
+                "id": "declined",
+                "label": "Application declined",
+                "group": "Starting point",
+                "kind": "end",
+                "owner": "Recruitment"
+              },
+              {
+                "id": "parallel",
+                "label": "Teams work in parallel",
+                "group": "Starting point",
+                "kind": "event",
+                "owner": "Workflow"
+              },
+              {
+                "id": "SubmitInsurance",
+                "label": "Submit insurance evidence",
+                "group": "Insurance",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "SubmitInsurance",
+                "scope": "company"
+              },
+              {
+                "id": "ReviewInsurance",
+                "label": "Review insurance",
+                "group": "Insurance",
+                "kind": "activity",
+                "owner": "Compliance",
+                "activity": "ReviewInsurance",
+                "scope": "company"
+              },
+              {
+                "id": "Insurance-decision",
+                "label": "Evidence accepted?",
+                "group": "Insurance",
+                "kind": "decision",
+                "owner": "Compliance"
+              },
+              {
+                "id": "Insurance-correction",
+                "label": "Replace supporting evidence",
+                "group": "Insurance",
+                "kind": "decision",
+                "owner": "Contractor"
+              },
+              {
+                "id": "Insurance-accepted",
+                "label": "Insurance verified",
+                "group": "Insurance",
+                "kind": "end",
+                "owner": "Compliance"
+              },
+              {
+                "id": "SubmitFinancial",
+                "label": "Submit fictional tax / banking pack",
+                "group": "Finance",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "SubmitFinancial",
+                "scope": "company"
+              },
+              {
+                "id": "ReviewFinancial",
+                "label": "Verify fictional financial pack",
+                "group": "Finance",
+                "kind": "activity",
+                "owner": "Finance",
+                "activity": "ReviewFinancial",
+                "scope": "company"
+              },
+              {
+                "id": "Finance-decision",
+                "label": "Evidence accepted?",
+                "group": "Finance",
+                "kind": "decision",
+                "owner": "Finance"
+              },
+              {
+                "id": "Finance-correction",
+                "label": "Replace supporting evidence",
+                "group": "Finance",
+                "kind": "decision",
+                "owner": "Contractor"
+              },
+              {
+                "id": "Finance-accepted",
+                "label": "Financial pack verified",
+                "group": "Finance",
+                "kind": "end",
+                "owner": "Finance"
+              },
+              {
+                "id": "SubmitAgreement",
+                "label": "Submit simulated agreement",
+                "group": "Agreement",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "SubmitAgreement",
+                "scope": "company"
+              },
+              {
+                "id": "ExecuteAgreement",
+                "label": "Execute simulated agreement",
+                "group": "Agreement",
+                "kind": "activity",
+                "owner": "Contractor Relations",
+                "activity": "ExecuteAgreement",
+                "scope": "company"
+              },
+              {
+                "id": "Agreement-decision",
+                "label": "Evidence accepted?",
+                "group": "Agreement",
+                "kind": "decision",
+                "owner": "Contractor Relations"
+              },
+              {
+                "id": "Agreement-correction",
+                "label": "Replace supporting evidence",
+                "group": "Agreement",
+                "kind": "decision",
+                "owner": "Contractor"
+              },
+              {
+                "id": "Agreement-accepted",
+                "label": "Agreement verified",
+                "group": "Agreement",
+                "kind": "end",
+                "owner": "Contractor Relations"
+              },
+              {
+                "id": "admin-join",
+                "label": "Administration approved",
+                "group": "Enablement",
+                "kind": "join",
+                "owner": "Compliance · Finance · Contractor Relations"
+              },
+              {
+                "id": "CreateVendor",
+                "label": "Create vendor record",
+                "group": "Enablement",
+                "kind": "activity",
+                "owner": "Automations & Integrations",
+                "activity": "CreateVendor",
+                "scope": "company"
+              },
+              {
+                "id": "SetupPortal",
+                "label": "Complete simulated portal setup",
+                "group": "Enablement",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "SetupPortal",
+                "scope": "company"
+              },
+              {
+                "id": "CompleteTraining",
+                "label": "Complete initial training",
+                "group": "Enablement",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "CompleteTraining",
+                "scope": "company"
+              },
+              {
+                "id": "ConfirmTraining",
+                "label": "Confirm training completion",
+                "group": "Enablement",
+                "kind": "activity",
+                "owner": "Training",
+                "activity": "ConfirmTraining",
+                "scope": "company"
+              },
+              {
+                "id": "SubmitLicense",
+                "label": "Submit license evidence",
+                "group": "Skill qualification",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "SubmitLicense",
+                "scope": "skill"
+              },
+              {
+                "id": "VerifyLicense",
+                "label": "Verify license",
+                "group": "Skill qualification",
+                "kind": "activity",
+                "owner": "Compliance",
+                "activity": "VerifyLicense",
+                "scope": "skill"
+              },
+              {
+                "id": "license-decision",
+                "label": "License valid?",
+                "group": "Skill qualification",
+                "kind": "decision",
+                "owner": "Compliance",
+                "scope": "skill"
+              },
+              {
+                "id": "license-correction",
+                "label": "Replace license evidence",
+                "group": "Skill qualification",
+                "kind": "decision",
+                "owner": "Contractor",
+                "scope": "skill"
+              },
+              {
+                "id": "ApproveSkill",
+                "label": "Approve skill qualification",
+                "group": "Skill qualification",
+                "kind": "activity",
+                "owner": "Field Manager",
+                "activity": "ApproveSkill",
+                "scope": "skill"
+              },
+              {
+                "id": "skill-decision",
+                "label": "Qualification decision",
+                "group": "Skill qualification",
+                "kind": "decision",
+                "owner": "Field Manager",
+                "scope": "skill"
+              },
+              {
+                "id": "skill-approved",
+                "label": "Company skill approved",
+                "group": "Skill qualification",
+                "kind": "end",
+                "owner": "Field Manager",
+                "scope": "skill"
+              },
+              {
+                "id": "skill-rejected",
+                "label": "Skill not approved",
+                "group": "Skill qualification",
+                "kind": "end",
+                "owner": "Field Manager",
+                "scope": "skill"
+              },
+              {
+                "id": "readiness-join",
+                "label": "Ready for activation",
+                "group": "Activation",
+                "kind": "join",
+                "owner": "All teams"
+              },
+              {
+                "id": "PublishActivation",
+                "label": "Publish contractor activation",
+                "group": "Activation",
+                "kind": "activity",
+                "owner": "Automations & Integrations",
+                "activity": "PublishActivation",
+                "scope": "company"
+              },
+              {
+                "id": "complete",
+                "label": "Onboarding completed",
+                "group": "Activation",
+                "kind": "end",
+                "owner": "Operations"
+              }
+            ],
+            "edges": [
+              {
+                "id": "origin:ScreenApplication",
+                "source": "origin",
+                "target": "ScreenApplication"
+              },
+              {
+                "id": "ScreenApplication:screening-decision",
+                "source": "ScreenApplication",
+                "target": "screening-decision"
+              },
+              {
+                "id": "screening-decision:ProvideInformation",
+                "source": "screening-decision",
+                "target": "ProvideInformation",
+                "label": "More information",
+                "route": "information"
+              },
+              {
+                "id": "ProvideInformation:ScreenApplication",
+                "source": "ProvideInformation",
+                "target": "ScreenApplication",
+                "label": "Review again",
+                "route": "information"
+              },
+              {
+                "id": "screening-decision:declined",
+                "source": "screening-decision",
+                "target": "declined",
+                "label": "Decline",
+                "route": "declined"
+              },
+              {
+                "id": "screening-decision:parallel",
+                "source": "screening-decision",
+                "target": "parallel",
+                "label": "Proceed",
+                "route": "proceed"
+              },
+              {
+                "id": "parallel:SubmitInsurance",
+                "source": "parallel",
+                "target": "SubmitInsurance"
+              },
+              {
+                "id": "SubmitInsurance:ReviewInsurance",
+                "source": "SubmitInsurance",
+                "target": "ReviewInsurance"
+              },
+              {
+                "id": "ReviewInsurance:Insurance-decision",
+                "source": "ReviewInsurance",
+                "target": "Insurance-decision"
+              },
+              {
+                "id": "Insurance-decision:Insurance-accepted",
+                "source": "Insurance-decision",
+                "target": "Insurance-accepted",
+                "label": "Verified",
+                "route": "Insurance-accepted"
+              },
+              {
+                "id": "Insurance-decision:Insurance-correction",
+                "source": "Insurance-decision",
+                "target": "Insurance-correction",
+                "label": "Replace",
+                "route": "Insurance-correction"
+              },
+              {
+                "id": "Insurance-correction:SubmitInsurance",
+                "source": "Insurance-correction",
+                "target": "SubmitInsurance",
+                "label": "Resubmit",
+                "route": "Insurance-correction"
+              },
+              {
+                "id": "Insurance-accepted:admin-join",
+                "source": "Insurance-accepted",
+                "target": "admin-join"
+              },
+              {
+                "id": "parallel:SubmitFinancial",
+                "source": "parallel",
+                "target": "SubmitFinancial"
+              },
+              {
+                "id": "SubmitFinancial:ReviewFinancial",
+                "source": "SubmitFinancial",
+                "target": "ReviewFinancial"
+              },
+              {
+                "id": "ReviewFinancial:Finance-decision",
+                "source": "ReviewFinancial",
+                "target": "Finance-decision"
+              },
+              {
+                "id": "Finance-decision:Finance-accepted",
+                "source": "Finance-decision",
+                "target": "Finance-accepted",
+                "label": "Verified",
+                "route": "Finance-accepted"
+              },
+              {
+                "id": "Finance-decision:Finance-correction",
+                "source": "Finance-decision",
+                "target": "Finance-correction",
+                "label": "Replace",
+                "route": "Finance-correction"
+              },
+              {
+                "id": "Finance-correction:SubmitFinancial",
+                "source": "Finance-correction",
+                "target": "SubmitFinancial",
+                "label": "Resubmit",
+                "route": "Finance-correction"
+              },
+              {
+                "id": "Finance-accepted:admin-join",
+                "source": "Finance-accepted",
+                "target": "admin-join"
+              },
+              {
+                "id": "parallel:SubmitAgreement",
+                "source": "parallel",
+                "target": "SubmitAgreement"
+              },
+              {
+                "id": "SubmitAgreement:ExecuteAgreement",
+                "source": "SubmitAgreement",
+                "target": "ExecuteAgreement"
+              },
+              {
+                "id": "ExecuteAgreement:Agreement-decision",
+                "source": "ExecuteAgreement",
+                "target": "Agreement-decision"
+              },
+              {
+                "id": "Agreement-decision:Agreement-accepted",
+                "source": "Agreement-decision",
+                "target": "Agreement-accepted",
+                "label": "Verified",
+                "route": "Agreement-accepted"
+              },
+              {
+                "id": "Agreement-decision:Agreement-correction",
+                "source": "Agreement-decision",
+                "target": "Agreement-correction",
+                "label": "Replace",
+                "route": "Agreement-correction"
+              },
+              {
+                "id": "Agreement-correction:SubmitAgreement",
+                "source": "Agreement-correction",
+                "target": "SubmitAgreement",
+                "label": "Resubmit",
+                "route": "Agreement-correction"
+              },
+              {
+                "id": "Agreement-accepted:admin-join",
+                "source": "Agreement-accepted",
+                "target": "admin-join"
+              },
+              {
+                "id": "admin-join:CreateVendor",
+                "source": "admin-join",
+                "target": "CreateVendor"
+              },
+              {
+                "id": "CreateVendor:SetupPortal",
+                "source": "CreateVendor",
+                "target": "SetupPortal"
+              },
+              {
+                "id": "SetupPortal:CompleteTraining",
+                "source": "SetupPortal",
+                "target": "CompleteTraining"
+              },
+              {
+                "id": "CompleteTraining:ConfirmTraining",
+                "source": "CompleteTraining",
+                "target": "ConfirmTraining"
+              },
+              {
+                "id": "ConfirmTraining:readiness-join",
+                "source": "ConfirmTraining",
+                "target": "readiness-join"
+              },
+              {
+                "id": "SubmitLicense:VerifyLicense",
+                "source": "SubmitLicense",
+                "target": "VerifyLicense"
+              },
+              {
+                "id": "VerifyLicense:license-decision",
+                "source": "VerifyLicense",
+                "target": "license-decision"
+              },
+              {
+                "id": "license-decision:ApproveSkill",
+                "source": "license-decision",
+                "target": "ApproveSkill",
+                "label": "Valid",
+                "route": "license-valid"
+              },
+              {
+                "id": "license-decision:license-correction",
+                "source": "license-decision",
+                "target": "license-correction",
+                "label": "Replace",
+                "route": "license-correction"
+              },
+              {
+                "id": "license-correction:SubmitLicense",
+                "source": "license-correction",
+                "target": "SubmitLicense",
+                "label": "Resubmit",
+                "route": "license-correction"
+              },
+              {
+                "id": "ApproveSkill:skill-decision",
+                "source": "ApproveSkill",
+                "target": "skill-decision"
+              },
+              {
+                "id": "skill-decision:skill-approved",
+                "source": "skill-decision",
+                "target": "skill-approved",
+                "label": "Approved",
+                "route": "skill-approved"
+              },
+              {
+                "id": "skill-decision:skill-rejected",
+                "source": "skill-decision",
+                "target": "skill-rejected",
+                "label": "Rejected",
+                "route": "skill-rejected"
+              },
+              {
+                "id": "parallel:SubmitLicense",
+                "source": "parallel",
+                "target": "SubmitLicense"
+              },
+              {
+                "id": "skill-approved:readiness-join",
+                "source": "skill-approved",
+                "target": "readiness-join"
+              },
+              {
+                "id": "admin-join:readiness-join",
+                "source": "admin-join",
+                "target": "readiness-join",
+                "label": "Administrative prerequisite"
+              },
+              {
+                "id": "readiness-join:PublishActivation",
+                "source": "readiness-join",
+                "target": "PublishActivation"
+              },
+              {
+                "id": "PublishActivation:complete",
+                "source": "PublishActivation",
+                "target": "complete"
+              }
+            ]
+          },
+          "workflowIds": [
+            "7d55d341-07fe-4297-9b71-cf9c2ec14c84",
+            "ed68bfc6-7567-4136-a367-ea1e94f6a442"
+          ],
+          "seen": [
+            "d3f3c84e-7298-4ec8-9c91-5af8401ddf14",
+            "fc4d006f-79cb-4ae1-bcdf-a9c4e1d3f2e5",
+            "a97b48f7-7e92-4297-acc8-54f776178242"
+          ],
+          "frames": [
+            {
+              "number": 0,
+              "revision": 6,
+              "capturedAt": "2026-10-17T00:59:48.617Z",
+              "causes": [
+                {
+                  "id": "d3f3c84e-7298-4ec8-9c91-5af8401ddf14",
+                  "kind": "transition",
+                  "label": "Company application · triggering commit"
+                }
+              ],
+              "nodes": {
+                "origin": {
+                  "status": "complete",
+                  "explanation": "Originating event accepted. Frame 0 is the atomic triggering commit; earlier visual history is not reconstructed.",
+                  "eventIds": [
+                    "d3f3c84e-7298-4ec8-9c91-5af8401ddf14"
+                  ]
+                },
+                "ScreenApplication": {
+                  "status": "waiting",
+                  "workItemId": "088fd1f2-e445-4686-bfa5-6b66a68697f6",
+                  "eventIds": [],
+                  "explanation": "Waiting for Recruitment. Review the company and its requested initial skill."
+                },
+                "screening-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ProvideInformation": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "declined": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "parallel": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitInsurance": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ReviewInsurance": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitFinancial": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ReviewFinancial": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitAgreement": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ExecuteAgreement": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "admin-join": {
+                  "status": "neutral",
+                  "explanation": "Waiting for Insurance verification — Compliance; Financial verification — Finance; Agreement verification — Contractor Relations.",
+                  "eventIds": [],
+                  "satisfied": 0,
+                  "total": 3,
+                  "outstanding": [
+                    "Insurance verification — Compliance",
+                    "Financial verification — Finance",
+                    "Agreement verification — Contractor Relations"
+                  ]
+                },
+                "CreateVendor": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SetupPortal": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "CompleteTraining": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ConfirmTraining": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitLicense": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "VerifyLicense": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "license-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "license-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ApproveSkill": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-approved": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-rejected": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "readiness-join": {
+                  "status": "neutral",
+                  "explanation": "Waiting for administrative approvals — Compliance, Finance and Contractor Relations; portal setup — Contractor; Training confirmation — Training; an approved company skill — Field Manager.",
+                  "eventIds": [],
+                  "satisfied": 0,
+                  "total": 4,
+                  "outstanding": [
+                    "administrative approvals — Compliance, Finance and Contractor Relations",
+                    "portal setup — Contractor",
+                    "Training confirmation — Training",
+                    "an approved company skill — Field Manager"
+                  ]
+                },
+                "PublishActivation": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "complete": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                }
+              },
+              "edges": {
+                "origin:ScreenApplication": "waiting",
+                "ScreenApplication:screening-decision": "neutral",
+                "screening-decision:ProvideInformation": "neutral",
+                "ProvideInformation:ScreenApplication": "neutral",
+                "screening-decision:declined": "neutral",
+                "screening-decision:parallel": "neutral",
+                "parallel:SubmitInsurance": "neutral",
+                "SubmitInsurance:ReviewInsurance": "neutral",
+                "ReviewInsurance:Insurance-decision": "neutral",
+                "Insurance-decision:Insurance-accepted": "neutral",
+                "Insurance-decision:Insurance-correction": "neutral",
+                "Insurance-correction:SubmitInsurance": "neutral",
+                "Insurance-accepted:admin-join": "neutral",
+                "parallel:SubmitFinancial": "neutral",
+                "SubmitFinancial:ReviewFinancial": "neutral",
+                "ReviewFinancial:Finance-decision": "neutral",
+                "Finance-decision:Finance-accepted": "neutral",
+                "Finance-decision:Finance-correction": "neutral",
+                "Finance-correction:SubmitFinancial": "neutral",
+                "Finance-accepted:admin-join": "neutral",
+                "parallel:SubmitAgreement": "neutral",
+                "SubmitAgreement:ExecuteAgreement": "neutral",
+                "ExecuteAgreement:Agreement-decision": "neutral",
+                "Agreement-decision:Agreement-accepted": "neutral",
+                "Agreement-decision:Agreement-correction": "neutral",
+                "Agreement-correction:SubmitAgreement": "neutral",
+                "Agreement-accepted:admin-join": "neutral",
+                "admin-join:CreateVendor": "neutral",
+                "CreateVendor:SetupPortal": "neutral",
+                "SetupPortal:CompleteTraining": "neutral",
+                "CompleteTraining:ConfirmTraining": "neutral",
+                "ConfirmTraining:readiness-join": "neutral",
+                "SubmitLicense:VerifyLicense": "neutral",
+                "VerifyLicense:license-decision": "neutral",
+                "license-decision:ApproveSkill": "neutral",
+                "license-decision:license-correction": "neutral",
+                "license-correction:SubmitLicense": "neutral",
+                "ApproveSkill:skill-decision": "neutral",
+                "skill-decision:skill-approved": "neutral",
+                "skill-decision:skill-rejected": "neutral",
+                "parallel:SubmitLicense": "neutral",
+                "skill-approved:readiness-join": "neutral",
+                "admin-join:readiness-join": "neutral",
+                "readiness-join:PublishActivation": "neutral",
+                "PublishActivation:complete": "neutral"
+              }
+            },
+            {
+              "number": 1,
+              "revision": 12,
+              "capturedAt": "2026-10-17T00:59:51.626Z",
+              "causes": [
+                {
+                  "id": "fc4d006f-79cb-4ae1-bcdf-a9c4e1d3f2e5",
+                  "label": "Screening Decision Recorded",
+                  "kind": "event",
+                  "actor": "Recruitment"
+                },
+                {
+                  "id": "a97b48f7-7e92-4297-acc8-54f776178242",
+                  "label": "Skill Requested",
+                  "kind": "event",
+                  "actor": "Workflow"
+                }
+              ],
+              "nodes": {
+                "origin": {
+                  "status": "complete",
+                  "explanation": "Originating event accepted. Frame 0 is the atomic triggering commit; earlier visual history is not reconstructed.",
+                  "eventIds": [
+                    "d3f3c84e-7298-4ec8-9c91-5af8401ddf14"
+                  ]
+                },
+                "ScreenApplication": {
+                  "status": "complete",
+                  "workItemId": "088fd1f2-e445-4686-bfa5-6b66a68697f6",
+                  "eventIds": [
+                    "fc4d006f-79cb-4ae1-bcdf-a9c4e1d3f2e5"
+                  ],
+                  "explanation": "Proceed"
+                },
+                "screening-decision": {
+                  "status": "complete",
+                  "explanation": "Proceed",
+                  "eventIds": [
+                    "fc4d006f-79cb-4ae1-bcdf-a9c4e1d3f2e5"
+                  ]
+                },
+                "ProvideInformation": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "declined": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "parallel": {
+                  "status": "complete",
+                  "explanation": "Administration and initial skill qualification progress independently",
+                  "eventIds": [
+                    "fc4d006f-79cb-4ae1-bcdf-a9c4e1d3f2e5"
+                  ]
+                },
+                "SubmitInsurance": {
+                  "status": "waiting",
+                  "workItemId": "c4afdf38-f8d1-473c-a423-108a181a95ae",
+                  "eventIds": [],
+                  "explanation": "Waiting for Contractor. Submit a fictional insurance simulated pack. Never enter real tax, banking or identity numbers."
+                },
+                "ReviewInsurance": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitFinancial": {
+                  "status": "waiting",
+                  "workItemId": "47bf8edc-2887-4880-a18f-3c135e513075",
+                  "eventIds": [],
+                  "explanation": "Waiting for Contractor. Submit a fictional financial simulated pack. Never enter real tax, banking or identity numbers."
+                },
+                "ReviewFinancial": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitAgreement": {
+                  "status": "waiting",
+                  "workItemId": "71d4ace6-7500-4cb7-b21c-25c5fb0437c8",
+                  "eventIds": [],
+                  "explanation": "Waiting for Contractor. Submit a fictional agreement simulated pack. Never enter real tax, banking or identity numbers."
+                },
+                "ExecuteAgreement": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "admin-join": {
+                  "status": "waiting",
+                  "explanation": "Waiting for Insurance verification — Compliance; Financial verification — Finance; Agreement verification — Contractor Relations.",
+                  "eventIds": [],
+                  "satisfied": 0,
+                  "total": 3,
+                  "outstanding": [
+                    "Insurance verification — Compliance",
+                    "Financial verification — Finance",
+                    "Agreement verification — Contractor Relations"
+                  ]
+                },
+                "CreateVendor": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SetupPortal": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "CompleteTraining": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ConfirmTraining": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitLicense": {
+                  "status": "waiting",
+                  "workItemId": "1de5ab2e-32fc-4e5e-b9dc-b742c5a73944",
+                  "eventIds": [],
+                  "explanation": "Waiting for Contractor. Submit fictional license evidence for HVAC."
+                },
+                "VerifyLicense": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "license-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "license-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ApproveSkill": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-approved": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-rejected": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "readiness-join": {
+                  "status": "waiting",
+                  "explanation": "Waiting for administrative approvals — Compliance, Finance and Contractor Relations; portal setup — Contractor; Training confirmation — Training; an approved company skill — Field Manager.",
+                  "eventIds": [],
+                  "satisfied": 0,
+                  "total": 4,
+                  "outstanding": [
+                    "administrative approvals — Compliance, Finance and Contractor Relations",
+                    "portal setup — Contractor",
+                    "Training confirmation — Training",
+                    "an approved company skill — Field Manager"
+                  ]
+                },
+                "PublishActivation": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "complete": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                }
+              },
+              "edges": {
+                "origin:ScreenApplication": "complete",
+                "ScreenApplication:screening-decision": "complete",
+                "screening-decision:ProvideInformation": "neutral",
+                "ProvideInformation:ScreenApplication": "neutral",
+                "screening-decision:declined": "neutral",
+                "screening-decision:parallel": "complete",
+                "parallel:SubmitInsurance": "waiting",
+                "SubmitInsurance:ReviewInsurance": "neutral",
+                "ReviewInsurance:Insurance-decision": "neutral",
+                "Insurance-decision:Insurance-accepted": "neutral",
+                "Insurance-decision:Insurance-correction": "neutral",
+                "Insurance-correction:SubmitInsurance": "neutral",
+                "Insurance-accepted:admin-join": "neutral",
+                "parallel:SubmitFinancial": "waiting",
+                "SubmitFinancial:ReviewFinancial": "neutral",
+                "ReviewFinancial:Finance-decision": "neutral",
+                "Finance-decision:Finance-accepted": "neutral",
+                "Finance-decision:Finance-correction": "neutral",
+                "Finance-correction:SubmitFinancial": "neutral",
+                "Finance-accepted:admin-join": "neutral",
+                "parallel:SubmitAgreement": "waiting",
+                "SubmitAgreement:ExecuteAgreement": "neutral",
+                "ExecuteAgreement:Agreement-decision": "neutral",
+                "Agreement-decision:Agreement-accepted": "neutral",
+                "Agreement-decision:Agreement-correction": "neutral",
+                "Agreement-correction:SubmitAgreement": "neutral",
+                "Agreement-accepted:admin-join": "neutral",
+                "admin-join:CreateVendor": "neutral",
+                "CreateVendor:SetupPortal": "neutral",
+                "SetupPortal:CompleteTraining": "neutral",
+                "CompleteTraining:ConfirmTraining": "neutral",
+                "ConfirmTraining:readiness-join": "neutral",
+                "SubmitLicense:VerifyLicense": "neutral",
+                "VerifyLicense:license-decision": "neutral",
+                "license-decision:ApproveSkill": "neutral",
+                "license-decision:license-correction": "neutral",
+                "license-correction:SubmitLicense": "neutral",
+                "ApproveSkill:skill-decision": "neutral",
+                "skill-decision:skill-approved": "neutral",
+                "skill-decision:skill-rejected": "neutral",
+                "parallel:SubmitLicense": "waiting",
+                "skill-approved:readiness-join": "neutral",
+                "admin-join:readiness-join": "waiting",
+                "readiness-join:PublishActivation": "neutral",
+                "PublishActivation:complete": "neutral"
+              }
+            }
+          ],
+          "status": "Stopped",
+          "triggerMatches": [
+            {
+              "id": "605f1bac-b31b-4aab-bfa7-1b2895acc65b",
+              "name": "Application net",
+              "kind": "application"
+            }
+          ],
+          "stoppedAtRevision": 15
+        },
+        {
+          "id": "648e7106-c7f8-4d3f-b611-d77d05cf0e26",
+          "originEventId": "75df5026-9a43-4dd7-95bd-99ba085b6225",
+          "companyId": "13e5f5b4-4744-49f4-bf66-0e138f3ea51b",
+          "companyName": "Net Beta",
+          "originLabel": "Company application",
+          "workflowId": "f3b8118f-b32d-4503-8353-59d14a3fdf6f",
+          "startedAt": "2026-10-17T00:59:49.070Z",
+          "definition": {
+            "adapterVersion": 1,
+            "workflowName": "CompanyOnboarding",
+            "workflowVersion": 2,
+            "nodes": [
+              {
+                "id": "origin",
+                "label": "Company application received",
+                "group": "Starting point",
+                "kind": "event",
+                "owner": "Contractor"
+              },
+              {
+                "id": "ScreenApplication",
+                "label": "Review application",
+                "group": "Starting point",
+                "kind": "activity",
+                "owner": "Recruitment",
+                "activity": "ScreenApplication",
+                "scope": "company"
+              },
+              {
+                "id": "screening-decision",
+                "label": "Proceed with onboarding?",
+                "group": "Starting point",
+                "kind": "decision",
+                "owner": "Recruitment"
+              },
+              {
+                "id": "ProvideInformation",
+                "label": "Provide additional information",
+                "group": "Starting point",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "ProvideInformation",
+                "scope": "company"
+              },
+              {
+                "id": "declined",
+                "label": "Application declined",
+                "group": "Starting point",
+                "kind": "end",
+                "owner": "Recruitment"
+              },
+              {
+                "id": "parallel",
+                "label": "Teams work in parallel",
+                "group": "Starting point",
+                "kind": "event",
+                "owner": "Workflow"
+              },
+              {
+                "id": "SubmitInsurance",
+                "label": "Submit insurance evidence",
+                "group": "Insurance",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "SubmitInsurance",
+                "scope": "company"
+              },
+              {
+                "id": "ReviewInsurance",
+                "label": "Review insurance",
+                "group": "Insurance",
+                "kind": "activity",
+                "owner": "Compliance",
+                "activity": "ReviewInsurance",
+                "scope": "company"
+              },
+              {
+                "id": "Insurance-decision",
+                "label": "Evidence accepted?",
+                "group": "Insurance",
+                "kind": "decision",
+                "owner": "Compliance"
+              },
+              {
+                "id": "Insurance-correction",
+                "label": "Replace supporting evidence",
+                "group": "Insurance",
+                "kind": "decision",
+                "owner": "Contractor"
+              },
+              {
+                "id": "Insurance-accepted",
+                "label": "Insurance verified",
+                "group": "Insurance",
+                "kind": "end",
+                "owner": "Compliance"
+              },
+              {
+                "id": "SubmitFinancial",
+                "label": "Submit fictional tax / banking pack",
+                "group": "Finance",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "SubmitFinancial",
+                "scope": "company"
+              },
+              {
+                "id": "ReviewFinancial",
+                "label": "Verify fictional financial pack",
+                "group": "Finance",
+                "kind": "activity",
+                "owner": "Finance",
+                "activity": "ReviewFinancial",
+                "scope": "company"
+              },
+              {
+                "id": "Finance-decision",
+                "label": "Evidence accepted?",
+                "group": "Finance",
+                "kind": "decision",
+                "owner": "Finance"
+              },
+              {
+                "id": "Finance-correction",
+                "label": "Replace supporting evidence",
+                "group": "Finance",
+                "kind": "decision",
+                "owner": "Contractor"
+              },
+              {
+                "id": "Finance-accepted",
+                "label": "Financial pack verified",
+                "group": "Finance",
+                "kind": "end",
+                "owner": "Finance"
+              },
+              {
+                "id": "SubmitAgreement",
+                "label": "Submit simulated agreement",
+                "group": "Agreement",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "SubmitAgreement",
+                "scope": "company"
+              },
+              {
+                "id": "ExecuteAgreement",
+                "label": "Execute simulated agreement",
+                "group": "Agreement",
+                "kind": "activity",
+                "owner": "Contractor Relations",
+                "activity": "ExecuteAgreement",
+                "scope": "company"
+              },
+              {
+                "id": "Agreement-decision",
+                "label": "Evidence accepted?",
+                "group": "Agreement",
+                "kind": "decision",
+                "owner": "Contractor Relations"
+              },
+              {
+                "id": "Agreement-correction",
+                "label": "Replace supporting evidence",
+                "group": "Agreement",
+                "kind": "decision",
+                "owner": "Contractor"
+              },
+              {
+                "id": "Agreement-accepted",
+                "label": "Agreement verified",
+                "group": "Agreement",
+                "kind": "end",
+                "owner": "Contractor Relations"
+              },
+              {
+                "id": "admin-join",
+                "label": "Administration approved",
+                "group": "Enablement",
+                "kind": "join",
+                "owner": "Compliance · Finance · Contractor Relations"
+              },
+              {
+                "id": "CreateVendor",
+                "label": "Create vendor record",
+                "group": "Enablement",
+                "kind": "activity",
+                "owner": "Automations & Integrations",
+                "activity": "CreateVendor",
+                "scope": "company"
+              },
+              {
+                "id": "SetupPortal",
+                "label": "Complete simulated portal setup",
+                "group": "Enablement",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "SetupPortal",
+                "scope": "company"
+              },
+              {
+                "id": "CompleteTraining",
+                "label": "Complete initial training",
+                "group": "Enablement",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "CompleteTraining",
+                "scope": "company"
+              },
+              {
+                "id": "ConfirmTraining",
+                "label": "Confirm training completion",
+                "group": "Enablement",
+                "kind": "activity",
+                "owner": "Training",
+                "activity": "ConfirmTraining",
+                "scope": "company"
+              },
+              {
+                "id": "SubmitLicense",
+                "label": "Submit license evidence",
+                "group": "Skill qualification",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "SubmitLicense",
+                "scope": "skill"
+              },
+              {
+                "id": "VerifyLicense",
+                "label": "Verify license",
+                "group": "Skill qualification",
+                "kind": "activity",
+                "owner": "Compliance",
+                "activity": "VerifyLicense",
+                "scope": "skill"
+              },
+              {
+                "id": "license-decision",
+                "label": "License valid?",
+                "group": "Skill qualification",
+                "kind": "decision",
+                "owner": "Compliance",
+                "scope": "skill"
+              },
+              {
+                "id": "license-correction",
+                "label": "Replace license evidence",
+                "group": "Skill qualification",
+                "kind": "decision",
+                "owner": "Contractor",
+                "scope": "skill"
+              },
+              {
+                "id": "ApproveSkill",
+                "label": "Approve skill qualification",
+                "group": "Skill qualification",
+                "kind": "activity",
+                "owner": "Field Manager",
+                "activity": "ApproveSkill",
+                "scope": "skill"
+              },
+              {
+                "id": "skill-decision",
+                "label": "Qualification decision",
+                "group": "Skill qualification",
+                "kind": "decision",
+                "owner": "Field Manager",
+                "scope": "skill"
+              },
+              {
+                "id": "skill-approved",
+                "label": "Company skill approved",
+                "group": "Skill qualification",
+                "kind": "end",
+                "owner": "Field Manager",
+                "scope": "skill"
+              },
+              {
+                "id": "skill-rejected",
+                "label": "Skill not approved",
+                "group": "Skill qualification",
+                "kind": "end",
+                "owner": "Field Manager",
+                "scope": "skill"
+              },
+              {
+                "id": "readiness-join",
+                "label": "Ready for activation",
+                "group": "Activation",
+                "kind": "join",
+                "owner": "All teams"
+              },
+              {
+                "id": "PublishActivation",
+                "label": "Publish contractor activation",
+                "group": "Activation",
+                "kind": "activity",
+                "owner": "Automations & Integrations",
+                "activity": "PublishActivation",
+                "scope": "company"
+              },
+              {
+                "id": "complete",
+                "label": "Onboarding completed",
+                "group": "Activation",
+                "kind": "end",
+                "owner": "Operations"
+              }
+            ],
+            "edges": [
+              {
+                "id": "origin:ScreenApplication",
+                "source": "origin",
+                "target": "ScreenApplication"
+              },
+              {
+                "id": "ScreenApplication:screening-decision",
+                "source": "ScreenApplication",
+                "target": "screening-decision"
+              },
+              {
+                "id": "screening-decision:ProvideInformation",
+                "source": "screening-decision",
+                "target": "ProvideInformation",
+                "label": "More information",
+                "route": "information"
+              },
+              {
+                "id": "ProvideInformation:ScreenApplication",
+                "source": "ProvideInformation",
+                "target": "ScreenApplication",
+                "label": "Review again",
+                "route": "information"
+              },
+              {
+                "id": "screening-decision:declined",
+                "source": "screening-decision",
+                "target": "declined",
+                "label": "Decline",
+                "route": "declined"
+              },
+              {
+                "id": "screening-decision:parallel",
+                "source": "screening-decision",
+                "target": "parallel",
+                "label": "Proceed",
+                "route": "proceed"
+              },
+              {
+                "id": "parallel:SubmitInsurance",
+                "source": "parallel",
+                "target": "SubmitInsurance"
+              },
+              {
+                "id": "SubmitInsurance:ReviewInsurance",
+                "source": "SubmitInsurance",
+                "target": "ReviewInsurance"
+              },
+              {
+                "id": "ReviewInsurance:Insurance-decision",
+                "source": "ReviewInsurance",
+                "target": "Insurance-decision"
+              },
+              {
+                "id": "Insurance-decision:Insurance-accepted",
+                "source": "Insurance-decision",
+                "target": "Insurance-accepted",
+                "label": "Verified",
+                "route": "Insurance-accepted"
+              },
+              {
+                "id": "Insurance-decision:Insurance-correction",
+                "source": "Insurance-decision",
+                "target": "Insurance-correction",
+                "label": "Replace",
+                "route": "Insurance-correction"
+              },
+              {
+                "id": "Insurance-correction:SubmitInsurance",
+                "source": "Insurance-correction",
+                "target": "SubmitInsurance",
+                "label": "Resubmit",
+                "route": "Insurance-correction"
+              },
+              {
+                "id": "Insurance-accepted:admin-join",
+                "source": "Insurance-accepted",
+                "target": "admin-join"
+              },
+              {
+                "id": "parallel:SubmitFinancial",
+                "source": "parallel",
+                "target": "SubmitFinancial"
+              },
+              {
+                "id": "SubmitFinancial:ReviewFinancial",
+                "source": "SubmitFinancial",
+                "target": "ReviewFinancial"
+              },
+              {
+                "id": "ReviewFinancial:Finance-decision",
+                "source": "ReviewFinancial",
+                "target": "Finance-decision"
+              },
+              {
+                "id": "Finance-decision:Finance-accepted",
+                "source": "Finance-decision",
+                "target": "Finance-accepted",
+                "label": "Verified",
+                "route": "Finance-accepted"
+              },
+              {
+                "id": "Finance-decision:Finance-correction",
+                "source": "Finance-decision",
+                "target": "Finance-correction",
+                "label": "Replace",
+                "route": "Finance-correction"
+              },
+              {
+                "id": "Finance-correction:SubmitFinancial",
+                "source": "Finance-correction",
+                "target": "SubmitFinancial",
+                "label": "Resubmit",
+                "route": "Finance-correction"
+              },
+              {
+                "id": "Finance-accepted:admin-join",
+                "source": "Finance-accepted",
+                "target": "admin-join"
+              },
+              {
+                "id": "parallel:SubmitAgreement",
+                "source": "parallel",
+                "target": "SubmitAgreement"
+              },
+              {
+                "id": "SubmitAgreement:ExecuteAgreement",
+                "source": "SubmitAgreement",
+                "target": "ExecuteAgreement"
+              },
+              {
+                "id": "ExecuteAgreement:Agreement-decision",
+                "source": "ExecuteAgreement",
+                "target": "Agreement-decision"
+              },
+              {
+                "id": "Agreement-decision:Agreement-accepted",
+                "source": "Agreement-decision",
+                "target": "Agreement-accepted",
+                "label": "Verified",
+                "route": "Agreement-accepted"
+              },
+              {
+                "id": "Agreement-decision:Agreement-correction",
+                "source": "Agreement-decision",
+                "target": "Agreement-correction",
+                "label": "Replace",
+                "route": "Agreement-correction"
+              },
+              {
+                "id": "Agreement-correction:SubmitAgreement",
+                "source": "Agreement-correction",
+                "target": "SubmitAgreement",
+                "label": "Resubmit",
+                "route": "Agreement-correction"
+              },
+              {
+                "id": "Agreement-accepted:admin-join",
+                "source": "Agreement-accepted",
+                "target": "admin-join"
+              },
+              {
+                "id": "admin-join:CreateVendor",
+                "source": "admin-join",
+                "target": "CreateVendor"
+              },
+              {
+                "id": "CreateVendor:SetupPortal",
+                "source": "CreateVendor",
+                "target": "SetupPortal"
+              },
+              {
+                "id": "SetupPortal:CompleteTraining",
+                "source": "SetupPortal",
+                "target": "CompleteTraining"
+              },
+              {
+                "id": "CompleteTraining:ConfirmTraining",
+                "source": "CompleteTraining",
+                "target": "ConfirmTraining"
+              },
+              {
+                "id": "ConfirmTraining:readiness-join",
+                "source": "ConfirmTraining",
+                "target": "readiness-join"
+              },
+              {
+                "id": "SubmitLicense:VerifyLicense",
+                "source": "SubmitLicense",
+                "target": "VerifyLicense"
+              },
+              {
+                "id": "VerifyLicense:license-decision",
+                "source": "VerifyLicense",
+                "target": "license-decision"
+              },
+              {
+                "id": "license-decision:ApproveSkill",
+                "source": "license-decision",
+                "target": "ApproveSkill",
+                "label": "Valid",
+                "route": "license-valid"
+              },
+              {
+                "id": "license-decision:license-correction",
+                "source": "license-decision",
+                "target": "license-correction",
+                "label": "Replace",
+                "route": "license-correction"
+              },
+              {
+                "id": "license-correction:SubmitLicense",
+                "source": "license-correction",
+                "target": "SubmitLicense",
+                "label": "Resubmit",
+                "route": "license-correction"
+              },
+              {
+                "id": "ApproveSkill:skill-decision",
+                "source": "ApproveSkill",
+                "target": "skill-decision"
+              },
+              {
+                "id": "skill-decision:skill-approved",
+                "source": "skill-decision",
+                "target": "skill-approved",
+                "label": "Approved",
+                "route": "skill-approved"
+              },
+              {
+                "id": "skill-decision:skill-rejected",
+                "source": "skill-decision",
+                "target": "skill-rejected",
+                "label": "Rejected",
+                "route": "skill-rejected"
+              },
+              {
+                "id": "parallel:SubmitLicense",
+                "source": "parallel",
+                "target": "SubmitLicense"
+              },
+              {
+                "id": "skill-approved:readiness-join",
+                "source": "skill-approved",
+                "target": "readiness-join"
+              },
+              {
+                "id": "admin-join:readiness-join",
+                "source": "admin-join",
+                "target": "readiness-join",
+                "label": "Administrative prerequisite"
+              },
+              {
+                "id": "readiness-join:PublishActivation",
+                "source": "readiness-join",
+                "target": "PublishActivation"
+              },
+              {
+                "id": "PublishActivation:complete",
+                "source": "PublishActivation",
+                "target": "complete"
+              }
+            ]
+          },
+          "workflowIds": [
+            "f3b8118f-b32d-4503-8353-59d14a3fdf6f",
+            "a1ff74a9-5111-4b4f-b2c3-ec191c37fdf4"
+          ],
+          "seen": [
+            "75df5026-9a43-4dd7-95bd-99ba085b6225",
+            "e6322cda-da8e-452f-9f54-8b99e5b0cc00",
+            "c79b3a57-044f-40f1-ae85-bd3a66259344",
+            "15fa335b-7948-4299-90e7-868065bdf671",
+            "560dfcd2-ef2d-4b4c-9af2-ab92d13a5b51"
+          ],
+          "frames": [
+            {
+              "number": 0,
+              "revision": 7,
+              "capturedAt": "2026-10-17T00:59:49.070Z",
+              "causes": [
+                {
+                  "id": "75df5026-9a43-4dd7-95bd-99ba085b6225",
+                  "kind": "transition",
+                  "label": "Company application · triggering commit"
+                }
+              ],
+              "nodes": {
+                "origin": {
+                  "status": "complete",
+                  "explanation": "Originating event accepted. Frame 0 is the atomic triggering commit; earlier visual history is not reconstructed.",
+                  "eventIds": [
+                    "75df5026-9a43-4dd7-95bd-99ba085b6225"
+                  ]
+                },
+                "ScreenApplication": {
+                  "status": "waiting",
+                  "workItemId": "12a1ac56-a195-4539-bd25-4a00ebc49809",
+                  "eventIds": [],
+                  "explanation": "Waiting for Recruitment. Review the company and its requested initial skill."
+                },
+                "screening-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ProvideInformation": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "declined": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "parallel": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitInsurance": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ReviewInsurance": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitFinancial": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ReviewFinancial": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitAgreement": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ExecuteAgreement": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "admin-join": {
+                  "status": "neutral",
+                  "explanation": "Waiting for Insurance verification — Compliance; Financial verification — Finance; Agreement verification — Contractor Relations.",
+                  "eventIds": [],
+                  "satisfied": 0,
+                  "total": 3,
+                  "outstanding": [
+                    "Insurance verification — Compliance",
+                    "Financial verification — Finance",
+                    "Agreement verification — Contractor Relations"
+                  ]
+                },
+                "CreateVendor": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SetupPortal": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "CompleteTraining": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ConfirmTraining": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitLicense": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "VerifyLicense": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "license-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "license-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ApproveSkill": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-approved": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-rejected": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "readiness-join": {
+                  "status": "neutral",
+                  "explanation": "Waiting for administrative approvals — Compliance, Finance and Contractor Relations; portal setup — Contractor; Training confirmation — Training; an approved company skill — Field Manager.",
+                  "eventIds": [],
+                  "satisfied": 0,
+                  "total": 4,
+                  "outstanding": [
+                    "administrative approvals — Compliance, Finance and Contractor Relations",
+                    "portal setup — Contractor",
+                    "Training confirmation — Training",
+                    "an approved company skill — Field Manager"
+                  ]
+                },
+                "PublishActivation": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "complete": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                }
+              },
+              "edges": {
+                "origin:ScreenApplication": "waiting",
+                "ScreenApplication:screening-decision": "neutral",
+                "screening-decision:ProvideInformation": "neutral",
+                "ProvideInformation:ScreenApplication": "neutral",
+                "screening-decision:declined": "neutral",
+                "screening-decision:parallel": "neutral",
+                "parallel:SubmitInsurance": "neutral",
+                "SubmitInsurance:ReviewInsurance": "neutral",
+                "ReviewInsurance:Insurance-decision": "neutral",
+                "Insurance-decision:Insurance-accepted": "neutral",
+                "Insurance-decision:Insurance-correction": "neutral",
+                "Insurance-correction:SubmitInsurance": "neutral",
+                "Insurance-accepted:admin-join": "neutral",
+                "parallel:SubmitFinancial": "neutral",
+                "SubmitFinancial:ReviewFinancial": "neutral",
+                "ReviewFinancial:Finance-decision": "neutral",
+                "Finance-decision:Finance-accepted": "neutral",
+                "Finance-decision:Finance-correction": "neutral",
+                "Finance-correction:SubmitFinancial": "neutral",
+                "Finance-accepted:admin-join": "neutral",
+                "parallel:SubmitAgreement": "neutral",
+                "SubmitAgreement:ExecuteAgreement": "neutral",
+                "ExecuteAgreement:Agreement-decision": "neutral",
+                "Agreement-decision:Agreement-accepted": "neutral",
+                "Agreement-decision:Agreement-correction": "neutral",
+                "Agreement-correction:SubmitAgreement": "neutral",
+                "Agreement-accepted:admin-join": "neutral",
+                "admin-join:CreateVendor": "neutral",
+                "CreateVendor:SetupPortal": "neutral",
+                "SetupPortal:CompleteTraining": "neutral",
+                "CompleteTraining:ConfirmTraining": "neutral",
+                "ConfirmTraining:readiness-join": "neutral",
+                "SubmitLicense:VerifyLicense": "neutral",
+                "VerifyLicense:license-decision": "neutral",
+                "license-decision:ApproveSkill": "neutral",
+                "license-decision:license-correction": "neutral",
+                "license-correction:SubmitLicense": "neutral",
+                "ApproveSkill:skill-decision": "neutral",
+                "skill-decision:skill-approved": "neutral",
+                "skill-decision:skill-rejected": "neutral",
+                "parallel:SubmitLicense": "neutral",
+                "skill-approved:readiness-join": "neutral",
+                "admin-join:readiness-join": "neutral",
+                "readiness-join:PublishActivation": "neutral",
+                "PublishActivation:complete": "neutral"
+              }
+            },
+            {
+              "number": 1,
+              "revision": 13,
+              "capturedAt": "2026-10-17T00:59:51.686Z",
+              "causes": [
+                {
+                  "id": "e6322cda-da8e-452f-9f54-8b99e5b0cc00",
+                  "label": "Screening Decision Recorded",
+                  "kind": "event",
+                  "actor": "Recruitment"
+                },
+                {
+                  "id": "c79b3a57-044f-40f1-ae85-bd3a66259344",
+                  "label": "Skill Requested",
+                  "kind": "event",
+                  "actor": "Workflow"
+                }
+              ],
+              "nodes": {
+                "origin": {
+                  "status": "complete",
+                  "explanation": "Originating event accepted. Frame 0 is the atomic triggering commit; earlier visual history is not reconstructed.",
+                  "eventIds": [
+                    "75df5026-9a43-4dd7-95bd-99ba085b6225"
+                  ]
+                },
+                "ScreenApplication": {
+                  "status": "complete",
+                  "workItemId": "12a1ac56-a195-4539-bd25-4a00ebc49809",
+                  "eventIds": [
+                    "e6322cda-da8e-452f-9f54-8b99e5b0cc00"
+                  ],
+                  "explanation": "Proceed"
+                },
+                "screening-decision": {
+                  "status": "complete",
+                  "explanation": "Proceed",
+                  "eventIds": [
+                    "e6322cda-da8e-452f-9f54-8b99e5b0cc00"
+                  ]
+                },
+                "ProvideInformation": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "declined": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "parallel": {
+                  "status": "complete",
+                  "explanation": "Administration and initial skill qualification progress independently",
+                  "eventIds": [
+                    "e6322cda-da8e-452f-9f54-8b99e5b0cc00"
+                  ]
+                },
+                "SubmitInsurance": {
+                  "status": "waiting",
+                  "workItemId": "538e4bee-d8fe-474a-8d14-bb0c6861dfe5",
+                  "eventIds": [],
+                  "explanation": "Waiting for Contractor. Submit a fictional insurance simulated pack. Never enter real tax, banking or identity numbers."
+                },
+                "ReviewInsurance": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitFinancial": {
+                  "status": "waiting",
+                  "workItemId": "f6c86c0d-ed0b-48cd-9ecd-f361f3bd5734",
+                  "eventIds": [],
+                  "explanation": "Waiting for Contractor. Submit a fictional financial simulated pack. Never enter real tax, banking or identity numbers."
+                },
+                "ReviewFinancial": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitAgreement": {
+                  "status": "waiting",
+                  "workItemId": "5b4ae6ee-780a-483a-bf3d-eca89fc3ed43",
+                  "eventIds": [],
+                  "explanation": "Waiting for Contractor. Submit a fictional agreement simulated pack. Never enter real tax, banking or identity numbers."
+                },
+                "ExecuteAgreement": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "admin-join": {
+                  "status": "waiting",
+                  "explanation": "Waiting for Insurance verification — Compliance; Financial verification — Finance; Agreement verification — Contractor Relations.",
+                  "eventIds": [],
+                  "satisfied": 0,
+                  "total": 3,
+                  "outstanding": [
+                    "Insurance verification — Compliance",
+                    "Financial verification — Finance",
+                    "Agreement verification — Contractor Relations"
+                  ]
+                },
+                "CreateVendor": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SetupPortal": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "CompleteTraining": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ConfirmTraining": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitLicense": {
+                  "status": "waiting",
+                  "workItemId": "58850847-34fb-4386-9acc-826e77979c05",
+                  "eventIds": [],
+                  "explanation": "Waiting for Contractor. Submit fictional license evidence for HVAC."
+                },
+                "VerifyLicense": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "license-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "license-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ApproveSkill": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-approved": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-rejected": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "readiness-join": {
+                  "status": "waiting",
+                  "explanation": "Waiting for administrative approvals — Compliance, Finance and Contractor Relations; portal setup — Contractor; Training confirmation — Training; an approved company skill — Field Manager.",
+                  "eventIds": [],
+                  "satisfied": 0,
+                  "total": 4,
+                  "outstanding": [
+                    "administrative approvals — Compliance, Finance and Contractor Relations",
+                    "portal setup — Contractor",
+                    "Training confirmation — Training",
+                    "an approved company skill — Field Manager"
+                  ]
+                },
+                "PublishActivation": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "complete": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                }
+              },
+              "edges": {
+                "origin:ScreenApplication": "complete",
+                "ScreenApplication:screening-decision": "complete",
+                "screening-decision:ProvideInformation": "neutral",
+                "ProvideInformation:ScreenApplication": "neutral",
+                "screening-decision:declined": "neutral",
+                "screening-decision:parallel": "complete",
+                "parallel:SubmitInsurance": "waiting",
+                "SubmitInsurance:ReviewInsurance": "neutral",
+                "ReviewInsurance:Insurance-decision": "neutral",
+                "Insurance-decision:Insurance-accepted": "neutral",
+                "Insurance-decision:Insurance-correction": "neutral",
+                "Insurance-correction:SubmitInsurance": "neutral",
+                "Insurance-accepted:admin-join": "neutral",
+                "parallel:SubmitFinancial": "waiting",
+                "SubmitFinancial:ReviewFinancial": "neutral",
+                "ReviewFinancial:Finance-decision": "neutral",
+                "Finance-decision:Finance-accepted": "neutral",
+                "Finance-decision:Finance-correction": "neutral",
+                "Finance-correction:SubmitFinancial": "neutral",
+                "Finance-accepted:admin-join": "neutral",
+                "parallel:SubmitAgreement": "waiting",
+                "SubmitAgreement:ExecuteAgreement": "neutral",
+                "ExecuteAgreement:Agreement-decision": "neutral",
+                "Agreement-decision:Agreement-accepted": "neutral",
+                "Agreement-decision:Agreement-correction": "neutral",
+                "Agreement-correction:SubmitAgreement": "neutral",
+                "Agreement-accepted:admin-join": "neutral",
+                "admin-join:CreateVendor": "neutral",
+                "CreateVendor:SetupPortal": "neutral",
+                "SetupPortal:CompleteTraining": "neutral",
+                "CompleteTraining:ConfirmTraining": "neutral",
+                "ConfirmTraining:readiness-join": "neutral",
+                "SubmitLicense:VerifyLicense": "neutral",
+                "VerifyLicense:license-decision": "neutral",
+                "license-decision:ApproveSkill": "neutral",
+                "license-decision:license-correction": "neutral",
+                "license-correction:SubmitLicense": "neutral",
+                "ApproveSkill:skill-decision": "neutral",
+                "skill-decision:skill-approved": "neutral",
+                "skill-decision:skill-rejected": "neutral",
+                "parallel:SubmitLicense": "waiting",
+                "skill-approved:readiness-join": "neutral",
+                "admin-join:readiness-join": "waiting",
+                "readiness-join:PublishActivation": "neutral",
+                "PublishActivation:complete": "neutral"
+              }
+            },
+            {
+              "number": 2,
+              "revision": 14,
+              "capturedAt": "2026-10-17T00:59:51.985Z",
+              "causes": [
+                {
+                  "id": "15fa335b-7948-4299-90e7-868065bdf671",
+                  "label": "Evidence Submitted",
+                  "kind": "event",
+                  "actor": "Contractor"
+                }
+              ],
+              "nodes": {
+                "origin": {
+                  "status": "complete",
+                  "explanation": "Originating event accepted. Frame 0 is the atomic triggering commit; earlier visual history is not reconstructed.",
+                  "eventIds": [
+                    "75df5026-9a43-4dd7-95bd-99ba085b6225"
+                  ]
+                },
+                "ScreenApplication": {
+                  "status": "complete",
+                  "workItemId": "12a1ac56-a195-4539-bd25-4a00ebc49809",
+                  "eventIds": [
+                    "e6322cda-da8e-452f-9f54-8b99e5b0cc00"
+                  ],
+                  "explanation": "Proceed"
+                },
+                "screening-decision": {
+                  "status": "complete",
+                  "explanation": "Proceed",
+                  "eventIds": [
+                    "e6322cda-da8e-452f-9f54-8b99e5b0cc00"
+                  ]
+                },
+                "ProvideInformation": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "declined": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "parallel": {
+                  "status": "complete",
+                  "explanation": "Administration and initial skill qualification progress independently",
+                  "eventIds": [
+                    "e6322cda-da8e-452f-9f54-8b99e5b0cc00"
+                  ]
+                },
+                "SubmitInsurance": {
+                  "status": "complete",
+                  "workItemId": "538e4bee-d8fe-474a-8d14-bb0c6861dfe5",
+                  "eventIds": [
+                    "15fa335b-7948-4299-90e7-868065bdf671"
+                  ],
+                  "explanation": "Evidence v1 submitted"
+                },
+                "ReviewInsurance": {
+                  "status": "waiting",
+                  "workItemId": "711ea314-9329-4e34-a646-c55e623c550c",
+                  "eventIds": [],
+                  "explanation": "Waiting for Compliance. Review insurance evidence v1 using the simulated verifier."
+                },
+                "Insurance-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitFinancial": {
+                  "status": "waiting",
+                  "workItemId": "f6c86c0d-ed0b-48cd-9ecd-f361f3bd5734",
+                  "eventIds": [],
+                  "explanation": "Waiting for Contractor. Submit a fictional financial simulated pack. Never enter real tax, banking or identity numbers."
+                },
+                "ReviewFinancial": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitAgreement": {
+                  "status": "waiting",
+                  "workItemId": "5b4ae6ee-780a-483a-bf3d-eca89fc3ed43",
+                  "eventIds": [],
+                  "explanation": "Waiting for Contractor. Submit a fictional agreement simulated pack. Never enter real tax, banking or identity numbers."
+                },
+                "ExecuteAgreement": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "admin-join": {
+                  "status": "waiting",
+                  "explanation": "Waiting for Insurance verification — Compliance; Financial verification — Finance; Agreement verification — Contractor Relations.",
+                  "eventIds": [],
+                  "satisfied": 0,
+                  "total": 3,
+                  "outstanding": [
+                    "Insurance verification — Compliance",
+                    "Financial verification — Finance",
+                    "Agreement verification — Contractor Relations"
+                  ]
+                },
+                "CreateVendor": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SetupPortal": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "CompleteTraining": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ConfirmTraining": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitLicense": {
+                  "status": "waiting",
+                  "workItemId": "58850847-34fb-4386-9acc-826e77979c05",
+                  "eventIds": [],
+                  "explanation": "Waiting for Contractor. Submit fictional license evidence for HVAC."
+                },
+                "VerifyLicense": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "license-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "license-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ApproveSkill": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-approved": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-rejected": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "readiness-join": {
+                  "status": "waiting",
+                  "explanation": "Waiting for administrative approvals — Compliance, Finance and Contractor Relations; portal setup — Contractor; Training confirmation — Training; an approved company skill — Field Manager.",
+                  "eventIds": [],
+                  "satisfied": 0,
+                  "total": 4,
+                  "outstanding": [
+                    "administrative approvals — Compliance, Finance and Contractor Relations",
+                    "portal setup — Contractor",
+                    "Training confirmation — Training",
+                    "an approved company skill — Field Manager"
+                  ]
+                },
+                "PublishActivation": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "complete": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                }
+              },
+              "edges": {
+                "origin:ScreenApplication": "complete",
+                "ScreenApplication:screening-decision": "complete",
+                "screening-decision:ProvideInformation": "neutral",
+                "ProvideInformation:ScreenApplication": "neutral",
+                "screening-decision:declined": "neutral",
+                "screening-decision:parallel": "complete",
+                "parallel:SubmitInsurance": "complete",
+                "SubmitInsurance:ReviewInsurance": "waiting",
+                "ReviewInsurance:Insurance-decision": "neutral",
+                "Insurance-decision:Insurance-accepted": "neutral",
+                "Insurance-decision:Insurance-correction": "neutral",
+                "Insurance-correction:SubmitInsurance": "neutral",
+                "Insurance-accepted:admin-join": "neutral",
+                "parallel:SubmitFinancial": "waiting",
+                "SubmitFinancial:ReviewFinancial": "neutral",
+                "ReviewFinancial:Finance-decision": "neutral",
+                "Finance-decision:Finance-accepted": "neutral",
+                "Finance-decision:Finance-correction": "neutral",
+                "Finance-correction:SubmitFinancial": "neutral",
+                "Finance-accepted:admin-join": "neutral",
+                "parallel:SubmitAgreement": "waiting",
+                "SubmitAgreement:ExecuteAgreement": "neutral",
+                "ExecuteAgreement:Agreement-decision": "neutral",
+                "Agreement-decision:Agreement-accepted": "neutral",
+                "Agreement-decision:Agreement-correction": "neutral",
+                "Agreement-correction:SubmitAgreement": "neutral",
+                "Agreement-accepted:admin-join": "neutral",
+                "admin-join:CreateVendor": "neutral",
+                "CreateVendor:SetupPortal": "neutral",
+                "SetupPortal:CompleteTraining": "neutral",
+                "CompleteTraining:ConfirmTraining": "neutral",
+                "ConfirmTraining:readiness-join": "neutral",
+                "SubmitLicense:VerifyLicense": "neutral",
+                "VerifyLicense:license-decision": "neutral",
+                "license-decision:ApproveSkill": "neutral",
+                "license-decision:license-correction": "neutral",
+                "license-correction:SubmitLicense": "neutral",
+                "ApproveSkill:skill-decision": "neutral",
+                "skill-decision:skill-approved": "neutral",
+                "skill-decision:skill-rejected": "neutral",
+                "parallel:SubmitLicense": "waiting",
+                "skill-approved:readiness-join": "neutral",
+                "admin-join:readiness-join": "waiting",
+                "readiness-join:PublishActivation": "neutral",
+                "PublishActivation:complete": "neutral"
+              }
+            },
+            {
+              "number": 3,
+              "revision": 20,
+              "capturedAt": "2026-10-17T00:59:54.967Z",
+              "causes": [
+                {
+                  "id": "560dfcd2-ef2d-4b4c-9af2-ab92d13a5b51",
+                  "label": "Evidence Submitted",
+                  "kind": "event",
+                  "actor": "Contractor"
+                }
+              ],
+              "nodes": {
+                "origin": {
+                  "status": "complete",
+                  "explanation": "Originating event accepted. Frame 0 is the atomic triggering commit; earlier visual history is not reconstructed.",
+                  "eventIds": [
+                    "75df5026-9a43-4dd7-95bd-99ba085b6225"
+                  ]
+                },
+                "ScreenApplication": {
+                  "status": "complete",
+                  "workItemId": "12a1ac56-a195-4539-bd25-4a00ebc49809",
+                  "eventIds": [
+                    "e6322cda-da8e-452f-9f54-8b99e5b0cc00"
+                  ],
+                  "explanation": "Proceed"
+                },
+                "screening-decision": {
+                  "status": "complete",
+                  "explanation": "Proceed",
+                  "eventIds": [
+                    "e6322cda-da8e-452f-9f54-8b99e5b0cc00"
+                  ]
+                },
+                "ProvideInformation": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "declined": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "parallel": {
+                  "status": "complete",
+                  "explanation": "Administration and initial skill qualification progress independently",
+                  "eventIds": [
+                    "e6322cda-da8e-452f-9f54-8b99e5b0cc00"
+                  ]
+                },
+                "SubmitInsurance": {
+                  "status": "complete",
+                  "workItemId": "538e4bee-d8fe-474a-8d14-bb0c6861dfe5",
+                  "eventIds": [
+                    "15fa335b-7948-4299-90e7-868065bdf671"
+                  ],
+                  "explanation": "Evidence v1 submitted"
+                },
+                "ReviewInsurance": {
+                  "status": "waiting",
+                  "workItemId": "711ea314-9329-4e34-a646-c55e623c550c",
+                  "eventIds": [],
+                  "explanation": "Waiting for Compliance. Review insurance evidence v1 using the simulated verifier."
+                },
+                "Insurance-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitFinancial": {
+                  "status": "waiting",
+                  "workItemId": "f6c86c0d-ed0b-48cd-9ecd-f361f3bd5734",
+                  "eventIds": [],
+                  "explanation": "Waiting for Contractor. Submit a fictional financial simulated pack. Never enter real tax, banking or identity numbers."
+                },
+                "ReviewFinancial": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitAgreement": {
+                  "status": "waiting",
+                  "workItemId": "5b4ae6ee-780a-483a-bf3d-eca89fc3ed43",
+                  "eventIds": [],
+                  "explanation": "Waiting for Contractor. Submit a fictional agreement simulated pack. Never enter real tax, banking or identity numbers."
+                },
+                "ExecuteAgreement": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "admin-join": {
+                  "status": "waiting",
+                  "explanation": "Waiting for Insurance verification — Compliance; Financial verification — Finance; Agreement verification — Contractor Relations.",
+                  "eventIds": [],
+                  "satisfied": 0,
+                  "total": 3,
+                  "outstanding": [
+                    "Insurance verification — Compliance",
+                    "Financial verification — Finance",
+                    "Agreement verification — Contractor Relations"
+                  ]
+                },
+                "CreateVendor": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SetupPortal": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "CompleteTraining": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ConfirmTraining": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitLicense": {
+                  "status": "complete",
+                  "workItemId": "58850847-34fb-4386-9acc-826e77979c05",
+                  "eventIds": [
+                    "560dfcd2-ef2d-4b4c-9af2-ab92d13a5b51"
+                  ],
+                  "explanation": "Evidence v1 submitted"
+                },
+                "VerifyLicense": {
+                  "status": "waiting",
+                  "workItemId": "2bdc22e2-123f-4921-9186-2fe1d5468629",
+                  "eventIds": [],
+                  "explanation": "Waiting for Compliance. Verify the latest simulated license. An expired result requires replacement; a timeout is retryable."
+                },
+                "license-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "license-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ApproveSkill": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-approved": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-rejected": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "readiness-join": {
+                  "status": "waiting",
+                  "explanation": "Waiting for administrative approvals — Compliance, Finance and Contractor Relations; portal setup — Contractor; Training confirmation — Training; an approved company skill — Field Manager.",
+                  "eventIds": [],
+                  "satisfied": 0,
+                  "total": 4,
+                  "outstanding": [
+                    "administrative approvals — Compliance, Finance and Contractor Relations",
+                    "portal setup — Contractor",
+                    "Training confirmation — Training",
+                    "an approved company skill — Field Manager"
+                  ]
+                },
+                "PublishActivation": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "complete": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                }
+              },
+              "edges": {
+                "origin:ScreenApplication": "complete",
+                "ScreenApplication:screening-decision": "complete",
+                "screening-decision:ProvideInformation": "neutral",
+                "ProvideInformation:ScreenApplication": "neutral",
+                "screening-decision:declined": "neutral",
+                "screening-decision:parallel": "complete",
+                "parallel:SubmitInsurance": "complete",
+                "SubmitInsurance:ReviewInsurance": "waiting",
+                "ReviewInsurance:Insurance-decision": "neutral",
+                "Insurance-decision:Insurance-accepted": "neutral",
+                "Insurance-decision:Insurance-correction": "neutral",
+                "Insurance-correction:SubmitInsurance": "neutral",
+                "Insurance-accepted:admin-join": "neutral",
+                "parallel:SubmitFinancial": "waiting",
+                "SubmitFinancial:ReviewFinancial": "neutral",
+                "ReviewFinancial:Finance-decision": "neutral",
+                "Finance-decision:Finance-accepted": "neutral",
+                "Finance-decision:Finance-correction": "neutral",
+                "Finance-correction:SubmitFinancial": "neutral",
+                "Finance-accepted:admin-join": "neutral",
+                "parallel:SubmitAgreement": "waiting",
+                "SubmitAgreement:ExecuteAgreement": "neutral",
+                "ExecuteAgreement:Agreement-decision": "neutral",
+                "Agreement-decision:Agreement-accepted": "neutral",
+                "Agreement-decision:Agreement-correction": "neutral",
+                "Agreement-correction:SubmitAgreement": "neutral",
+                "Agreement-accepted:admin-join": "neutral",
+                "admin-join:CreateVendor": "neutral",
+                "CreateVendor:SetupPortal": "neutral",
+                "SetupPortal:CompleteTraining": "neutral",
+                "CompleteTraining:ConfirmTraining": "neutral",
+                "ConfirmTraining:readiness-join": "neutral",
+                "SubmitLicense:VerifyLicense": "waiting",
+                "VerifyLicense:license-decision": "neutral",
+                "license-decision:ApproveSkill": "neutral",
+                "license-decision:license-correction": "neutral",
+                "license-correction:SubmitLicense": "neutral",
+                "ApproveSkill:skill-decision": "neutral",
+                "skill-decision:skill-approved": "neutral",
+                "skill-decision:skill-rejected": "neutral",
+                "parallel:SubmitLicense": "complete",
+                "skill-approved:readiness-join": "neutral",
+                "admin-join:readiness-join": "waiting",
+                "readiness-join:PublishActivation": "neutral",
+                "PublishActivation:complete": "neutral"
+              }
+            }
+          ],
+          "status": "Recording",
+          "triggerMatches": [
+            {
+              "id": "605f1bac-b31b-4aab-bfa7-1b2895acc65b",
+              "name": "Application net",
+              "kind": "application"
+            }
+          ]
+        },
+        {
+          "id": "06d94176-24d1-4156-9c31-44744eab4864",
+          "originEventId": "be821a83-127b-4e13-a81c-1ddb675a91b4",
+          "companyId": "45b13348-30ad-42f4-b10c-3cb23137124d",
+          "companyName": "Net Gamma",
+          "originLabel": "Company application",
+          "workflowId": "a4a3f7ba-0dd1-42f1-8bc5-a0600b7b21a7",
+          "startedAt": "2026-10-17T00:59:49.566Z",
+          "definition": {
+            "adapterVersion": 1,
+            "workflowName": "CompanyOnboarding",
+            "workflowVersion": 2,
+            "nodes": [
+              {
+                "id": "origin",
+                "label": "Company application received",
+                "group": "Starting point",
+                "kind": "event",
+                "owner": "Contractor"
+              },
+              {
+                "id": "ScreenApplication",
+                "label": "Review application",
+                "group": "Starting point",
+                "kind": "activity",
+                "owner": "Recruitment",
+                "activity": "ScreenApplication",
+                "scope": "company"
+              },
+              {
+                "id": "screening-decision",
+                "label": "Proceed with onboarding?",
+                "group": "Starting point",
+                "kind": "decision",
+                "owner": "Recruitment"
+              },
+              {
+                "id": "ProvideInformation",
+                "label": "Provide additional information",
+                "group": "Starting point",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "ProvideInformation",
+                "scope": "company"
+              },
+              {
+                "id": "declined",
+                "label": "Application declined",
+                "group": "Starting point",
+                "kind": "end",
+                "owner": "Recruitment"
+              },
+              {
+                "id": "parallel",
+                "label": "Teams work in parallel",
+                "group": "Starting point",
+                "kind": "event",
+                "owner": "Workflow"
+              },
+              {
+                "id": "SubmitInsurance",
+                "label": "Submit insurance evidence",
+                "group": "Insurance",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "SubmitInsurance",
+                "scope": "company"
+              },
+              {
+                "id": "ReviewInsurance",
+                "label": "Review insurance",
+                "group": "Insurance",
+                "kind": "activity",
+                "owner": "Compliance",
+                "activity": "ReviewInsurance",
+                "scope": "company"
+              },
+              {
+                "id": "Insurance-decision",
+                "label": "Evidence accepted?",
+                "group": "Insurance",
+                "kind": "decision",
+                "owner": "Compliance"
+              },
+              {
+                "id": "Insurance-correction",
+                "label": "Replace supporting evidence",
+                "group": "Insurance",
+                "kind": "decision",
+                "owner": "Contractor"
+              },
+              {
+                "id": "Insurance-accepted",
+                "label": "Insurance verified",
+                "group": "Insurance",
+                "kind": "end",
+                "owner": "Compliance"
+              },
+              {
+                "id": "SubmitFinancial",
+                "label": "Submit fictional tax / banking pack",
+                "group": "Finance",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "SubmitFinancial",
+                "scope": "company"
+              },
+              {
+                "id": "ReviewFinancial",
+                "label": "Verify fictional financial pack",
+                "group": "Finance",
+                "kind": "activity",
+                "owner": "Finance",
+                "activity": "ReviewFinancial",
+                "scope": "company"
+              },
+              {
+                "id": "Finance-decision",
+                "label": "Evidence accepted?",
+                "group": "Finance",
+                "kind": "decision",
+                "owner": "Finance"
+              },
+              {
+                "id": "Finance-correction",
+                "label": "Replace supporting evidence",
+                "group": "Finance",
+                "kind": "decision",
+                "owner": "Contractor"
+              },
+              {
+                "id": "Finance-accepted",
+                "label": "Financial pack verified",
+                "group": "Finance",
+                "kind": "end",
+                "owner": "Finance"
+              },
+              {
+                "id": "SubmitAgreement",
+                "label": "Submit simulated agreement",
+                "group": "Agreement",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "SubmitAgreement",
+                "scope": "company"
+              },
+              {
+                "id": "ExecuteAgreement",
+                "label": "Execute simulated agreement",
+                "group": "Agreement",
+                "kind": "activity",
+                "owner": "Contractor Relations",
+                "activity": "ExecuteAgreement",
+                "scope": "company"
+              },
+              {
+                "id": "Agreement-decision",
+                "label": "Evidence accepted?",
+                "group": "Agreement",
+                "kind": "decision",
+                "owner": "Contractor Relations"
+              },
+              {
+                "id": "Agreement-correction",
+                "label": "Replace supporting evidence",
+                "group": "Agreement",
+                "kind": "decision",
+                "owner": "Contractor"
+              },
+              {
+                "id": "Agreement-accepted",
+                "label": "Agreement verified",
+                "group": "Agreement",
+                "kind": "end",
+                "owner": "Contractor Relations"
+              },
+              {
+                "id": "admin-join",
+                "label": "Administration approved",
+                "group": "Enablement",
+                "kind": "join",
+                "owner": "Compliance · Finance · Contractor Relations"
+              },
+              {
+                "id": "CreateVendor",
+                "label": "Create vendor record",
+                "group": "Enablement",
+                "kind": "activity",
+                "owner": "Automations & Integrations",
+                "activity": "CreateVendor",
+                "scope": "company"
+              },
+              {
+                "id": "SetupPortal",
+                "label": "Complete simulated portal setup",
+                "group": "Enablement",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "SetupPortal",
+                "scope": "company"
+              },
+              {
+                "id": "CompleteTraining",
+                "label": "Complete initial training",
+                "group": "Enablement",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "CompleteTraining",
+                "scope": "company"
+              },
+              {
+                "id": "ConfirmTraining",
+                "label": "Confirm training completion",
+                "group": "Enablement",
+                "kind": "activity",
+                "owner": "Training",
+                "activity": "ConfirmTraining",
+                "scope": "company"
+              },
+              {
+                "id": "SubmitLicense",
+                "label": "Submit license evidence",
+                "group": "Skill qualification",
+                "kind": "activity",
+                "owner": "Contractor",
+                "activity": "SubmitLicense",
+                "scope": "skill"
+              },
+              {
+                "id": "VerifyLicense",
+                "label": "Verify license",
+                "group": "Skill qualification",
+                "kind": "activity",
+                "owner": "Compliance",
+                "activity": "VerifyLicense",
+                "scope": "skill"
+              },
+              {
+                "id": "license-decision",
+                "label": "License valid?",
+                "group": "Skill qualification",
+                "kind": "decision",
+                "owner": "Compliance",
+                "scope": "skill"
+              },
+              {
+                "id": "license-correction",
+                "label": "Replace license evidence",
+                "group": "Skill qualification",
+                "kind": "decision",
+                "owner": "Contractor",
+                "scope": "skill"
+              },
+              {
+                "id": "ApproveSkill",
+                "label": "Approve skill qualification",
+                "group": "Skill qualification",
+                "kind": "activity",
+                "owner": "Field Manager",
+                "activity": "ApproveSkill",
+                "scope": "skill"
+              },
+              {
+                "id": "skill-decision",
+                "label": "Qualification decision",
+                "group": "Skill qualification",
+                "kind": "decision",
+                "owner": "Field Manager",
+                "scope": "skill"
+              },
+              {
+                "id": "skill-approved",
+                "label": "Company skill approved",
+                "group": "Skill qualification",
+                "kind": "end",
+                "owner": "Field Manager",
+                "scope": "skill"
+              },
+              {
+                "id": "skill-rejected",
+                "label": "Skill not approved",
+                "group": "Skill qualification",
+                "kind": "end",
+                "owner": "Field Manager",
+                "scope": "skill"
+              },
+              {
+                "id": "readiness-join",
+                "label": "Ready for activation",
+                "group": "Activation",
+                "kind": "join",
+                "owner": "All teams"
+              },
+              {
+                "id": "PublishActivation",
+                "label": "Publish contractor activation",
+                "group": "Activation",
+                "kind": "activity",
+                "owner": "Automations & Integrations",
+                "activity": "PublishActivation",
+                "scope": "company"
+              },
+              {
+                "id": "complete",
+                "label": "Onboarding completed",
+                "group": "Activation",
+                "kind": "end",
+                "owner": "Operations"
+              }
+            ],
+            "edges": [
+              {
+                "id": "origin:ScreenApplication",
+                "source": "origin",
+                "target": "ScreenApplication"
+              },
+              {
+                "id": "ScreenApplication:screening-decision",
+                "source": "ScreenApplication",
+                "target": "screening-decision"
+              },
+              {
+                "id": "screening-decision:ProvideInformation",
+                "source": "screening-decision",
+                "target": "ProvideInformation",
+                "label": "More information",
+                "route": "information"
+              },
+              {
+                "id": "ProvideInformation:ScreenApplication",
+                "source": "ProvideInformation",
+                "target": "ScreenApplication",
+                "label": "Review again",
+                "route": "information"
+              },
+              {
+                "id": "screening-decision:declined",
+                "source": "screening-decision",
+                "target": "declined",
+                "label": "Decline",
+                "route": "declined"
+              },
+              {
+                "id": "screening-decision:parallel",
+                "source": "screening-decision",
+                "target": "parallel",
+                "label": "Proceed",
+                "route": "proceed"
+              },
+              {
+                "id": "parallel:SubmitInsurance",
+                "source": "parallel",
+                "target": "SubmitInsurance"
+              },
+              {
+                "id": "SubmitInsurance:ReviewInsurance",
+                "source": "SubmitInsurance",
+                "target": "ReviewInsurance"
+              },
+              {
+                "id": "ReviewInsurance:Insurance-decision",
+                "source": "ReviewInsurance",
+                "target": "Insurance-decision"
+              },
+              {
+                "id": "Insurance-decision:Insurance-accepted",
+                "source": "Insurance-decision",
+                "target": "Insurance-accepted",
+                "label": "Verified",
+                "route": "Insurance-accepted"
+              },
+              {
+                "id": "Insurance-decision:Insurance-correction",
+                "source": "Insurance-decision",
+                "target": "Insurance-correction",
+                "label": "Replace",
+                "route": "Insurance-correction"
+              },
+              {
+                "id": "Insurance-correction:SubmitInsurance",
+                "source": "Insurance-correction",
+                "target": "SubmitInsurance",
+                "label": "Resubmit",
+                "route": "Insurance-correction"
+              },
+              {
+                "id": "Insurance-accepted:admin-join",
+                "source": "Insurance-accepted",
+                "target": "admin-join"
+              },
+              {
+                "id": "parallel:SubmitFinancial",
+                "source": "parallel",
+                "target": "SubmitFinancial"
+              },
+              {
+                "id": "SubmitFinancial:ReviewFinancial",
+                "source": "SubmitFinancial",
+                "target": "ReviewFinancial"
+              },
+              {
+                "id": "ReviewFinancial:Finance-decision",
+                "source": "ReviewFinancial",
+                "target": "Finance-decision"
+              },
+              {
+                "id": "Finance-decision:Finance-accepted",
+                "source": "Finance-decision",
+                "target": "Finance-accepted",
+                "label": "Verified",
+                "route": "Finance-accepted"
+              },
+              {
+                "id": "Finance-decision:Finance-correction",
+                "source": "Finance-decision",
+                "target": "Finance-correction",
+                "label": "Replace",
+                "route": "Finance-correction"
+              },
+              {
+                "id": "Finance-correction:SubmitFinancial",
+                "source": "Finance-correction",
+                "target": "SubmitFinancial",
+                "label": "Resubmit",
+                "route": "Finance-correction"
+              },
+              {
+                "id": "Finance-accepted:admin-join",
+                "source": "Finance-accepted",
+                "target": "admin-join"
+              },
+              {
+                "id": "parallel:SubmitAgreement",
+                "source": "parallel",
+                "target": "SubmitAgreement"
+              },
+              {
+                "id": "SubmitAgreement:ExecuteAgreement",
+                "source": "SubmitAgreement",
+                "target": "ExecuteAgreement"
+              },
+              {
+                "id": "ExecuteAgreement:Agreement-decision",
+                "source": "ExecuteAgreement",
+                "target": "Agreement-decision"
+              },
+              {
+                "id": "Agreement-decision:Agreement-accepted",
+                "source": "Agreement-decision",
+                "target": "Agreement-accepted",
+                "label": "Verified",
+                "route": "Agreement-accepted"
+              },
+              {
+                "id": "Agreement-decision:Agreement-correction",
+                "source": "Agreement-decision",
+                "target": "Agreement-correction",
+                "label": "Replace",
+                "route": "Agreement-correction"
+              },
+              {
+                "id": "Agreement-correction:SubmitAgreement",
+                "source": "Agreement-correction",
+                "target": "SubmitAgreement",
+                "label": "Resubmit",
+                "route": "Agreement-correction"
+              },
+              {
+                "id": "Agreement-accepted:admin-join",
+                "source": "Agreement-accepted",
+                "target": "admin-join"
+              },
+              {
+                "id": "admin-join:CreateVendor",
+                "source": "admin-join",
+                "target": "CreateVendor"
+              },
+              {
+                "id": "CreateVendor:SetupPortal",
+                "source": "CreateVendor",
+                "target": "SetupPortal"
+              },
+              {
+                "id": "SetupPortal:CompleteTraining",
+                "source": "SetupPortal",
+                "target": "CompleteTraining"
+              },
+              {
+                "id": "CompleteTraining:ConfirmTraining",
+                "source": "CompleteTraining",
+                "target": "ConfirmTraining"
+              },
+              {
+                "id": "ConfirmTraining:readiness-join",
+                "source": "ConfirmTraining",
+                "target": "readiness-join"
+              },
+              {
+                "id": "SubmitLicense:VerifyLicense",
+                "source": "SubmitLicense",
+                "target": "VerifyLicense"
+              },
+              {
+                "id": "VerifyLicense:license-decision",
+                "source": "VerifyLicense",
+                "target": "license-decision"
+              },
+              {
+                "id": "license-decision:ApproveSkill",
+                "source": "license-decision",
+                "target": "ApproveSkill",
+                "label": "Valid",
+                "route": "license-valid"
+              },
+              {
+                "id": "license-decision:license-correction",
+                "source": "license-decision",
+                "target": "license-correction",
+                "label": "Replace",
+                "route": "license-correction"
+              },
+              {
+                "id": "license-correction:SubmitLicense",
+                "source": "license-correction",
+                "target": "SubmitLicense",
+                "label": "Resubmit",
+                "route": "license-correction"
+              },
+              {
+                "id": "ApproveSkill:skill-decision",
+                "source": "ApproveSkill",
+                "target": "skill-decision"
+              },
+              {
+                "id": "skill-decision:skill-approved",
+                "source": "skill-decision",
+                "target": "skill-approved",
+                "label": "Approved",
+                "route": "skill-approved"
+              },
+              {
+                "id": "skill-decision:skill-rejected",
+                "source": "skill-decision",
+                "target": "skill-rejected",
+                "label": "Rejected",
+                "route": "skill-rejected"
+              },
+              {
+                "id": "parallel:SubmitLicense",
+                "source": "parallel",
+                "target": "SubmitLicense"
+              },
+              {
+                "id": "skill-approved:readiness-join",
+                "source": "skill-approved",
+                "target": "readiness-join"
+              },
+              {
+                "id": "admin-join:readiness-join",
+                "source": "admin-join",
+                "target": "readiness-join",
+                "label": "Administrative prerequisite"
+              },
+              {
+                "id": "readiness-join:PublishActivation",
+                "source": "readiness-join",
+                "target": "PublishActivation"
+              },
+              {
+                "id": "PublishActivation:complete",
+                "source": "PublishActivation",
+                "target": "complete"
+              }
+            ]
+          },
+          "workflowIds": [
+            "a4a3f7ba-0dd1-42f1-8bc5-a0600b7b21a7"
+          ],
+          "seen": [
+            "be821a83-127b-4e13-a81c-1ddb675a91b4"
+          ],
+          "frames": [
+            {
+              "number": 0,
+              "revision": 8,
+              "capturedAt": "2026-10-17T00:59:49.566Z",
+              "causes": [
+                {
+                  "id": "be821a83-127b-4e13-a81c-1ddb675a91b4",
+                  "kind": "transition",
+                  "label": "Company application · triggering commit"
+                }
+              ],
+              "nodes": {
+                "origin": {
+                  "status": "complete",
+                  "explanation": "Originating event accepted. Frame 0 is the atomic triggering commit; earlier visual history is not reconstructed.",
+                  "eventIds": [
+                    "be821a83-127b-4e13-a81c-1ddb675a91b4"
+                  ]
+                },
+                "ScreenApplication": {
+                  "status": "waiting",
+                  "workItemId": "18f66b8a-bac3-4c59-a27c-d1e70fa7472c",
+                  "eventIds": [],
+                  "explanation": "Waiting for Recruitment. Review the company and its requested initial skill."
+                },
+                "screening-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ProvideInformation": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "declined": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "parallel": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitInsurance": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ReviewInsurance": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Insurance-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitFinancial": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ReviewFinancial": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Finance-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitAgreement": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ExecuteAgreement": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "Agreement-accepted": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "admin-join": {
+                  "status": "neutral",
+                  "explanation": "Waiting for Insurance verification — Compliance; Financial verification — Finance; Agreement verification — Contractor Relations.",
+                  "eventIds": [],
+                  "satisfied": 0,
+                  "total": 3,
+                  "outstanding": [
+                    "Insurance verification — Compliance",
+                    "Financial verification — Finance",
+                    "Agreement verification — Contractor Relations"
+                  ]
+                },
+                "CreateVendor": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SetupPortal": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "CompleteTraining": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ConfirmTraining": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "SubmitLicense": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "VerifyLicense": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "license-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "license-correction": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "ApproveSkill": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-decision": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-approved": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "skill-rejected": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "readiness-join": {
+                  "status": "neutral",
+                  "explanation": "Waiting for administrative approvals — Compliance, Finance and Contractor Relations; portal setup — Contractor; Training confirmation — Training; an approved company skill — Field Manager.",
+                  "eventIds": [],
+                  "satisfied": 0,
+                  "total": 4,
+                  "outstanding": [
+                    "administrative approvals — Compliance, Finance and Contractor Relations",
+                    "portal setup — Contractor",
+                    "Training confirmation — Training",
+                    "an approved company skill — Field Manager"
+                  ]
+                },
+                "PublishActivation": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                },
+                "complete": {
+                  "status": "neutral",
+                  "explanation": "Not yet reached",
+                  "eventIds": []
+                }
+              },
+              "edges": {
+                "origin:ScreenApplication": "waiting",
+                "ScreenApplication:screening-decision": "neutral",
+                "screening-decision:ProvideInformation": "neutral",
+                "ProvideInformation:ScreenApplication": "neutral",
+                "screening-decision:declined": "neutral",
+                "screening-decision:parallel": "neutral",
+                "parallel:SubmitInsurance": "neutral",
+                "SubmitInsurance:ReviewInsurance": "neutral",
+                "ReviewInsurance:Insurance-decision": "neutral",
+                "Insurance-decision:Insurance-accepted": "neutral",
+                "Insurance-decision:Insurance-correction": "neutral",
+                "Insurance-correction:SubmitInsurance": "neutral",
+                "Insurance-accepted:admin-join": "neutral",
+                "parallel:SubmitFinancial": "neutral",
+                "SubmitFinancial:ReviewFinancial": "neutral",
+                "ReviewFinancial:Finance-decision": "neutral",
+                "Finance-decision:Finance-accepted": "neutral",
+                "Finance-decision:Finance-correction": "neutral",
+                "Finance-correction:SubmitFinancial": "neutral",
+                "Finance-accepted:admin-join": "neutral",
+                "parallel:SubmitAgreement": "neutral",
+                "SubmitAgreement:ExecuteAgreement": "neutral",
+                "ExecuteAgreement:Agreement-decision": "neutral",
+                "Agreement-decision:Agreement-accepted": "neutral",
+                "Agreement-decision:Agreement-correction": "neutral",
+                "Agreement-correction:SubmitAgreement": "neutral",
+                "Agreement-accepted:admin-join": "neutral",
+                "admin-join:CreateVendor": "neutral",
+                "CreateVendor:SetupPortal": "neutral",
+                "SetupPortal:CompleteTraining": "neutral",
+                "CompleteTraining:ConfirmTraining": "neutral",
+                "ConfirmTraining:readiness-join": "neutral",
+                "SubmitLicense:VerifyLicense": "neutral",
+                "VerifyLicense:license-decision": "neutral",
+                "license-decision:ApproveSkill": "neutral",
+                "license-decision:license-correction": "neutral",
+                "license-correction:SubmitLicense": "neutral",
+                "ApproveSkill:skill-decision": "neutral",
+                "skill-decision:skill-approved": "neutral",
+                "skill-decision:skill-rejected": "neutral",
+                "parallel:SubmitLicense": "neutral",
+                "skill-approved:readiness-join": "neutral",
+                "admin-join:readiness-join": "neutral",
+                "readiness-join:PublishActivation": "neutral",
+                "PublishActivation:complete": "neutral"
+              }
+            }
+          ],
+          "status": "Recording",
+          "triggerMatches": [
+            {
+              "id": "605f1bac-b31b-4aab-bfa7-1b2895acc65b",
+              "name": "Application net",
+              "kind": "application"
+            }
+          ]
+        }
+      ],
+      "triggers": [
+        {
+          "id": "605f1bac-b31b-4aab-bfa7-1b2895acc65b",
+          "name": "Meeting net",
+          "kind": "application",
+          "enabled": false,
+          "fireCount": 3,
+          "lastFiredAt": "2026-10-17T00:59:49.566Z",
+          "lastEventId": "be821a83-127b-4e13-a81c-1ddb675a91b4"
+        }
+      ]
+    }
+  }
+}

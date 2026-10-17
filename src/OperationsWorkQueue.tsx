@@ -91,6 +91,7 @@ export function OperationsWorkQueue({
   state,
   participant,
   companyId,
+  executionRole,
   service,
   run,
   busy,
@@ -99,6 +100,7 @@ export function OperationsWorkQueue({
 }: {
   state: State;
   participant: QueueParticipant;
+  executionRole: Role;
   companyId: string;
   service: OnboardingService;
   run: Run;
@@ -167,6 +169,14 @@ export function OperationsWorkQueue({
             <a href="#/contractor" target="_blank" rel="noopener">
               Open Contractor Portal ↗
             </a>
+          </article>
+        ) : task.owner !== executionRole ? (
+          <article className="task-card">
+            <span className="pill neutral">{task.owner}</span>
+            <h3>{activityLabel(task.activity)}</h3>
+            <p>
+              Owned by {task.owner}. Select that role to complete this work.
+            </p>
           </article>
         ) : (
           <TaskCard

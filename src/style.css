@@ -69,6 +69,25 @@ aside {
 .brand-caption {
   min-width: 0;
 }
+.network-scope {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 14px 14px;
+}
+.network-scope button {
+  padding: 8px;
+  font-size: 11px;
+}
+.network-scope button[aria-pressed="true"] {
+  background: #294d3e;
+  color: white;
+}
+.network-scope small {
+  color: #66786c;
+  font-size: 10px;
+  line-height: 1.5;
+}
 @font-face {
   font-family: "Unity Narrow";
   src: local("Bahnschrift");
@@ -1958,4 +1977,15 @@ main {
     align-items: start;
     flex-direction: column;
   }
+}
+.queue-selection-empty {
+  padding: 12px 16px;
+  border-bottom: 1px solid #dce3dc;
+}
+.queue-selection-empty h3 {
+  margin: 0 0 4px;
+}
+.queue-selection-empty p {
+  margin: 0;
+  color: #62766b;
 }

@@ -5,6 +5,7 @@ import {
   completion,
   evidence,
   nav,
+  inspectCompany,
   proceed,
   role,
   snapshot,
@@ -187,6 +188,7 @@ test("vendor and activation are discovered in Operations and executed in Monitor
   );
   await expect(operations.getByTestId("queue-total")).toHaveText("1");
   await nav(operations, "Overview");
+  await inspectCompany(operations, "Activation Visibility Demo");
   const activationLink = operations
     .getByTestId("eligibility-guidance")
     .getByRole("link", { name: "Open Automations & Integrations" });

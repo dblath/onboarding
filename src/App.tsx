@@ -91,7 +91,26 @@ export function App({
     useState<QueueParticipant>(internalPersona);
   const [queueExpanded, setQueueExpanded] = useState(false);
   const [queueCompany, setQueueCompany] = useState("");
+  const [networkScope, setNetworkScope] = useState<"active" | "all">(() =>
+    sessionStorage.getItem("fieldwork:operations:network-view") === "all"
+      ? "all"
+      : "active",
+  );
+  function chooseNetworkScope(scope: "active" | "all") {
+    setNetworkScope(scope);
+    sessionStorage.setItem("fieldwork:operations:network-view", scope);
+  }
   const openTasks = openWork(state);
+  const roleCount = (companyId: string) =>
+    openTasks.filter(
+      (t) => t.companyId === companyId && t.owner === internalPersona,
+    ).length;
+  const network = state.companies.filter(
+    (c) =>
+      experience !== "operations" ||
+      networkScope === "all" ||
+      roleCount(c.id) > 0,
+  );
   const [selected, setSelected] = useState(
       () => sessionStorage.getItem(`fieldwork:${experience}:company`) ?? "",
     ),
@@ -117,6 +136,11 @@ export function App({
           : "Overview",
     );
     setCreating(false);
+    setNetworkScope(
+      sessionStorage.getItem("fieldwork:operations:network-view") === "all"
+        ? "all"
+        : "active",
+    );
     setNotice("");
   }, [experience]);
   useEffect(() => {
@@ -184,8 +208,8 @@ export function App({
   const c =
       experience === "contractor"
         ? contractorSession.company
-        : (state.companies.find((c) => c.id === selected) ??
-          (selected ? undefined : state.companies[0])),
+        : (network.find((c) => c.id === selected) ??
+          (selected ? undefined : network[0])),
     a = state.applications.find((a) => a.companyId === c?.id),
     qualifications = state.qualifications.filter((q) => q.companyId === c?.id),
     tasks = state.workItems.filter(
@@ -217,17 +241,14 @@ export function App({
     if (loading) return;
     // Remember the initial default so a later replacement cannot silently swap
     // the company already being shown in this tab.
-    if (experience !== "contractor" && !selected && state.companies[0]) {
-      setSelected(state.companies[0].id);
-      sessionStorage.setItem(
-        `fieldwork:${experience}:company`,
-        state.companies[0].id,
-      );
+    if (experience !== "contractor" && !selected && network[0]) {
+      setSelected(network[0].id);
+      sessionStorage.setItem(`fieldwork:${experience}:company`, network[0].id);
     }
     if (
       selected &&
       selected !== "__choose_company__" &&
-      !state.companies.some((c) => c.id === selected)
+      !network.some((c) => c.id === selected)
     ) {
       setSelected("__choose_company__");
       sessionStorage.setItem(
@@ -237,7 +258,22 @@ export function App({
     }
     if (queueCompany && !state.companies.some((c) => c.id === queueCompany))
       setQueueCompany("__choose_company__");
-  }, [loading, state.companies, selected, queueCompany, experience]);
+    else if (
+      experience === "operations" &&
+      networkScope === "active" &&
+      queueCompany &&
+      !roleCount(queueCompany)
+    )
+      setQueueCompany("");
+  }, [
+    loading,
+    state,
+    selected,
+    queueCompany,
+    experience,
+    networkScope,
+    internalPersona,
+  ]);
   function chooseParticipant(participant: QueueParticipant) {
     if (participant === "Simulation") {
       window.location.hash = automationLink(queueCompany).slice(1);
@@ -382,7 +418,7 @@ export function App({
         </nav>
         <div className="aside-bottom">
           <span className="live-dot" /> Browser-local workspace
-          <p>Iteration 3.7 · The Viz Fishing Net</p>
+          <p>Iteration 3.8 · Focus & progress</p>
         </div>
       </aside>
       <div className="main">
@@ -582,8 +618,8 @@ export function App({
           )}
           {experience !== "contractor" && selected === "__choose_company__" && (
             <p role="status" className="notice">
-              The previously selected company is not in this workspace. Choose a
-              company from Contractor network to continue.
+              The previously selected company is unavailable in this view.
+              Choose a company from Contractor network to continue.
             </p>
           )}
           {experience !== "contractor" && (
@@ -737,11 +773,51 @@ export function App({
                 <section className="panel applications">
                   <div className="section-heading">
                     <h2>Contractor network</h2>
-                    <span className="pill neutral">
-                      {state.companies.length}
-                    </span>
+                    <span className="pill neutral">{network.length}</span>
                   </div>
-                  {!state.companies.length ? (
+                  {experience === "operations" && (
+                    <div
+                      className="network-scope"
+                      role="group"
+                      aria-label="Contractor network view"
+                    >
+                      <button
+                        className="secondary"
+                        aria-pressed={networkScope === "active"}
+                        onClick={() => chooseNetworkScope("active")}
+                      >
+                        My active work
+                      </button>
+                      <button
+                        className="secondary"
+                        aria-pressed={networkScope === "all"}
+                        onClick={() => chooseNetworkScope("all")}
+                      >
+                        All companies
+                      </button>
+                      <small>
+                        {internalPersona} open work · global queue totals
+                        include all participants
+                      </small>
+                    </div>
+                  )}
+                  {!network.length &&
+                  state.companies.length > 0 &&
+                  experience === "operations" ? (
+                    <div className="empty">
+                      <h3>No active work for {internalPersona}.</h3>
+                      <p>
+                        Other participants may still have work. Your list
+                        includes only your open tasks.
+                      </p>
+                      <button
+                        className="secondary"
+                        onClick={() => chooseNetworkScope("all")}
+                      >
+                        Show all companies
+                      </button>
+                    </div>
+                  ) : !state.companies.length ? (
                     <div className="empty">
                       <div className="empty-icon">↗</div>
                       <h3>A fresh start.</h3>
@@ -751,13 +827,16 @@ export function App({
                       </p>
                     </div>
                   ) : (
-                    state.companies.map((company) => {
+                    network.map((company) => {
                       const app = state.applications.find(
                           (a) => a.companyId === company.id,
                         ),
-                        count = (
-                          experience === "operations" ? openTasks : allMyTasks
-                        ).filter((t) => t.companyId === company.id).length;
+                        count =
+                          experience === "operations"
+                            ? roleCount(company.id)
+                            : allMyTasks.filter(
+                                (t) => t.companyId === company.id,
+                              ).length;
                       return (
                         <button
                           className={
@@ -776,7 +855,7 @@ export function App({
                               {app?.skill} · {count} task
                               {count === 1 ? "" : "s"}
                               {experience === "operations"
-                                ? " open across all participants"
+                                ? ` open for ${internalPersona}`
                                 : " for you"}
                             </span>
                             <span
@@ -1193,24 +1272,6 @@ export function App({
                         )}
                       </>
                     )}
-                    {view === "Work queue" && experience === "operations" && (
-                      <OperationsWorkQueue
-                        state={state}
-                        participant={queueParticipant}
-                        companyId={queueCompany}
-                        service={service}
-                        run={run}
-                        busy={writeDisabled}
-                        onCompanyChange={(companyId) => {
-                          setQueueCompany(companyId);
-                          if (companyId) selectCompany(companyId);
-                        }}
-                        onOverview={(companyId) => {
-                          selectCompany(companyId);
-                          setView("Overview");
-                        }}
-                      />
-                    )}
                     {view === "Work queue" && experience !== "operations" && (
                       <>
                         <div className="section-heading">
@@ -1331,12 +1392,26 @@ export function App({
                         </DiagnosticPanel>
                       )}
                   </>
+                ) : experience === "operations" && view === "Work queue" ? (
+                  <div className="queue-selection-empty">
+                    <h3>Choose a company for its details.</h3>
+                    <p>
+                      Your current work is listed below. Select a company from
+                      Contractor network to inspect its status.
+                    </p>
+                  </div>
                 ) : (
                   <div className="empty large">
                     <div className="empty-icon">◎</div>
-                    <h2>A clear path to getting started.</h2>
+                    <h2>
+                      {experience === "operations"
+                        ? "Choose a company to inspect."
+                        : "A clear path to getting started."}
+                    </h2>
                     <p>
-                      Submit a fictional company application as Contractor.
+                      {experience === "operations"
+                        ? "Your previous selection is no longer in this view. Choose from your current work or show all companies."
+                        : "Submit a fictional company application as Contractor."}
                       <br />
                       Then follow its events all the way to Ready.
                     </p>
@@ -1344,6 +1419,25 @@ export function App({
                       Apply <span>→</span> Qualify <span>→</span> Ready
                     </div>
                   </div>
+                )}
+                {view === "Work queue" && experience === "operations" && (
+                  <OperationsWorkQueue
+                    state={state}
+                    participant={queueParticipant}
+                    executionRole={internalPersona}
+                    companyId={queueCompany}
+                    service={service}
+                    run={run}
+                    busy={writeDisabled}
+                    onCompanyChange={(companyId) => {
+                      setQueueCompany(companyId);
+                      if (companyId) selectCompany(companyId);
+                    }}
+                    onOverview={(companyId) => {
+                      selectCompany(companyId);
+                      setView("Overview");
+                    }}
+                  />
                 )}
               </section>
             </div>

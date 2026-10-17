@@ -155,6 +155,9 @@ test("duplicate emails require a company choice; independent contractor tabs nev
   ).toBeVisible();
   await signIn(second, "alex@example.com", "Beta Company");
   await operations
+    .getByRole("button", { name: "All companies", exact: true })
+    .click();
+  await operations
     .getByRole("button")
     .filter({ hasText: "Other Company" })
     .click();

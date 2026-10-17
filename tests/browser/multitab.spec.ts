@@ -5,6 +5,7 @@ import {
   completion,
   evidence,
   nav,
+  inspectCompany,
   proceed,
   role,
   snapshot,
@@ -121,6 +122,7 @@ test("three simultaneous experiences complete correction, independent branches a
   );
   await nav(contractor, "Your journey");
   await nav(operations, "Overview");
+  await inspectCompany(operations, "Summit Three Tabs");
   await expect(
     contractor.getByRole("heading", { name: "Eligible to receive jobs" }),
   ).toBeVisible();

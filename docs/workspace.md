@@ -1,6 +1,6 @@
 # Portable Demo Workspace
 
-Iteration 3.6 adds a first-class Monitor view at `#/monitor?view=workspace`. The existing browser IndexedDB snapshot remains authoritative. Files are portable backups/scenarios, not a replacement live repository or an event replay mechanism.
+Iteration 3.6 adds a first-class Monitor view at `#/monitor?view=workspace`. IndexedDB remains authoritative. Since 3.8 its business/control/recording/frame stores assemble the same logical workspace; files remain one complete portable backup/scenario, not a replacement live repository or an event replay mechanism. See [observer storage](observer-storage.md).
 
 ## File contract
 
@@ -44,4 +44,4 @@ Viz remounts at the default journey's latest frame. Legacy `activeRecordingId` i
 
 `src/workspace/workspace.test.ts` and `tests/browser/workspace.spec.ts` cover exact Frame 13, archives/attempts/waits, real downloads/imports, reset, continuation/reloading original, malformed/incompatible references, stale and competing replacements, transaction abort, native API contract/cancellation/write failure, selection cleanup, refresh and all-tab revisions. `src/viz/triggers.test.ts` and `tests/browser/fishing-net.spec.ts` add multiple running recordings/rules/metadata and all four unchanged original-file fixtures. Native operating-system picker dialogs remain a manual check; the native API is mocked in browser automation. See [recording contracts](viz-recording.md).
 
-History remains unbounded in one snapshot. Export/validation/clone/serialization cost and quota pressure increase with accumulated Viz frames and archives. No streaming, compression, pruning, near-limit performance or quota-recovery guarantee. Representative sizes and actual executed test results are in [STATUS](STATUS.md); detailed current acceptance steps and fictional exported files are local-only under `docs/chet/`.
+Live history is append-only in separate frame rows; ordinary commands do not rewrite historical frames. Confirmed Load/Reset use one transaction across every store, so partial replacement cannot survive a failure. Original 3.6 and original 3.7 files remain supported without changing their frames. History is unbounded in logical exports and per-tab memory. Cold loading, export, validation and replacement still process complete history. No streaming, compression, pruning, near-limit performance or authoritative quota-recovery guarantee. Representative sizes and actual executed test results are in [STATUS](STATUS.md); detailed current acceptance steps and fictional exported files are local-only under `docs/chet/`.

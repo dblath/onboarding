@@ -4,6 +4,7 @@ import {
   card,
   initialReadiness,
   nav,
+  inspectCompany,
   snapshot,
   synchronized,
   workspace,
@@ -16,6 +17,7 @@ test("Operations discovers automations without executing them; deep links preser
   const operations = await workspace(context, "operations");
   const monitor = await workspace(context, "monitor");
   await initialReadiness(contractor, operations);
+  await inspectCompany(operations, "Summit Three Tabs");
   const other = await workspace(context, "contractor");
   await application(other, "Other Company Demo", "other@example.com");
   const state = await snapshot(operations);
@@ -65,6 +67,7 @@ test("Operations discovers automations without executing them; deep links preser
     ),
   ).toBe(preferences.company);
   await nav(operations, "Overview");
+  await inspectCompany(operations, "Summit Three Tabs");
   await expect(
     operations
       .getByTestId("eligibility-guidance")

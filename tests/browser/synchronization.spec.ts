@@ -91,7 +91,7 @@ test("change notifications contain only revision metadata and observe already co
     }) {
       probes.push(
         new Promise<Probe>((resolve, reject) => {
-          const request = indexedDB.open("fieldwork-onboarding", 1);
+          const request = indexedDB.open("fieldwork-onboarding");
           request.onerror = () => reject(request.error);
           request.onsuccess = () => {
             const db = request.result,
@@ -178,6 +178,9 @@ test("hash navigation keeps application and internal tab selections separate", a
   await application(contractor, "First Company");
   await application(contractor, "Second Company");
   // Selection of a different company and role in one tab does not move another tab.
+  await operations
+    .getByRole("button", { name: "All companies", exact: true })
+    .click();
   await operations
     .getByRole("button")
     .filter({ hasText: "First Company" })

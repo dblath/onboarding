@@ -38,7 +38,27 @@ import {
 export { LocalOrchestrator } from "./orchestration";
 export interface Repository {
   load(): Promise<State>;
-  save(state: State): Promise<void>;
+  save(state: State): Promise<void | { captureError: string }>;
+  prepare?(): Promise<void>;
+  replace?(state: State): Promise<void>;
+}
+export { IndexedDbRepository } from "./indexedDbRepository";
+const businessJson = ({ viz: _viz, ...business }: State) =>
+  JSON.stringify(business);
+function vizSignature(s: State) {
+  try {
+    return JSON.stringify(
+      s.viz && {
+        ...s.viz,
+        recordings: s.viz.recordings.map(({ frames, ...r }) => ({
+          ...r,
+          frameCount: frames.length,
+        })),
+      },
+    );
+  } catch {
+    return undefined;
+  } // Auxiliary serialization cannot veto a valid business command.
 }
 export interface IntegrationPort {
   execute(state: State, task: WorkItem, fail: boolean): BusinessEvent;
@@ -149,25 +169,36 @@ export class OnboardingService {
   subscribe(listener: (revision: number) => void) {
     return this.coordinator.subscribe(listener);
   }
-  private change<T>(action: (s: State) => T, forceSave = false): Promise<T> {
+  private change<T>(
+    action: (s: State) => T,
+    forceSave = false,
+    observerCommand = false,
+  ): Promise<T> {
     const expectedEpoch = this.observedEpoch,
       observed = this.observedRevision >= 0;
     const run = async () => {
       let committedRevision: number | undefined;
+      let captureError: string | undefined;
       const result = await this.coordinator.exclusive(async () => {
+        await this.repository.prepare?.();
         const raw = await this.repository.load();
         if (observed && raw.workspaceEpoch !== expectedEpoch)
           throw new Error(
             "The workspace was replaced in another tab. Review the restored workspace before trying this action again.",
           );
-        const before = JSON.stringify(raw);
+        const before = businessJson(raw),
+          visualsBefore = vizSignature(raw);
         const s = migrateState(raw);
         const previousEventIds = new Set(s.events.map((e) => e.eventId));
         const value = action(s);
         safelyCaptureVisuals(s, previousEventIds);
-        if (forceSave || JSON.stringify(s) !== before) {
+        if (
+          forceSave ||
+          businessJson(s) !== before ||
+          vizSignature(s) !== visualsBefore
+        ) {
           s.revision += 1;
-          await this.repository.save(s);
+          captureError = (await this.repository.save(s))?.captureError;
           committedRevision = s.revision;
         }
         this.observe(s);
@@ -176,6 +207,8 @@ export class OnboardingService {
       // Publishing is deliberately outside the lock and after transaction completion.
       if (committedRevision !== undefined)
         this.coordinator.publish(committedRevision);
+      if (observerCommand && captureError)
+        throw new Error(`Viz update could not be fully saved. ${captureError}`);
       return result;
     };
     return this.enqueue(run);
@@ -185,7 +218,10 @@ export class OnboardingService {
     return this.change((s) => s, true);
   }
   async getState() {
-    const s = await this.repository.load();
+    // Readers wait for the business + best-effort auxiliary phases of a command.
+    const s = await (this.coordinator.unavailableReason
+      ? this.repository.load()
+      : this.coordinator.exclusive(() => this.repository.load()));
     this.observe(s);
     return s;
   }
@@ -236,7 +272,8 @@ export class OnboardingService {
             "Workspace revision limit reached. No state was replaced.",
           );
         next.workspaceEpoch = id();
-        await this.repository.save(next);
+        if (this.repository.replace) await this.repository.replace(next);
+        else await this.repository.save(next);
         this.observe(next);
         return next.revision;
       });
@@ -244,10 +281,10 @@ export class OnboardingService {
     });
   }
   startVizRecording(originEventId: string) {
-    return this.change((s) => startRecording(s, originEventId));
+    return this.change((s) => startRecording(s, originEventId), true, true);
   }
   stopVizRecording(recordingId: string) {
-    return this.change((s) => stopRecording(s, recordingId));
+    return this.change((s) => stopRecording(s, recordingId), true, true);
   }
   saveRecordingTrigger(input: {
     id?: string;
@@ -255,48 +292,56 @@ export class OnboardingService {
     kind: TriggerKind;
     enabled: boolean;
   }) {
-    return this.change((s) => {
-      if (!input.name.trim() || input.name.length > 120)
-        throw new Error("Give this trigger a name of 1–120 characters.");
-      if (!triggerCatalog.some((t) => t.kind === input.kind))
-        throw new Error(
-          "Unsupported recording trigger. Choose a supported catalog entry.",
-        );
-      s.viz ??= {
-        version: 2,
-        activeRecordingId: "",
-        recordings: [],
-        triggers: [],
-      };
-      const rules = (s.viz.triggers ??= []);
-      const existing = input.id
-        ? rules.find((t) => t.id === input.id)
-        : undefined;
-      if (input.id && !existing)
-        throw new Error("Trigger no longer exists. Refresh and try again.");
-      if (existing)
-        Object.assign(existing, {
-          name: input.name.trim(),
-          kind: input.kind,
-          enabled: input.enabled,
-        });
-      else
-        rules.push({
-          id: id(),
-          name: input.name.trim(),
-          kind: input.kind,
-          enabled: input.enabled,
-          fireCount: 0,
-        });
-    });
+    return this.change(
+      (s) => {
+        if (!input.name.trim() || input.name.length > 120)
+          throw new Error("Give this trigger a name of 1–120 characters.");
+        if (!triggerCatalog.some((t) => t.kind === input.kind))
+          throw new Error(
+            "Unsupported recording trigger. Choose a supported catalog entry.",
+          );
+        s.viz ??= {
+          version: 2,
+          activeRecordingId: "",
+          recordings: [],
+          triggers: [],
+        };
+        const rules = (s.viz.triggers ??= []);
+        const existing = input.id
+          ? rules.find((t) => t.id === input.id)
+          : undefined;
+        if (input.id && !existing)
+          throw new Error("Trigger no longer exists. Refresh and try again.");
+        if (existing)
+          Object.assign(existing, {
+            name: input.name.trim(),
+            kind: input.kind,
+            enabled: input.enabled,
+          });
+        else
+          rules.push({
+            id: id(),
+            name: input.name.trim(),
+            kind: input.kind,
+            enabled: input.enabled,
+            fireCount: 0,
+          });
+      },
+      false,
+      true,
+    );
   }
   removeRecordingTrigger(triggerId: string) {
-    return this.change((s) => {
-      if (s.viz)
-        s.viz.triggers = (s.viz.triggers ?? []).filter(
-          (t) => t.id !== triggerId,
-        );
-    });
+    return this.change(
+      (s) => {
+        if (s.viz)
+          s.viz.triggers = (s.viz.triggers ?? []).filter(
+            (t) => t.id !== triggerId,
+          );
+      },
+      false,
+      true,
+    );
   }
   async getApplication(applicationId: string) {
     return (await this.getState()).applications.find(
@@ -668,38 +713,5 @@ export class OnboardingService {
   }
   deliverEvent(event: BusinessEvent) {
     return this.change((s) => this.orchestration.deliver(s, event));
-  }
-}
-export class IndexedDbRepository implements Repository {
-  private db: Promise<IDBDatabase>;
-  constructor(name = "fieldwork-onboarding") {
-    this.db = new Promise((resolve, reject) => {
-      const r = indexedDB.open(name, 1);
-      r.onupgradeneeded = () => r.result.createObjectStore("state");
-      r.onsuccess = () => resolve(r.result);
-      r.onerror = () => reject(r.error);
-      r.onblocked = () =>
-        reject(new Error("Storage is blocked by another browser tab."));
-    });
-  }
-  async load(): Promise<State> {
-    const db = await this.db;
-    return new Promise((resolve, reject) => {
-      const r = db.transaction("state").objectStore("state").get("current");
-      // Migration can schedule workflow work, so it runs only inside a locked command.
-      r.onsuccess = () => resolve(r.result ?? emptyState());
-      r.onerror = () => reject(r.error);
-    });
-  }
-  async save(s: State): Promise<void> {
-    const db = await this.db;
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction("state", "readwrite");
-      tx.objectStore("state").put(s, "current");
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-      tx.onabort = () =>
-        reject(tx.error ?? new Error("Storage transaction aborted."));
-    });
   }
 }

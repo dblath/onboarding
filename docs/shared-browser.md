@@ -1,5 +1,7 @@
 # Iteration 3: one state, three browser experiences
 
+Current 3.8 architecture supersedes the original single-row save below: [observer storage](observer-storage.md) documents separate business durability, isolated incremental capture transactions and atomic all-store Load/Reset. Operations now defaults to role-owned Open work, with explicit All companies discovery. Vendor creation, activation and integration retries execute only in Monitor -> Automations & Integrations. This document otherwise records the original multi-tab baseline; see [STATUS](STATUS.md) for current tested behavior.
+
 Company and skill processes, workflow definition versions, business events and readiness policy are unchanged. This iteration changes presentation and persistence coordination.
 
 | Experience            | Route         | Presentation and actions                                                                                                  |

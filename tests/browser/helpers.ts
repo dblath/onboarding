@@ -5,6 +5,13 @@ import {
   type Page,
 } from "@playwright/test";
 import type { State } from "../../src/domain";
+import {
+  assembleStoredWorkspace,
+  type Control,
+  type Head,
+  type BusinessRow,
+} from "../../src/indexedDbRepository";
+import type { VisualFrame } from "../../src/viz/types";
 
 export async function workspace(
   context: BrowserContext,
@@ -97,8 +104,18 @@ export async function signIn(page: Page, email: string, companyName?: string) {
 export async function proceed(page: Page) {
   await role(page, "Recruitment");
   const task = card(page, "Review application");
+  const workItemId = await task.getAttribute("data-work-item");
   await task.getByRole("button", { name: "Record decision →" }).click();
-  await expect(task).toHaveCount(0);
+  await expect(
+    page.locator(`article[data-work-item="${workItemId}"]`),
+  ).toHaveCount(0);
+}
+/** Explicit broader discovery, never silently chooses a replacement company. */
+export async function inspectCompany(page: Page, name: string) {
+  await page
+    .getByRole("button", { name: "All companies", exact: true })
+    .click();
+  await page.locator(".application-row").filter({ hasText: name }).click();
 }
 export async function evidence(
   page: Page,
@@ -124,22 +141,54 @@ export async function completion(page: Page, activity: string, button: string) {
   await expect(task).toHaveCount(0);
 }
 export async function snapshot(page: Page): Promise<State> {
-  return page.evaluate(async () => {
+  const data = await page.evaluate(async () => {
     const db = await new Promise<IDBDatabase>((resolve, reject) => {
-      const r = indexedDB.open("fieldwork-onboarding", 1);
+      const r = indexedDB.open("fieldwork-onboarding");
       r.onsuccess = () => resolve(r.result);
       r.onerror = () => reject(r.error);
     });
-    try {
-      return await new Promise<State>((resolve, reject) => {
-        const r = db.transaction("state").objectStore("state").get("current");
+    const read = <T>(r: IDBRequest<T>) =>
+      new Promise<T>((resolve, reject) => {
         r.onsuccess = () => resolve(r.result);
         r.onerror = () => reject(r.error);
       });
+    try {
+      const stores = db.objectStoreNames.contains("viz-control")
+        ? ["state", "viz-control", "viz-recordings", "viz-frames"]
+        : ["state"];
+      const tx = db.transaction(stores);
+      const [raw, control, heads, frames, keys] = await Promise.all([
+        read(tx.objectStore("state").get("current")),
+        stores.length > 1
+          ? read(tx.objectStore("viz-control").get("current"))
+          : undefined,
+        stores.length > 1
+          ? read(tx.objectStore("viz-recordings").getAll())
+          : [],
+        stores.length > 1 ? read(tx.objectStore("viz-frames").getAll()) : [],
+        stores.length > 1
+          ? read(tx.objectStore("viz-frames").getAllKeys())
+          : [],
+      ]);
+      return { raw, control, heads, frames, keys };
     } finally {
       db.close();
     }
   });
+  if (!data.raw) return data.raw;
+  const frames = new Map<string, VisualFrame[]>();
+  data.frames.forEach((f, i) => {
+    const id = (data.keys[i] as [string, number])[0];
+    const list = frames.get(id) ?? [];
+    list.push(f);
+    frames.set(id, list);
+  });
+  return assembleStoredWorkspace(
+    data.raw as BusinessRow | State,
+    data.control as Control | undefined,
+    data.heads as Head[],
+    frames,
+  );
 }
 export async function synchronized(pages: Page[]) {
   await expect

@@ -133,7 +133,7 @@ it("keeps the global parent count during role/company filtering and reloads coun
   const beta = s.companies.find((company) => company.name === "Beta Work")!;
   const user = userEvent.setup();
   render(<App service={service} />);
-  await screen.findByRole("heading", { name: "Alpha Work" });
+  await screen.findByRole("heading", { name: "Beta Work" });
   const parent = screen.getByRole("button", { name: "Work queue" });
   await user.click(parent);
   expect(parent.getAttribute("aria-expanded")).toBe("true");
@@ -181,6 +181,7 @@ it("Operations exposes system work as deep links without execution or retry cont
     <OperationsWorkQueue
       state={state}
       participant="All"
+      executionRole="Recruitment"
       companyId=""
       service={testService(new IndexedDbRepository(`links-${id()}`))}
       run={run}

@@ -137,7 +137,7 @@ test("80-step synthetic layout fixture is compact, navigable and clearly identif
   // Test-only auxiliary visualization data, never submitted as business work.
   await monitor.evaluate(async (recording) => {
     const db = await new Promise<IDBDatabase>((resolve, reject) => {
-      const request = indexedDB.open("fieldwork-onboarding", 1);
+      const request = indexedDB.open("fieldwork-onboarding");
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });
@@ -145,14 +145,20 @@ test("80-step synthetic layout fixture is compact, navigable and clearly identif
       const tx = db.transaction("state", "readwrite"),
         store = tx.objectStore("state"),
         request = store.get("current");
-      request.onsuccess = () =>
+      request.onsuccess = () => {
+        const {
+          storageLayout: _layout,
+          observerExpected: _observer,
+          ...legacy
+        } = request.result;
         store.put(
           {
-            ...request.result,
+            ...legacy,
             viz: { version: 1, activeRecordingId: "", recordings: [recording] },
           },
           "current",
         );
+      };
       tx.oncomplete = () => resolve();
       tx.onerror = () => reject(tx.error);
     });
@@ -163,9 +169,22 @@ test("80-step synthetic layout fixture is compact, navigable and clearly identif
   await monitor
     .getByLabel("Recording", { exact: true })
     .selectOption(fixture.id);
+  await expect(monitor.getByTestId("remaining-Insurance")).toHaveText(
+    "2 remaining",
+  );
+  await expect(monitor.getByTestId("remaining-Finance")).toHaveText(
+    "16 remaining",
+  );
   await monitor
     .getByRole("button", { name: "Presentation view", exact: true })
     .click();
+  await expect(monitor.getByTestId("viz-canvas")).toHaveAttribute(
+    "data-fitting",
+    "false",
+  );
+  await monitor.screenshot({
+    path: testInfo.outputPath("viz-grouped-80-fixture.png"),
+  });
   await monitor
     .getByRole("button", { name: "Expand all", exact: true })
     .click();
