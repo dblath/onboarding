@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type { OnboardingService } from "./application";
 import { type Role, type State, type WorkItem } from "./domain";
 import { internalPersonas } from "./experiences";
@@ -67,24 +68,28 @@ export function OperationsQueueNavigation({
         hidden={!expanded}
       >
         {(["All", ...queueParticipants] as QueueParticipant[]).map((owner) => (
-          <button
-            key={owner}
-            aria-label={`${participantName(owner)} work`}
-            aria-pressed={participant === owner}
-            aria-describedby={`queue-count-${owner.replaceAll(" ", "-")}`}
-            onClick={() => onSelect(owner)}
-          >
-            <span>{participantName(owner)}</span>
-            <span
-              id={`queue-count-${owner.replaceAll(" ", "-")}`}
-              className="nav-count"
-              data-testid={`queue-count-${owner}`}
+          <Fragment key={owner}>
+            {owner === "Simulation" && <hr className="participant-divider" />}
+            <button
+              aria-label={`${participantName(owner)} work`}
+              aria-pressed={participant === owner}
+              aria-describedby={`queue-count-${owner.replaceAll(" ", "-")}`}
+              onClick={() => onSelect(owner)}
             >
-              {owner === "All"
-                ? tasks.length
-                : tasks.filter((task) => task.owner === owner).length}
-            </span>
-          </button>
+              <span className="participant-label">
+                {participantName(owner)}
+              </span>
+              <span
+                id={`queue-count-${owner.replaceAll(" ", "-")}`}
+                className="nav-count"
+                data-testid={`queue-count-${owner}`}
+              >
+                {owner === "All"
+                  ? tasks.length
+                  : tasks.filter((task) => task.owner === owner).length}
+              </span>
+            </button>
+          </Fragment>
         ))}
       </div>
     </div>

@@ -16,6 +16,12 @@ export const internalPersonas = [
   "Training",
 ] as const satisfies readonly Persona[];
 export type InternalPersona = (typeof internalPersonas)[number];
+// Presentation catalog only; system work retains its canonical Simulation owner.
+export const operationsParticipants = [
+  ...internalPersonas,
+  "Simulation",
+] as const;
+export type OperationsParticipant = (typeof operationsParticipants)[number];
 function readExperience(): Experience {
   const route = window.location.hash.slice(1).split("?")[0];
   return route === "/operations"

@@ -10,7 +10,7 @@ import {
   workspace,
 } from "./helpers";
 
-test("Operations discovers automations without executing them; deep links preserve preferences and publication updates three tabs", async ({
+test("Operations selects A&I without executing it; Monitor deep links preserve Operations preferences and publication updates three tabs", async ({
   context,
 }, testInfo) => {
   const contractor = await workspace(context, "contractor");
@@ -53,14 +53,14 @@ test("Operations discovers automations without executing them; deep links preser
   await operations
     .getByRole("button", { name: "Automations & Integrations work" })
     .click();
-  await expect(operations).toHaveURL(/#\/monitor\?view=automations&company=/);
-  await expect(operations.getByLabel("Automations company")).toHaveValue(
-    company.id,
-  );
-  await operations.goto("/#/operations");
+  await expect(operations).toHaveURL(/#\/operations$/);
   await expect(operations.getByLabel("Internal role")).toHaveValue(
-    preferences.role!,
+    "Simulation",
   );
+  await expect(
+    operations.getByRole("button", { name: "My active work", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(card(operations, "Publish contractor activation")).toBeVisible();
   expect(
     await operations.evaluate(() =>
       sessionStorage.getItem("fieldwork:operations:company"),

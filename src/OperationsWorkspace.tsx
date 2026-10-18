@@ -6,7 +6,7 @@ import {
   type ContractorCompany,
   type Activity,
 } from "./domain";
-import { type InternalPersona } from "./experiences";
+import { type OperationsParticipant } from "./experiences";
 import {
   contractorJourney,
   contractorOwner,
@@ -17,6 +17,7 @@ import {
   OperationsWorkQueue,
   type QueueParticipant,
   openWork,
+  participantName,
 } from "./OperationsWorkQueue";
 import { LifecycleStatus } from "./LifecycleStatus";
 import { EligibilityGuidance } from "./EligibilityGuidance";
@@ -83,7 +84,7 @@ function CompanyRecord({
 }: {
   state: State;
   company: ContractorCompany;
-  role: InternalPersona;
+  role: OperationsParticipant;
   service: OnboardingService;
   run: Run;
   busy: boolean;
@@ -399,7 +400,7 @@ export function OperationsWorkspace({
   busy,
 }: {
   state: State;
-  role: InternalPersona;
+  role: OperationsParticipant;
   companies: ContractorCompany[];
   company?: ContractorCompany;
   scope: "active" | "all";
@@ -415,6 +416,7 @@ export function OperationsWorkspace({
   busy: boolean;
 }) {
   const [listOpen, setListOpen] = useState(false);
+  const roleName = participantName(role);
   const attention = operationsAttention(state, role),
     owned = state.workItems.filter(
       (t) =>
@@ -435,8 +437,8 @@ export function OperationsWorkspace({
             <div>
               <h2>All outstanding work</h2>
               <p>
-                Global discovery. Your current execution role is {role}; other
-                teams' work is read-only.
+                Global discovery. Your current execution role is {roleName};
+                other teams' work is read-only.
               </p>
             </div>
             <button className="secondary" onClick={() => onParticipant(role)}>
@@ -522,7 +524,7 @@ export function OperationsWorkspace({
                     <span className="ops-company-task">
                       {first
                         ? businessActivityLabel(first.activity)
-                        : `No open ${role} work`}
+                        : `No open ${roleName} work`}
                     </span>
                     <small>
                       {first
@@ -539,7 +541,7 @@ export function OperationsWorkspace({
             </div>
             {!companies.length && (
               <div className="ops-list-empty">
-                <strong>No active work for {role}.</strong>
+                <strong>No active work for {roleName}.</strong>
                 <p>
                   {state.companies.length
                     ? "Other teams may still be working. Explore company records when you need to."
@@ -551,7 +553,7 @@ export function OperationsWorkspace({
               </div>
             )}
             <p className="ops-list-note">
-              Counts here are Open {role} work only. The Work queue badge
+              Counts here are Open {roleName} work only. The Work queue badge
               includes all participants.
             </p>
           </section>
@@ -593,9 +595,15 @@ export function OperationsWorkspace({
                   <div className="ops-section-heading">
                     <h3>Your actions</h3>
                     <span data-testid="queue-visible-count">
-                      {owned.length} open for {role}
+                      {owned.length} open for {roleName}
                     </span>
                   </div>
+                  {role === "Simulation" && owned.length > 0 && (
+                    <p className="muted">
+                      Simulation · user-triggered only. No external services are
+                      called; selecting a company never runs an activity.
+                    </p>
+                  )}
                   {owned.map((t) => (
                     <div
                       className="queue-item"
@@ -611,13 +619,14 @@ export function OperationsWorkspace({
                         run={run}
                         busy={busy}
                         operationsView
+                        automationExecution={role === "Simulation"}
                       />
                     </div>
                   ))}
                   {!owned.length && (
                     <div className="ops-no-actions">
                       <strong>
-                        No {role} action is needed for this company.
+                        No {roleName} action is needed for this company.
                       </strong>
                       <p>{model.summary}</p>
                       {model.others.length > 0 && (
@@ -639,34 +648,36 @@ export function OperationsWorkspace({
                     </div>
                   )}
                 </section>
-                {openWork(state).filter(
-                  (t) => t.companyId === company.id && t.owner === "Simulation",
-                ).length > 0 && (
-                  <div className="ops-automation-note" role="note">
-                    <strong>
-                      {model.ready
-                        ? "Ready for activation"
-                        : "Automation needs attention"}
-                    </strong>
-                    <p>
-                      {model.ready
-                        ? "All requirements are complete. Contractor activation is awaiting publication by Operations."
-                        : "Company setup includes a pending test integration. Execution is in Workflow Monitor."}
-                    </p>
-                    <a
-                      href={automationLink(
-                        company.id,
-                        openWork(state).find(
-                          (t) =>
-                            t.companyId === company.id &&
-                            t.owner === "Simulation",
-                        )?.id,
-                      )}
-                    >
-                      Open Automations & Integrations
-                    </a>
-                  </div>
-                )}
+                {role !== "Simulation" &&
+                  openWork(state).filter(
+                    (t) =>
+                      t.companyId === company.id && t.owner === "Simulation",
+                  ).length > 0 && (
+                    <div className="ops-automation-note" role="note">
+                      <strong>
+                        {model.ready
+                          ? "Ready for activation"
+                          : "Automation needs attention"}
+                      </strong>
+                      <p>
+                        {model.ready
+                          ? "All requirements are complete. Contractor activation is awaiting publication by Operations."
+                          : "Company setup includes a pending test integration. Select Automations & Integrations to run it here, or open Workflow Monitor."}
+                      </p>
+                      <a
+                        href={automationLink(
+                          company.id,
+                          openWork(state).find(
+                            (t) =>
+                              t.companyId === company.id &&
+                              t.owner === "Simulation",
+                          )?.id,
+                        )}
+                      >
+                        Open Automations & Integrations
+                      </a>
+                    </div>
+                  )}
                 <CompanyRecord
                   key={company.id}
                   state={state}
@@ -688,7 +699,7 @@ export function OperationsWorkspace({
                 <h2>
                   {companies.length
                     ? "Choose the next company to work with"
-                    : `You're caught up, ${role}`}
+                    : `You're caught up, ${roleName}`}
                 </h2>
                 <p>
                   {companies.length

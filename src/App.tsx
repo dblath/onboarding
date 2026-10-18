@@ -13,8 +13,8 @@ import { useWorkspace } from "./useWorkspace";
 import {
   useExperience,
   experienceNames,
-  internalPersonas,
-  type InternalPersona,
+  operationsParticipants,
+  type OperationsParticipant,
 } from "./experiences";
 import {
   approvedSkills,
@@ -22,7 +22,7 @@ import {
   isJobEligible,
   readinessChecks,
   skillCatalog,
-  type Persona,
+  type Role,
 } from "./domain";
 import { TaskCard, type Run } from "./TaskCard";
 import { WorkflowMonitor } from "./WorkflowMonitor";
@@ -102,15 +102,15 @@ export function App({
     name: string;
     email: string;
   } | null>(null);
-  const [internalPersona, setInternalPersona] = useState<InternalPersona>(
+  const [internalPersona, setInternalPersona] = useState<OperationsParticipant>(
     () => {
       const saved = sessionStorage.getItem("fieldwork:operations:role");
-      return internalPersonas.includes(saved as InternalPersona)
-        ? (saved as InternalPersona)
+      return operationsParticipants.includes(saved as OperationsParticipant)
+        ? (saved as OperationsParticipant)
         : "Recruitment";
     },
   );
-  const persona: Persona =
+  const persona: Role | "Workflow Monitor" =
     experience === "contractor"
       ? "Contractor"
       : experience === "monitor"
@@ -339,15 +339,12 @@ export function App({
     internalPersona,
   ]);
   function chooseParticipant(participant: QueueParticipant) {
-    if (participant === "Simulation") {
-      window.location.hash = automationLink(queueCompany).slice(1);
-      return;
-    }
     setQueueParticipant(participant);
-    if (internalPersonas.includes(participant as InternalPersona)) {
-      setInternalPersona(participant as InternalPersona);
+    if (operationsParticipants.includes(participant as OperationsParticipant)) {
+      setInternalPersona(participant as OperationsParticipant);
       sessionStorage.setItem("fieldwork:operations:role", participant);
     }
+    if (participant === "Simulation") chooseNetworkScope("active");
     setView("Work queue");
     setCreating(false);
     setNotice("");
@@ -552,7 +549,7 @@ export function App({
         </nav>
         <div className="aside-bottom">
           <span className="live-dot" /> Browser-local workspace
-          <p>Iteration 3.13 · UX cleanup</p>
+          <p>Iteration 3.14 · Operations participants</p>
         </div>
       </aside>
       <div className="main">
@@ -577,16 +574,13 @@ export function App({
                 id="persona"
                 value={internalPersona}
                 onChange={(e) => {
-                  const role = e.target.value as InternalPersona;
-                  setInternalPersona(role);
-                  setQueueParticipant(role);
-                  sessionStorage.setItem("fieldwork:operations:role", role);
-                  setView("Work queue");
-                  setNotice("");
+                  chooseParticipant(e.target.value as OperationsParticipant);
                 }}
               >
-                {internalPersonas.map((p) => (
-                  <option key={p}>{p}</option>
+                {operationsParticipants.map((p) => (
+                  <option key={p} value={p}>
+                    {p === "Simulation" ? "Automations & Integrations" : p}
+                  </option>
                 ))}
               </select>
             </div>
@@ -623,7 +617,7 @@ export function App({
                     {allMyTasks.length} open action
                     {allMyTasks.length === 1 ? "" : "s"}
                   </strong>{" "}
-                  for {internalPersona} ·{" "}
+                  for {participantName(internalPersona)} ·{" "}
                   {networkScope === "active"
                     ? "My active work"
                     : "All companies"}

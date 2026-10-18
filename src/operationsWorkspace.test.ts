@@ -21,5 +21,19 @@ it("groups only Open owned tasks by company across workflow roots, without chang
   expect(
     operationsAttention(state, "Training").every((r) => r.count === 0),
   ).toBe(true);
+  const automations = operationsAttention(state, "Simulation").filter(
+    (r) => r.count,
+  );
+  expect(automations.map((r) => [r.company.name, r.count])).toEqual([
+    ["Sierra Services", 1],
+  ]);
+  expect(automations[0].work.map((t) => t.activity)).toEqual([
+    "PublishActivation",
+  ]);
+  expect(
+    automations.every((r) =>
+      r.work.every((t) => t.owner === "Simulation" && t.status === "Open"),
+    ),
+  ).toBe(true);
   expect(JSON.stringify(state)).toBe(before);
 });

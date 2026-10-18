@@ -91,6 +91,22 @@
 }
 .experience-operations .operations-queue-navigation [role="group"] button {
   font-size: 11px;
+  text-align: left;
+  align-items: center;
+}
+.experience-operations .operations-queue-navigation .participant-label {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  white-space: normal;
+}
+.experience-operations .operations-queue-navigation .nav-count {
+  flex-shrink: 0;
+}
+.experience-operations .participant-divider {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 8px 6px;
 }
 .operations-product {
   min-width: 0;

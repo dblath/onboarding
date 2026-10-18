@@ -49,7 +49,9 @@ export function TaskCard({
       action,
       operationsView
         ? message.includes("Timeout")
-          ? "The verification service did not respond. Retry is available in Workflow Monitor."
+          ? automationExecution
+            ? "The verification service did not respond. Retry this action here or in Workflow Monitor."
+            : "The verification service did not respond. Retry is available in Workflow Monitor."
           : t.activity === "ScreenApplication"
             ? "Application decision saved. Your work list has been updated."
             : t.activity === "ConfirmTraining"
@@ -232,8 +234,9 @@ export function TaskCard({
                 <>
                   <strong>Verification failed — retry available</strong>
                   <p>
-                    Waiting for external service. Review the attempt and retry
-                    in Workflow Monitor.
+                    {automationExecution
+                      ? "The test service did not respond. Retry the same action here or in Workflow Monitor; completed work is preserved."
+                      : "Waiting for external service. Review the attempt and retry in Workflow Monitor."}
                   </p>
                 </>
               ) : (

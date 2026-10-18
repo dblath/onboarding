@@ -90,9 +90,14 @@ export async function systemActivities(page: Page) {
       exact: true,
     })
     .click();
-  await expect(
-    page.getByRole("region", { name: "Automations & Integrations" }),
-  ).toBeVisible();
+  await expect(page).toHaveURL(/#\/operations$/);
+  await expect(page.getByLabel("Internal role")).toHaveValue("Simulation");
+  // Explicit test choice after switching participants; the product never substitutes a stale company.
+  if (
+    (await page.locator(".ops-company-row.selected").count()) === 0 &&
+    (await page.locator(".ops-company-row").count()) > 0
+  )
+    await page.locator(".ops-company-row").first().click();
 }
 export async function application(
   page: Page,
