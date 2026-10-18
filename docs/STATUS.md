@@ -110,9 +110,9 @@ The 3.10 readable local review file is **523,278 bytes** (about 511 KiB): 5 comp
 
 - Repository onboarding, C:\Users\david\Documents\Repositories\onboarding; branch main/upstream origin/main; fetch/push https://github.com/dblath/onboarding.git.
 - Starting published tip: 21470f980260dcbe8bedf30d28d6459dcc84230f. Previous 3.10 implementation: c559f3c0717abca69d30c90d465208edef8908e3.
-- 3.11 commit/push pending final checks. No reset, force-push, reinitialization, credentials or deployment.
+- **3.11 implementation 0a88ce4a0b22b52ebdcf5889f935f9b905817ac1 committed and pushed on 2026-10-18.** Local HEAD matched GitHub refs/heads/main; tree was clean and branch/upstream main...origin/main. This publication record is a documentation-only follow-up; final tip is in delivery and the local Chet handoff. No reset, force-push, reinitialization, credentials or deployment.
 - Current changes are presentation components/helpers, narrow CTA CSS, tests, package version and docs. Domain/use cases/workflow transitions, persistence, recorder/pinned definitions and original branding assets remain untouched. Session/credential matching behavior unchanged despite UI copy changes in ContractorAccess.
-- Chet material is excluded through .git/info/exclude and never tracked. Verify clean tree/local-remote SHA agreement and stopped temporary server after publication.
+- Prettier and staged/working diff checks passed. Chet material is excluded through .git/info/exclude and no Chet files are tracked. Temporary test preview stopped; no listener on 4173/5174, port 5173 untouched. HomeItem remains clean/read-only. Final clean tree/local-remote SHA agreement is rechecked after this publication record.
 - Original Unity PNG SHA256: 88ef0146e47c4f25fbb95372945eca19b65e6598c7a8a43a8eb39a5af337d1a1. Logo, wordmark, fonts, theme and favicons unchanged.
 - Docs: current STATUS/README, presentation-language, Operations/Contractor design notes, observer/workspace/recording/shared-browser and domain/process/event/rule catalogs. Detailed report/screenshots/acceptance remain local-only under docs/chet.
 
