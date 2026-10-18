@@ -112,9 +112,9 @@ The retained scale test passed again in 3.13: 25 companies/50 recordings/650 fra
 
 - Repository onboarding: C:\Users\david\Documents\Repositories\onboarding; main/upstream origin/main; origin fetch/push https://github.com/dblath/onboarding.git.
 - Starting accepted/published tip: d0602299f1ae726b327b48a57477ffb360bdcad2. Previous 3.12 implementation: 546e17c0c17425b0db68debe8626ef6488c9a053.
-- 3.13 commit/push pending final checks. Changes: bounded UX/selection, scoped colors, tests/fixtures, package version and docs. No domain/workflow/persistence/observer contracts or original branding changes.
+- **3.13 implementation a02b719ac36906013730338eb64fca6b67c48f65 committed and pushed on 2026-10-18.** Local HEAD, origin/main and GitHub refs/heads/main matched; tree was clean. This publication record is a documentation-only follow-up; final tip is reported in delivery and the local Chet handoff. Changes: bounded UX/selection, colors, tests/fixtures, package version and docs. No domain/workflow/persistence/observer contracts or original branding changes.
 - docs/chet is excluded by .git/info/exclude and has no tracked files. Full Chet report, review material and four before/after screenshot pairs remain local-only under docs/chet/iteration-3.13.
-- Final formatting, remote/local SHA/clean tree and listener checks follow publication. No force-push, credentials, history replacement, deployment or persistent server. Manual app uses 5174 --strictPort; 5173 remains reserved for David.
+- Formatting and staged/working diff checks passed. Temporary preview stopped; no listener remained on 4173/5174. Remote/local SHA and clean tree are rechecked after this publication record. No force-push, credentials, history replacement, deployment or persistent server. Manual app uses 5174 --strictPort; 5173 was untouched and remains reserved for David.
 
 ## 8. Manual acceptance and next work
 
