@@ -46,6 +46,14 @@
 .experience-contractor .title-row {
   margin-bottom: 20px;
 }
+.experience-contractor .landing-intro-space {
+  height: 45px;
+}
+@media (max-width: 560px) {
+  .experience-contractor .landing-intro-space {
+    height: 57px;
+  }
+}
 .experience-contractor .title-row h1 {
   font-family: inherit;
   font-weight: 650;
@@ -87,6 +95,9 @@
 }
 .contractor-product {
   min-width: 0;
+}
+.contractor-company-activity + .contractor-journey {
+  margin-top: 28px;
 }
 .contractor-company {
   display: flex;

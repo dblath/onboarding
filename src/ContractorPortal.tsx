@@ -159,6 +159,31 @@ export function ContractorPortal({
         </button>
       </form>
     );
+  const growth = (additional.length > 0 || skillRequest) && (
+    <section
+      className="contractor-company-activity"
+      aria-label="Separate company activities"
+    >
+      <div className="contractor-section-heading">
+        <div>
+          <h2>Grow your company's skills</h2>
+          <p>Additional qualifications don't reopen completed onboarding.</p>
+        </div>
+      </div>
+      {additional.map((q) => (
+        <div className="contractor-record-row" key={q.id}>
+          <strong>{q.skill}</strong>
+          <span
+            className={`contractor-status ${q.status === "Approved" ? "complete" : ["Rejected", "Invalidated", "Correction required"].includes(q.status) ? "correction" : "waiting"}`}
+          >
+            {q.status}
+          </span>
+          {q.reason && <p>{q.reason}</p>}
+        </div>
+      ))}
+      {skillRequest}
+    </section>
+  );
   return (
     <div className="contractor-product" key={c.id}>
       <div className="contractor-company">
@@ -319,6 +344,7 @@ export function ContractorPortal({
         </section>
       ) : (
         <>
+          {historical && growth}
           <section
             className="contractor-journey"
             aria-label="Onboarding journey"
@@ -383,33 +409,7 @@ export function ContractorPortal({
               ))}
             </div>
           </section>
-          {(additional.length > 0 || skillRequest) && (
-            <section
-              className="contractor-company-activity"
-              aria-label="Separate company activities"
-            >
-              <div className="contractor-section-heading">
-                <div>
-                  <h2>Grow your company's skills</h2>
-                  <p>
-                    Additional qualifications don't reopen completed onboarding.
-                  </p>
-                </div>
-              </div>
-              {additional.map((q) => (
-                <div className="contractor-record-row" key={q.id}>
-                  <strong>{q.skill}</strong>
-                  <span
-                    className={`contractor-status ${q.status === "Approved" ? "complete" : ["Rejected", "Invalidated", "Correction required"].includes(q.status) ? "correction" : "waiting"}`}
-                  >
-                    {q.status}
-                  </span>
-                  {q.reason && <p>{q.reason}</p>}
-                </div>
-              ))}
-              {skillRequest}
-            </section>
-          )}
+          {!historical && growth}
         </>
       )}
       <section

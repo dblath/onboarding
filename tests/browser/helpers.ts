@@ -45,7 +45,10 @@ export async function nav(page: Page, name: string) {
   }
   await page
     .getByRole("navigation")
-    .getByRole("button", { name, exact: true })
+    .getByRole("button", {
+      name: name === "Demo Workspace" ? "Workspace" : name,
+      exact: true,
+    })
     .click();
   if (page.url().includes("#/monitor") && name === "Workflow monitor") {
     await page.evaluate(() => {

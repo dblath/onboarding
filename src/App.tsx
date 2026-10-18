@@ -1,4 +1,11 @@
-import { lazy, Suspense, useEffect, useState, type FormEvent } from "react";
+import {
+  Fragment,
+  lazy,
+  Suspense,
+  useEffect,
+  useState,
+  type FormEvent,
+} from "react";
 
 import type { OnboardingService } from "./application";
 import { createBrowserService } from "./runtime";
@@ -238,7 +245,9 @@ export function App({
             Outbox: "Messages",
           } as Partial<Record<View, string>>
         )[v] ?? v)
-      : v;
+      : v === "Demo Workspace"
+        ? "Workspace"
+        : v;
   const writeDisabled = busy || Boolean(service.unavailableReason);
   const run: Run = async (action, message) => {
     if (service.unavailableReason) {
@@ -449,77 +458,83 @@ export function App({
                   onSelect={chooseParticipant}
                 />
               ) : (
-                <button
-                  key={v}
-                  aria-label={viewName(v)}
-                  aria-current={view === v && !creating ? "page" : undefined}
-                  className={view === v && !creating ? "nav-active" : ""}
-                  onClick={() => {
-                    setView(v);
-                    if (experience === "monitor") {
-                      const workflowId =
-                        monitorWorkflow ||
-                        state.workflows.find(
-                          (w) =>
-                            w.companyId === c?.id &&
-                            w.definitionId === "CompanyOnboarding",
-                        )?.id ||
-                        "";
-                      if (v === "Journey Map")
-                        window.location.hash = journeyMapLink(
-                          c?.id,
-                          workflowId,
-                        ).slice(1);
-                      else if (v === "Automations & Integrations")
-                        window.location.hash = automationLink(
-                          c?.id,
-                          "",
-                          workflowId,
-                        ).slice(1);
-                      else {
-                        const query = new URLSearchParams({
-                          view:
-                            v === "Workflow monitor"
-                              ? "onboarding"
-                              : v === "Outbox"
-                                ? "messages"
-                                : v === "Recording Triggers"
-                                  ? "triggers"
-                                  : "workspace",
-                        });
-                        if (c?.id) query.set("company", c.id);
-                        if (workflowId) query.set("workflow", workflowId);
-                        window.location.hash = `#/monitor?${query}`;
+                <Fragment key={v}>
+                  {experience === "monitor" &&
+                    v === "Automations & Integrations" && (
+                      <hr className="monitor-nav-divider" />
+                    )}
+                  <button
+                    aria-label={viewName(v)}
+                    aria-current={view === v && !creating ? "page" : undefined}
+                    className={view === v && !creating ? "nav-active" : ""}
+                    onClick={() => {
+                      // Monitor mounts its next view only after the matching hash context arrives.
+                      if (experience !== "monitor") setView(v);
+                      if (experience === "monitor") {
+                        const workflowId =
+                          monitorWorkflow ||
+                          state.workflows.find(
+                            (w) =>
+                              w.companyId === c?.id &&
+                              w.definitionId === "CompanyOnboarding",
+                          )?.id ||
+                          "";
+                        if (v === "Journey Map")
+                          window.location.hash = journeyMapLink(
+                            c?.id ?? selected,
+                            workflowId,
+                          ).slice(1);
+                        else if (v === "Automations & Integrations")
+                          window.location.hash = automationLink(
+                            c?.id,
+                            "",
+                            workflowId,
+                          ).slice(1);
+                        else {
+                          const query = new URLSearchParams({
+                            view:
+                              v === "Workflow monitor"
+                                ? "onboarding"
+                                : v === "Outbox"
+                                  ? "messages"
+                                  : v === "Recording Triggers"
+                                    ? "triggers"
+                                    : "workspace",
+                          });
+                          if (c?.id) query.set("company", c.id);
+                          if (workflowId) query.set("workflow", workflowId);
+                          window.location.hash = `#/monitor?${query}`;
+                        }
                       }
-                    }
-                    setCreating(false);
-                    setNotice("");
-                  }}
-                >
-                  <span>
-                    {
+                      setCreating(false);
+                      setNotice("");
+                    }}
+                  >
+                    <span className="nav-icon">
                       {
-                        Overview: "▦",
-                        "Work queue": "☷",
-                        "Journey Map": "◎",
-                        "Recording Triggers": "⊕",
-                        "Demo Workspace": "⇄",
-                        "Workflow monitor": "☷",
-                        "Automations & Integrations": "↗",
-                        Outbox: "◫",
-                      }[v]
-                    }
-                  </span>
-                  <span>{viewName(v)}</span>
-                  {v === "Automations & Integrations" && (
-                    <span className="nav-count">
-                      {pendingAutomations(state).length}
+                        {
+                          Overview: "▦",
+                          "Work queue": "☷",
+                          "Journey Map": "◎",
+                          "Recording Triggers": "⊕",
+                          "Demo Workspace": "⇄",
+                          "Workflow monitor": "☷",
+                          "Automations & Integrations": "↗",
+                          Outbox: "◫",
+                        }[v]
+                      }
                     </span>
-                  )}
-                  {v === "Work queue" && (
-                    <span className="nav-count">{allMyTasks.length}</span>
-                  )}
-                </button>
+                    <span className="nav-label">{viewName(v)}</span>
+                    {v === "Automations & Integrations" && (
+                      <span className="nav-count">
+                        {pendingAutomations(state).length}
+                      </span>
+                    )}
+                    {v === "Work queue" && (
+                      <span className="nav-count">{allMyTasks.length}</span>
+                    )}
+                  </button>
+                </Fragment>
               ),
             )
           )}
@@ -537,7 +552,7 @@ export function App({
         </nav>
         <div className="aside-bottom">
           <span className="live-dot" /> Browser-local workspace
-          <p>Iteration 3.12 · Monitor the onboarding</p>
+          <p>Iteration 3.13 · UX cleanup</p>
         </div>
       </aside>
       <div className="main">
@@ -640,33 +655,39 @@ export function App({
               </p>
             </div>
           )}
-          {showLegacyTitle(experience, anonymous) && (
-            <div className="title-row">
-              <div>
-                <div className="eyebrow">A STRONG NETWORK STARTS HERE</div>
-                <h1>
-                  {persona === "Contractor"
-                    ? anonymous
-                      ? "Your next chapter starts here."
-                      : "Your company. Your next step."
-                    : persona === "Workflow Monitor"
-                      ? "Every step, in view."
-                      : "Good people. Great partnerships."}
-                </h1>
-                <p className="subtitle">
-                  {persona === "Contractor"
-                    ? "One company. Independent skills. A clear path to your first job."
-                    : persona === "Workflow Monitor"
-                      ? view === "Automations & Integrations"
-                        ? "Run test integrations and review actions that need attention."
-                        : "Watch business events resume durable waits and schedule the next activity."
-                      : view === "Work queue"
-                        ? `${participantName(queueParticipant)} work. Review outstanding actions across companies.`
-                        : `Your ${persona.toLowerCase()} workspace. Complete an action and see the process move.`}
-                </p>
+          {showLegacyTitle(experience, anonymous) &&
+            (!creating ? (
+              <div
+                className="title-row landing-intro-space"
+                aria-hidden="true"
+              />
+            ) : (
+              <div className="title-row">
+                <div>
+                  <div className="eyebrow">A STRONG NETWORK STARTS HERE</div>
+                  <h1>
+                    {persona === "Contractor"
+                      ? anonymous
+                        ? "Your next chapter starts here."
+                        : "Your company. Your next step."
+                      : persona === "Workflow Monitor"
+                        ? "Every step, in view."
+                        : "Good people. Great partnerships."}
+                  </h1>
+                  <p className="subtitle">
+                    {persona === "Contractor"
+                      ? "One company. Independent skills. A clear path to your first job."
+                      : persona === "Workflow Monitor"
+                        ? view === "Automations & Integrations"
+                          ? "Run test integrations and review actions that need attention."
+                          : "Watch business events resume durable waits and schedule the next activity."
+                        : view === "Work queue"
+                          ? `${participantName(queueParticipant)} work. Review outstanding actions across companies.`
+                          : `Your ${persona.toLowerCase()} workspace. Complete an action and see the process move.`}
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
+            ))}
           {!anonymous && experience !== "contractor" && (
             <div className="stats">
               <div>
@@ -898,7 +919,9 @@ export function App({
                 busy={writeDisabled}
               />
             </Suspense>
-          ) : experience === "monitor" && view === "Journey Map" ? (
+          ) : experience === "monitor" &&
+            view === "Journey Map" &&
+            routeContext.journey ? (
             <VizBoundary key={state.workspaceEpoch ?? "original"}>
               <Suspense
                 fallback={
@@ -913,7 +936,12 @@ export function App({
                   companyId={routeContext.companyId}
                   workflowId={routeContext.workflowId}
                   recordingId={routeContext.recordingId}
-                  onContext={(companyId, workflowId, recordingId) => {
+                  onContext={(
+                    companyId,
+                    workflowId,
+                    recordingId,
+                    allCompanies = false,
+                  ) => {
                     setSelected(companyId);
                     setMonitorWorkflow(workflowId);
                     sessionStorage.setItem(
@@ -921,8 +949,8 @@ export function App({
                       companyId,
                     );
                     window.location.hash = journeyMapLink(
-                      companyId,
-                      workflowId,
+                      allCompanies ? "" : companyId,
+                      allCompanies ? "" : workflowId,
                       recordingId,
                     ).slice(1);
                   }}

@@ -1,5 +1,15 @@
 # Workflow Monitor — Iteration 3.12
 
+## Iteration 3.13 cleanup
+
+The 3.12 business-first structure below remains accepted. The existing Demo Workspace left-nav destination is labelled **Workspace**, retaining view=workspace and all portable-state functionality. Automations & Integrations aligns with peer labels; one actual separator follows the existing onboarding entry. No duplicate links.
+
+`recordingSelection.ts` resolves actual availability: prefer matching workflow, then another capture for the same company; never an unrelated company fallback. A missing explicit/remembered identity stays unavailable. A company without capture offers “No recordings for this company” and All companies; “No recordings yet” is reserved for a globally empty collection. All capture sources/statuses remain selectable.
+
+Defaults are pinned once in the presentation URL so the existing epoch-keyed renderer remount cannot adopt another workspace's recording. Explicit choices use epoch/company/workflow preferences in tab-local sessionStorage, excluded from exports. Monitor mounts a destination after matching route context arrives and gates Journey Map by its actual route; an old-context default cannot overwrite navigation. Selection does not execute capture/business commands or move another tab. Invalid previous company selection remains explicit on return to Viz.
+
+Recording-browser/information/control/history surfaces, selected rows, lanes and completed-node illumination use blue/slate. Genuine success icons/badges/completed edges remain green; waits/errors retain amber/red. Original logo/wordmark, canvas geometry and recording contracts are unchanged. See [actual evidence](STATUS.md).
+
 Monitor starts with an operational picture of onboarding. Contractor helps a company complete its work; Operations helps human teams act; Monitor explains progress and attention. Automations & Integrations executes explicit test integrations/retries/publication. Journey Map / Viz visualizes actual recordings. These are presentation responsibilities, not security boundaries.
 
 ## Business overview and journey selection

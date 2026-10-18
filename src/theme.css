@@ -240,6 +240,53 @@ label {
 .aside-bottom p {
   color: #afc0ce;
 }
+/* Neutral information surfaces and selection are blue/slate, never success washes. */
+.lifecycle-grid,
+.event-path,
+.callout,
+.response,
+.add-skill,
+pre,
+.empty-icon {
+  background: var(--surface-2);
+  border-color: var(--line);
+}
+.lifecycle-grid dt,
+.event-path small,
+.event-path > span,
+.monitor-metrics span,
+.correlation dt,
+.correlation dd,
+.attempt p,
+.wait-row small {
+  color: var(--muted);
+}
+.lifecycle-grid dd {
+  color: var(--text);
+}
+.history-kind,
+.history-kind.Rule,
+.history-kind.Event {
+  background: var(--soft);
+  color: var(--accent);
+}
+.timeline li,
+.monitor-metrics {
+  border-color: var(--line);
+}
+.timeline li::before {
+  background: var(--accent);
+}
+.automation-item:focus,
+.automation-selected {
+  outline-color: var(--accent);
+}
+.operations-queue-navigation [role="group"] {
+  border-color: #385064;
+}
+.checkbox input {
+  accent-color: var(--accent);
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

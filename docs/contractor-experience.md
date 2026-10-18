@@ -1,5 +1,7 @@
 # Contractor experience — Iteration 3.9
 
+Iteration 3.13 retains this design and its business behavior. For completed onboarding, the existing Grow your company's skills section/form now precedes history, after company identity/current eligibility. Ready + Active visibility, skill choices and independent qualification commands remain. In-progress layout is unchanged. Anonymous landing removes the duplicate page heading/subtitle and reserves its original introductory footprint; the main-panel introduction/sign-in/CTA remain, and starting an application retains its contextual heading. Original Unity assets/wordmark and semantic status colors are unchanged. See [current evidence](STATUS.md).
+
 The signed-in Contractor Portal answers: where does my company stand, what do I need to do, and who is working next? It presents existing facts and commands; it is not a new workflow projection or a new source of truth.
 
 ## HomeItem reference, read-only

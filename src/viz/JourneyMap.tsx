@@ -30,6 +30,12 @@ import type { Run } from "../TaskCard";
 import { originatingEvents, originWorkflow } from "./recorder";
 import { recordingStatus } from "./triggers";
 import { RecordingBrowser } from "./RecordingBrowser";
+import {
+  recordingSelection,
+  rememberedRecording,
+  rememberRecording,
+} from "./recordingSelection";
+import { journeyMapLink } from "../presentation";
 import { groupProgress } from "./groupProgress";
 import type {
   MapNode,
@@ -446,9 +452,9 @@ function Canvas({
                       width={width}
                       height={height}
                       rx="16"
-                      fill={["#edf7f5", "#eef3fa", "#f5f0f9", "#fcf5e9"][i]}
+                      fill={["#edf3f9", "#f1f5f9", "#eaf2f9", "#f4f7fa"][i]}
                       fillOpacity=".7"
-                      stroke={["#d4e8e1", "#d7e1ed", "#e6dbee", "#ecdfc7"][i]}
+                      stroke={["#d4e0ec", "#d7e1ed", "#cdddeb", "#d8e2ec"][i]}
                     />
                     <text
                       x={x + 15}
@@ -502,10 +508,11 @@ export default function JourneyMap({
     companyId: string,
     workflowId: string,
     recordingId: string,
+    allCompanies?: boolean,
   ) => void;
 }) {
   const [originChoice, setOriginChoice] = useState("");
-  const [viewedId, setViewedId] = useState("");
+  const [viewed, setViewed] = useState({ key: "", scope: "", id: "" });
   const [index, setIndex] = useState<number | null>(null);
   const [selected, setSelected] = useState("");
   const [collapsed, setCollapsed] = useState(() => new Set(groups));
@@ -514,48 +521,48 @@ export default function JourneyMap({
   const [playing, setPlaying] = useState(false);
   const [pace, setPace] = useState(1600);
   const recordings = state.viz?.recordings ?? [];
-  const resolvedRequest = useRef("");
-  const requested = recordingId
-    ? recordings.find(
-        (r) =>
-          r.id === recordingId &&
-          (!companyId || r.companyId === companyId) &&
-          (!workflowId || r.workflowId === workflowId),
-      )
-    : companyId
-      ? recordings
-          .filter(
-            (r) =>
-              r.companyId === companyId &&
-              (!workflowId || r.workflowId === workflowId),
-          )
-          .at(-1)
-      : undefined;
+  const pinnedDefault = useRef("");
+  const context = { companyId, workflowId, recordingId };
+  const viewScope = JSON.stringify([companyId, workflowId, recordingId]);
+  const viewKey = JSON.stringify([
+    state.workspaceEpoch ?? "original",
+    companyId,
+    workflowId,
+    recordingId,
+  ]);
+  const chosenId =
+    viewed.scope === viewScope && viewed.id
+      ? viewed.id
+      : rememberedRecording(state, context);
+  const { recording, placeholder, unavailable, companyRecordings } =
+    recordingSelection(state, context, chosenId);
   useEffect(() => {
-    if (companyId || recordingId) {
-      const key = `${state.workspaceEpoch ?? "original"}:${companyId}:${workflowId}:${recordingId}`;
-      if (resolvedRequest.current === key) return;
-      setViewedId(requested?.id ?? "__unavailable_recording__");
+    if (viewed.key !== viewKey || (!viewed.id && recording)) {
+      // Preserve an unavailable binding across replacement; never adopt another company silently.
+      setViewed({
+        key: viewKey,
+        scope: viewScope,
+        id: recording?.id ?? chosenId,
+      });
       setIndex(null);
       setSelected("");
       setPlaying(false);
-      if (requested) resolvedRequest.current = key;
     }
-  }, [companyId, workflowId, recordingId, requested?.id, state.workspaceEpoch]);
+  }, [viewKey, viewScope, chosenId, recording?.id, viewed.key, viewed.id]);
   useEffect(() => {
-    // Bind the initial view once. A manual start in another tab must not move it.
-    if (!companyId && !recordingId && !viewedId && recordings.length)
-      setViewedId(state.viz?.activeRecordingId || recordings[0].id);
-  }, [
-    viewedId,
-    recordings,
-    state.viz?.activeRecordingId,
-    companyId,
-    recordingId,
-  ]);
-  const recording = recordings.find(
-    (r) => r.id === (viewedId || state.viz?.activeRecordingId),
-  );
+    // Pin an available default in the URL before the renderer can remount on
+    // workspace replacement. An All companies browser keeps its global scope.
+    const identity = `${viewKey}:${recording?.id ?? ""}`;
+    if (recording && !recordingId && pinnedDefault.current !== identity) {
+      pinnedDefault.current = identity;
+      onContext?.(
+        recording.companyId,
+        recording.workflowId,
+        recording.id,
+        !companyId,
+      );
+    }
+  }, [viewKey, recording?.id, recordingId, companyId, onContext]);
   const currentIndex = recording
     ? index === null
       ? recording.frames.length - 1
@@ -595,11 +602,18 @@ export default function JourneyMap({
   );
   function chooseRecording(id: string) {
     setPlaying(false);
-    setViewedId(id);
+    setViewed({ key: viewKey, scope: viewScope, id });
     setIndex(null);
     setSelected("");
     const next = recordings.find((r) => r.id === id);
-    if (next) onContext?.(next.companyId, next.workflowId, next.id);
+    if (next) {
+      rememberRecording(
+        state,
+        { companyId: next.companyId, workflowId: next.workflowId },
+        next.id,
+      );
+      onContext?.(next.companyId, next.workflowId, next.id);
+    }
   }
   function toggle(group: string) {
     setCollapsed((previous) => {
@@ -613,7 +627,7 @@ export default function JourneyMap({
       className={`viz-workspace${large ? " viz-presentation" : ""}`}
       aria-label="Journey Map"
     >
-      {(companyId || recordingId) && !requested && (
+      {unavailable && (
         <p role="status">
           The linked recording is unavailable for this journey. Choose an
           existing recording or capture point below; no recording was created or
@@ -696,8 +710,14 @@ export default function JourneyMap({
                 (event) => event.eventId === originChoice,
               );
               const workflow = origin && originWorkflow(state, origin);
-              if (origin && workflow)
+              if (origin && workflow) {
+                rememberRecording(
+                  state,
+                  { companyId: origin.companyId, workflowId: workflow.id },
+                  id,
+                );
                 onContext?.(origin.companyId, workflow.id, id);
+              }
             }, "Journey tracking started at Frame 0. Earlier visual history has not been reconstructed.")
           }
         >
@@ -711,7 +731,7 @@ export default function JourneyMap({
             onChange={(e) => chooseRecording(e.target.value)}
           >
             <option value="" disabled>
-              No recordings yet
+              {placeholder}
             </option>
             {recordings.map((r, i) => (
               <option key={r.id} value={r.id}>
@@ -720,6 +740,11 @@ export default function JourneyMap({
               </option>
             ))}
           </select>
+          {companyId && !companyRecordings.length && recordings.length > 0 && (
+            <a className="viz-all-companies" href={journeyMapLink()}>
+              All companies
+            </a>
+          )}
         </label>
       </div>
       <RecordingBrowser

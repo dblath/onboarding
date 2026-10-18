@@ -12,7 +12,10 @@ import { card, signIn, snapshot, synchronized, workspace } from "./helpers";
 async function navigate(page: Page, name: string) {
   await page
     .getByRole("navigation")
-    .getByRole("button", { name, exact: true })
+    .getByRole("button", {
+      name: name === "Demo Workspace" ? "Workspace" : name,
+      exact: true,
+    })
     .click();
 }
 async function load(page: Page, file: WorkspaceFile) {

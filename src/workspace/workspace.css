@@ -9,12 +9,12 @@
   gap: 12px 24px;
   padding: 12px 0;
   margin-bottom: 14px;
-  border-block: 1px solid #e0e9e6;
+  border-block: 1px solid var(--line);
   color: #637b80;
   font-size: 12px;
 }
 .workspace-metrics strong {
-  color: #285347;
+  color: var(--text);
   margin-right: 5px;
   font-size: 18px;
 }
@@ -39,15 +39,15 @@
   gap: 14px;
 }
 .workspace-scenarios article {
-  border: 1px solid #dce6e2;
+  border: 1px solid var(--line);
   border-radius: 10px;
   padding: 16px;
-  background: #f8fbf9;
+  background: var(--surface-2);
 }
 .workspace-scenarios h4 {
   margin: 0;
   font-size: 14px;
-  color: #31574b;
+  color: var(--text);
 }
 .workspace-scenarios p {
   min-height: 65px;
@@ -63,9 +63,9 @@
   max-height: 85vh;
   overflow: auto;
   padding: 26px;
-  border: 1px solid #bfcfc8;
+  border: 1px solid var(--line-strong);
   border-radius: 14px;
-  color: #29473e;
+  color: var(--text);
   box-shadow: 0 20px 80px #153b4530;
 }
 .demo-workspace dialog::backdrop {
