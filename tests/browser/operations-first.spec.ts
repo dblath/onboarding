@@ -95,7 +95,7 @@ test("work-first Operations covers Recruitment, Compliance, correction, empty ro
   });
   const verification = card(ops, "Review insurance");
   await verification
-    .getByRole("button", { name: "Run simulated verification →", exact: true })
+    .getByRole("button", { name: "Run test verification →", exact: true })
     .click();
   await expect(verification).toHaveCount(0);
   await expect(ops.getByTestId("queue-visible-count")).toHaveText(

@@ -160,7 +160,10 @@ for (const capability of ["locks", "BroadcastChannel"] as const) {
       "Web Locks and BroadcastChannel",
     );
     await expect(
-      page.getByRole("button", { name: "＋ New application" }),
+      page.getByRole("button", {
+        name: "Start a new application",
+        exact: false,
+      }),
     ).toBeDisabled();
     await expect(page.getByTestId("sync-status")).toContainText(
       "Writes disabled",

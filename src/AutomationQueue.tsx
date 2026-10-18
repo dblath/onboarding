@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import type { OnboardingService } from "./application";
 import type { State } from "./domain";
 import { TaskCard, type Run } from "./TaskCard";
-import { activityLabel, simulationMessage } from "./presentation";
+import { businessActivityLabel, businessMessage } from "./presentation";
 import { LifecycleStatus } from "./LifecycleStatus";
 
 export const pendingAutomations = (state: State) =>
@@ -64,9 +64,9 @@ export function AutomationQueue({
         <span className="pill neutral">{pending.length} pending</span>
       </div>
       <p>
-        <strong>Simulation · user-triggered only.</strong> No external services
-        are called. Run a pending action or retry a failed attempt explicitly;
-        nothing executes automatically.
+        <strong>Demo integrations · user-triggered only.</strong> No external
+        services are called. Run a pending action or retry a failed attempt
+        explicitly; nothing executes automatically.
       </p>
       <label>
         Automations company
@@ -130,7 +130,7 @@ export function AutomationQueue({
           <p className="muted">
             {latest(t.id)?.status === "Failed"
               ? `Attempt ${latest(t.id)!.attempt} failed. Retry the same action.`
-              : "Awaiting your simulated run; no external request is in progress."}
+              : "Awaiting your test run; no external request is in progress."}
           </p>
           <TaskCard
             task={t}
@@ -159,12 +159,12 @@ export function AutomationQueue({
           >
             <strong>
               {state.companies.find((c) => c.id === t.companyId)?.name} ·{" "}
-              {activityLabel(t.activity)}
+              {businessActivityLabel(t.activity)}
             </strong>
             <p>
               {t.status}
               {latest(t.id)?.status === "Succeeded"
-                ? " · Simulated integration succeeded"
+                ? " · Test integration succeeded"
                 : ""}
             </p>
             {state.attempts
@@ -172,9 +172,7 @@ export function AutomationQueue({
               .map((a) => (
                 <p key={a.id}>
                   Attempt {a.attempt}: {a.status} ·{" "}
-                  {simulationMessage(
-                    a.technicalError ?? a.businessOutcome ?? "",
-                  )}
+                  {businessMessage(a.technicalError ?? a.businessOutcome ?? "")}
                 </p>
               ))}
           </div>

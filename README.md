@@ -1,8 +1,10 @@
-# Unity fieldwork - Contractor onboarding, Iteration 3.10
+# Unity fieldwork - Contractor onboarding, Iteration 3.11
 
 End-to-end product discovery prototype: contractor application, screening, administrative approvals, independent skill qualification, vendor provisioning, portal, training, readiness and activation. Browser-only persistence and simulated integrations. Simulated company sign-in uses the application email and password 123. No backend, real authentication or live services.
 
 Unity branding uses the complete original logo across all three experiences. The square favicons add transparent padding and preserve its proportions. See [asset derivations](public/assets/README.md) and [branding acceptance](docs/acceptance-branding.md). Current verification, including the corrected asynchronous count-test wait, is recorded in [STATUS](docs/STATUS.md).
+
+Iteration 3.11 polishes the accepted Contractor/Operations design: prominent environment strips are removed, anonymous application has one main CTA, sign-in uses visible Email/Password labels, and Request qualification is a solid blue primary action with its existing Ready + Active rule. Normal UI uses business/demo/test language; discreet environment/storage information remains in the footer. Original historical records remain faithful in explicit technical inspection. No business, workflow, recording, persistence, login behavior, logo or wordmark changes. See [presentation boundaries](docs/presentation-language.md).
 
 Historical onboarding completion, current readiness and operational status are separate. Job eligibility requires Ready AND Active. Restoring qualifications never removes a suspension. [Operations queue acceptance](docs/acceptance-3.3.md) / [Iteration 3.2 UX acceptance](docs/acceptance-3.2.md) / [Lifecycle acceptance](docs/acceptance-3.1.md) · [Current status](docs/STATUS.md).
 

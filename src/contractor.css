@@ -498,6 +498,11 @@
   flex: 1;
   margin: 0;
 }
+.contractor-skill-request > .primary {
+  min-height: 44px;
+  padding: 12px 20px;
+  flex-shrink: 0;
+}
 .contractor-section-note,
 .contractor-empty-note {
   font-size: 13px;

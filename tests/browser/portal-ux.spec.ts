@@ -21,7 +21,9 @@ test("anonymous application confirms before login; failed credentials, reload an
     path: testInfo.outputPath("contractor-anonymous.png"),
     fullPage: true,
   });
-  await contractor.getByRole("button", { name: "＋ New application" }).click();
+  await contractor
+    .getByRole("button", { name: "Start a new application", exact: false })
+    .click();
   await contractor
     .getByLabel("Fictional company name")
     .fill("Summit Portal Demo");
@@ -33,33 +35,27 @@ test("anonymous application confirms before login; failed credentials, reload an
   await expect(
     contractor.getByRole("heading", { name: "Application submitted" }),
   ).toBeVisible();
-  await expect(contractor.getByLabel("Application email")).toHaveValue(
-    "alex@example.com",
-  );
+  await expect(contractor.getByLabel("Email")).toHaveValue("alex@example.com");
   await expect(contractor.getByTestId("lifecycle-onboarding")).toHaveCount(0);
   await expect(
     contractor.getByRole("button", { name: "Required actions" }),
   ).toHaveCount(0);
   await expect(card(operations, "Review application")).toBeVisible();
   const submitted = await snapshot(operations);
-  await contractor
-    .getByLabel("Simulation password", { exact: true })
-    .fill("wrong");
+  await contractor.getByLabel("Password", { exact: true }).fill("wrong");
   await contractor
     .getByRole("button", { name: "Sign In", exact: true })
     .click();
   await expect(contractor.getByRole("alert")).toContainText(
-    "Incorrect simulation password",
+    "Incorrect password",
   );
   expect(
     await contractor.evaluate(() =>
       sessionStorage.getItem("fieldwork:contractor:session"),
     ),
   ).toBeNull();
-  await contractor.getByLabel("Application email").fill("unknown@example.com");
-  await contractor
-    .getByLabel("Simulation password", { exact: true })
-    .fill("123");
+  await contractor.getByLabel("Email").fill("unknown@example.com");
+  await contractor.getByLabel("Password", { exact: true }).fill("123");
   await contractor
     .getByRole("button", { name: "Sign In", exact: true })
     .click();
@@ -121,8 +117,8 @@ test("duplicate emails require a company choice; independent contractor tabs nev
   await application(first, "Beta Company");
   await application(first, "Other Company", "other@example.com");
   await first.getByRole("button", { name: "Sign Out" }).click();
-  await first.getByLabel("Application email").fill("alex@example.com");
-  await first.getByLabel("Simulation password", { exact: true }).fill("123");
+  await first.getByLabel("Email").fill("alex@example.com");
+  await first.getByLabel("Password", { exact: true }).fill("123");
   await first.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(
     first.getByRole("heading", { name: "Choose your company" }),

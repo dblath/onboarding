@@ -86,7 +86,12 @@ export async function application(
   name = "Summit Three Tabs",
   email = "alex@example.com",
 ) {
-  await page.getByRole("button", { name: "＋ New application" }).click();
+  const apply = page.getByRole("button", {
+    name: "Start a new application",
+    exact: false,
+  });
+  if (await apply.isVisible()) await apply.click();
+  else await page.getByRole("button", { name: "＋ New application" }).click();
   await page.getByLabel("Fictional company name").fill(name);
   await page.getByLabel("Contact name").fill("Alex Demo");
   await page.getByLabel("Application email").fill(email);
@@ -99,8 +104,8 @@ export async function application(
   await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
 }
 export async function signIn(page: Page, email: string, companyName?: string) {
-  await page.getByLabel("Application email").fill(email);
-  await page.getByLabel("Simulation password", { exact: true }).fill("123");
+  await page.getByLabel("Email", { exact: true }).fill(email);
+  await page.getByLabel("Password", { exact: true }).fill("123");
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   if (
     await page.getByRole("heading", { name: "Choose your company" }).isVisible()
@@ -162,9 +167,7 @@ export async function evidence(
 }
 export async function verify(page: Page, activity: string) {
   const task = card(page, activity);
-  await task
-    .getByRole("button", { name: "Run simulated verification →" })
-    .click();
+  await task.getByRole("button", { name: "Run test verification →" }).click();
   await expect(task).toHaveCount(0);
 }
 export async function completion(page: Page, activity: string, button: string) {
@@ -252,7 +255,7 @@ export async function initialReadiness(
   for (const name of [
     "Submit insurance evidence",
     "Submit fictional tax / banking pack",
-    "Submit simulated agreement",
+    "Submit contractor agreement",
     "Submit license evidence",
   ])
     await evidence(contractor, name);
@@ -262,7 +265,7 @@ export async function initialReadiness(
   await role(operations, "Finance");
   await verify(operations, "Verify fictional financial pack");
   await role(operations, "Contractor Relations");
-  await verify(operations, "Execute simulated agreement");
+  await verify(operations, "Review contractor agreement");
   await systemActivities(operations);
   await card(operations, "Create vendor record")
     .getByRole("button", { name: "Create vendor record →" })
@@ -282,7 +285,7 @@ export async function initialReadiness(
   await expect(decision).toHaveCount(0);
   await completion(
     contractor,
-    "Complete simulated portal setup",
+    "Complete company profile",
     "Complete portal setup →",
   );
   await completion(

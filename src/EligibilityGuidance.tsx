@@ -1,4 +1,4 @@
-import { activityLabel, automationLink } from "./presentation";
+import { businessActivityLabel, automationLink } from "./presentation";
 import {
   isJobEligible,
   isReady,
@@ -73,7 +73,7 @@ export function EligibilityGuidance({
   const action = (task: (typeof tasks)[number]) => (
     <li key={task.id}>
       <span>
-        {actionNames[task.activity] ?? activityLabel(task.activity)} —{" "}
+        {actionNames[task.activity] ?? businessActivityLabel(task.activity)} —{" "}
         <strong>{ownerName(task.owner)}</strong>
       </span>
       {!contractorView && task.owner === "Simulation" ? (

@@ -25,6 +25,56 @@ export function simulationMessage(message: string) {
   return labels[message] ?? message;
 }
 
+/** UI-only vocabulary. Legacy helpers above also feed immutable Viz recordings;
+ * keep their output stable. Never apply this adapter to company names or free text. */
+export function businessText(text: string) {
+  return text
+    .replace(/\bsimulated\b/gi, (word) =>
+      word[0] === word[0].toUpperCase() ? "Test" : "test",
+    )
+    .replace(/\bsimulation(?:-only)?\b/gi, (word) =>
+      word[0] === word[0].toUpperCase() ? "Test" : "test",
+    )
+    .replace(/\bdemo document\b/gi, "sample document")
+    .replace(/\bdemo pack\b/gi, "sample pack");
+}
+
+export const businessActivityLabel = (activity: Activity) => {
+  const labels: Partial<Record<Activity, string>> = {
+    SubmitAgreement: "Submit contractor agreement",
+    ExecuteAgreement: "Review contractor agreement",
+    SetupPortal: "Complete company profile",
+  };
+  return labels[activity] ?? businessText(activityLabel(activity));
+};
+
+/** Exact system outcomes only; user decisions, reasons and names remain verbatim. */
+export function businessMessage(message: string): string {
+  const known = simulationMessage(message);
+  if (known !== message) return businessText(known);
+  if (
+    /^(?:Simulated|Test) (?:integration timeout|timeout|verification passed)/i.test(
+      message,
+    )
+  )
+    return businessText(message);
+  if (
+    /^Review (?:insurance|financial|agreement) evidence v\d+ using the simulated verifier\.$/i.test(
+      message,
+    )
+  )
+    return businessText(message);
+  const waiting = /^(Waiting for [^.]+\. )(.+)$/s.exec(message);
+  if (waiting) return waiting[1] + businessMessage(waiting[2]);
+  if (
+    /^(?:Reminder: .+ is overdue\.|Escalation: .+ has overdue work — .+\.|Reminder sent in-app to .+: .+|Escalated overdue .+ to Contractor Relations)$/.test(
+      message,
+    )
+  )
+    return businessText(message);
+  return message;
+}
+
 export function automationLink(companyId = "", activityId = "") {
   const query = new URLSearchParams({ view: "automations" });
   if (companyId) query.set("company", companyId);

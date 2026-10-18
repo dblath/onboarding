@@ -25,7 +25,7 @@ import { groups, areaColors, layoutGroups } from "./layout";
 import { compactLabel, edgeStatus, frameStory } from "./story";
 import type { State } from "../domain";
 import type { OnboardingService } from "../application";
-import { automationLink } from "../presentation";
+import { automationLink, businessText, businessMessage } from "../presentation";
 import type { Run } from "../TaskCard";
 import { originatingEvents, originWorkflow } from "./recorder";
 import { recordingStatus } from "./triggers";
@@ -77,7 +77,7 @@ function JourneyNodeCard({ data }: NodeProps<JourneyNode>) {
       key={data.changed ? data.frameNumber : "steady"}
       className={`viz-node ${data.model.kind} ${data.visual.status}${data.selected ? " selected" : ""}${data.changed ? " changed" : ""}`}
       data-changed={!!data.changed}
-      title={`${data.model.label} — ${visualLabel(data.visual)}${data.progress ? ` · ${data.progress}. Unfinished applicable activity stages on this recorded route; correction stages count once. Future decisions can add work.` : ""}`}
+      title={`${businessText(data.model.label)} — ${visualLabel(data.visual)}${data.progress ? ` · ${data.progress}. Unfinished applicable activity stages on this recorded route; correction stages count once. Future decisions can add work.` : ""}`}
       style={
         {
           "--area-color": areaColors[data.model.group],
@@ -99,7 +99,7 @@ function JourneyNodeCard({ data }: NodeProps<JourneyNode>) {
       </span>
       {data.count ? (
         <span className="viz-group-label">
-          <strong>{data.model.label}</strong>
+          <strong>{businessText(data.model.label)}</strong>
           <small data-testid={`remaining-${data.model.group}`}>
             {data.progress}
           </small>
@@ -208,7 +208,7 @@ function diagram(
           frameNumber: frame.number,
           selected: selected === model.id,
         },
-        ariaLabel: `${model.label}, ${statusLabels[status]}, ${groupProgress(r.definition, frame, group).label}, ${members.length} steps${visual.satisfied !== undefined ? `, ${visual.satisfied} of ${visual.total} prerequisites complete` : ""}`,
+        ariaLabel: `${businessText(model.label)}, ${statusLabels[status]}, ${groupProgress(r.definition, frame, group).label}, ${members.length} steps${visual.satisfied !== undefined ? `, ${visual.satisfied} of ${visual.total} prerequisites complete` : ""}`,
         focusable: true,
       });
       members.forEach((n) => replacement.set(n.id, model.id));
@@ -225,7 +225,7 @@ function diagram(
             frameNumber: frame.number,
             selected: selected === model.id,
           },
-          ariaLabel: `${model.label}, ${visualLabel(frame.nodes[model.id])}, ${model.owner}`,
+          ariaLabel: `${businessText(model.label)}, ${visualLabel(frame.nodes[model.id])}, ${businessText(model.owner)}`,
           focusable: true,
         });
         replacement.set(model.id, model.id);
@@ -589,9 +589,7 @@ export default function JourneyMap({
             up.
           </p>
         </div>
-        <span className="viz-disclosure">
-          Simulation · recorded business execution
-        </span>
+        <span className="viz-disclosure">Recorded business execution</span>
       </div>
       <div className="viz-selectors">
         <label>
@@ -801,7 +799,13 @@ export default function JourneyMap({
           <div className="viz-frame-caption">
             <span>{index === null ? "LATEST CAPTURE" : "RECORDED STATE"}</span>
             <strong data-testid="viz-frame-cause">
-              {frame.causes.map((c) => c.label).join(" · ")}
+              {frame.causes
+                .map((c) =>
+                  c.kind === "attempt"
+                    ? businessText(c.label)
+                    : businessMessage(c.label),
+                )
+                .join(" · ")}
             </strong>
             <small>
               Revision {frame.revision} ·{" "}
@@ -819,13 +823,13 @@ export default function JourneyMap({
             >
               <div>
                 <h3>{story.title}</h3>
-                <p>{story.explanation}</p>
+                <p>{businessMessage(story.explanation)}</p>
                 {story.next.length > 0 && (
                   <p>
                     <strong>Next: </strong>
                     {story.next
                       .slice(0, 2)
-                      .map((n) => `${n.label} — ${n.owner}`)
+                      .map((n) => `${businessText(n.label)} — ${n.owner}`)
                       .join("; ")}
                     {story.next.length > 2
                       ? `; +${story.next.length - 2} parallel actions`
@@ -968,7 +972,7 @@ export default function JourneyMap({
                           >
                             {icons[frame.nodes[n.id].status]}
                           </span>
-                          {n.label}
+                          {businessText(n.label)}
                           <small>
                             {groupProgress(
                               recording.definition,
@@ -989,7 +993,7 @@ export default function JourneyMap({
                       {selectedModel.kind} ·{" "}
                       {live ? "LIVE" : `FRAME ${currentIndex}`}
                     </span>
-                    <h3>{selectedModel.label}</h3>
+                    <h3>{businessText(selectedModel.label)}</h3>
                     <span
                       className={`viz-detail-status ${selectedVisual.status}`}
                     >
@@ -998,13 +1002,17 @@ export default function JourneyMap({
                     </span>
                     <dl>
                       <dt>Responsible participant</dt>
-                      <dd>{selectedModel.owner}</dd>
+                      <dd>{businessText(selectedModel.owner)}</dd>
                       <dt>
                         {selectedVisual.satisfied !== undefined
                           ? `${selectedVisual.satisfied} satisfied · ${selectedVisual.total! - selectedVisual.satisfied} outstanding`
                           : "What’s happening"}
                       </dt>
-                      <dd>{selectedVisual.explanation}</dd>
+                      <dd>
+                        {selectedModel.activity === "ProvideInformation"
+                          ? selectedVisual.explanation
+                          : businessMessage(selectedVisual.explanation)}
+                      </dd>
                     </dl>
                     {selectedVisual.outstanding?.length ? (
                       <ul>
@@ -1046,6 +1054,13 @@ export default function JourneyMap({
                     )}
                     <details>
                       <summary>Events & execution references</summary>
+                      <pre data-raw-records="Recorded step">
+                        {JSON.stringify(
+                          { definition: selectedModel, state: selectedVisual },
+                          null,
+                          2,
+                        )}
+                      </pre>
                       <p>
                         {recording.definition.workflowName} v
                         {recording.definition.workflowVersion} · adapter{" "}
@@ -1060,7 +1075,7 @@ export default function JourneyMap({
                           <div key={e.eventId}>
                             <strong>{e.eventType}</strong>
                             <small>
-                              {e.actor} · {e.eventId}
+                              {businessText(e.actor)} · {e.eventId}
                             </small>
                           </div>
                         ))
@@ -1103,7 +1118,10 @@ export default function JourneyMap({
               independently
             </small>
           </div>
-          <details className="viz-recording-reference">
+          <details
+            className="viz-recording-reference"
+            data-raw-records="Recording references"
+          >
             <summary>Recording scope & causation</summary>
             <p>
               {recordingStatus(state, recording)} · {recording.originLabel} ·{" "}

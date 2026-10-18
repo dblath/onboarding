@@ -33,12 +33,14 @@ export function ContractorAccess({
   onSignIn,
   loading,
   onApply,
+  applicationDisabled = loading,
 }: {
   companies: Company[];
   submitted: { name: string; email: string } | null;
   onSignIn: (companyId: string) => void;
   loading: boolean;
   onApply: () => void;
+  applicationDisabled?: boolean;
 }) {
   const [email, setEmail] = useState(submitted?.email ?? "");
   const [password, setPassword] = useState("");
@@ -52,7 +54,7 @@ export function ContractorAccess({
     event.preventDefault();
     setError("");
     if (password !== "123") {
-      setError("Incorrect simulation password. Use 123.");
+      setError("Incorrect password. Use 123.");
       return;
     }
     const normalized = email.trim().toLowerCase();
@@ -83,8 +85,8 @@ export function ContractorAccess({
             Recruitment.
           </p>
           <p>
-            Sign in with <strong>{submitted.email}</strong> and simulation
-            password <strong>123</strong> to follow your journey.
+            Sign in with <strong>{submitted.email}</strong> and demo password{" "}
+            <strong>123</strong> to follow your journey.
           </p>
         </div>
       ) : (
@@ -96,7 +98,11 @@ export function ContractorAccess({
             company through the documents, qualifications and setup to get ready
             for work. One-person companies welcome.
           </p>
-          <button className="primary portal-marquee-cta" onClick={onApply}>
+          <button
+            className="primary portal-marquee-cta"
+            onClick={onApply}
+            disabled={applicationDisabled}
+          >
             Start a new application <span aria-hidden>→</span>
           </button>
           <p className="portal-first-step">
@@ -106,7 +112,7 @@ export function ContractorAccess({
         </div>
       )}
       <p className="demo-auth-note">
-        Simulation-only sign in. Any application email + password 123. No real
+        Demo sign-in. Use your application email and password 123. No real
         authentication, password storage or security boundary.
       </p>
       {error && (
@@ -165,7 +171,7 @@ export function ContractorAccess({
           <h3>Sign in to your company</h3>
           <div className="form-grid">
             <label>
-              Application email
+              Email
               <input
                 type="email"
                 required
@@ -175,7 +181,7 @@ export function ContractorAccess({
               />
             </label>
             <label>
-              Simulation password
+              Password
               <input
                 type="password"
                 required

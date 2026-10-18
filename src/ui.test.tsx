@@ -83,7 +83,7 @@ function card(name: string) {
 async function submitApplication() {
   render(<App service={service} />);
   const start = await screen.findByRole("button", {
-    name: "＋ New application",
+    name: "Start a new application",
   });
   await waitFor(() => expect(start.hasAttribute("disabled")).toBe(false));
   await user.click(start);
@@ -104,7 +104,7 @@ async function submitApplication() {
     screen.getByRole("button", { name: "Submit application →" }),
   );
   await screen.findByRole("heading", { name: "Application submitted" });
-  await user.type(screen.getByLabelText("Simulation password"), "123");
+  await user.type(screen.getByLabelText("Password"), "123");
   await user.click(screen.getByRole("button", { name: "Sign In" }));
   await screen.findByRole("heading", { name: "Summit UI Demo" });
 }
@@ -130,7 +130,7 @@ async function submitEvidence(label: string, fixture = "Valid demo document") {
 async function runReview(label: string) {
   const t = card(label);
   await user.click(
-    within(t).getByRole("button", { name: "Run simulated verification →" }),
+    within(t).getByRole("button", { name: "Run test verification →" }),
   );
   await waitFor(() => expect(t.isConnected).toBe(false));
 }
@@ -167,7 +167,7 @@ async function submitAdmin() {
   for (const label of [
     "Submit insurance evidence",
     "Submit fictional tax / banking pack",
-    "Submit simulated agreement",
+    "Submit contractor agreement",
   ])
     await submitEvidence(label);
 }
@@ -177,7 +177,7 @@ async function reviewAdmin() {
   await persona("Finance");
   await runReview("Verify fictional financial pack");
   await persona("Contractor Relations");
-  await runReview("Execute simulated agreement");
+  await runReview("Review contractor agreement");
 }
 async function systemActivities() {
   await persona("Workflow Monitor");
@@ -193,10 +193,7 @@ async function vendor() {
 }
 async function training() {
   await persona("Contractor");
-  await completeTask(
-    "Complete simulated portal setup",
-    "Complete portal setup →",
-  );
+  await completeTask("Complete company profile", "Complete portal setup →");
   await completeTask(
     "Complete initial training",
     "Complete initial training →",
@@ -236,11 +233,11 @@ describe("participant UI acceptance", () => {
     await qualify();
     await persona("Contractor");
     await submitEvidence("Submit insurance evidence");
-    await submitEvidence("Submit simulated agreement");
+    await submitEvidence("Submit contractor agreement");
     await persona("Compliance");
     await runReview("Review insurance");
     await persona("Contractor Relations");
-    await runReview("Execute simulated agreement");
+    await runReview("Review contractor agreement");
     await go("Overview");
     expect(
       screen.getByRole("heading", {
@@ -316,7 +313,7 @@ describe("participant UI acceptance", () => {
       screen.getByRole("button", { name: "Timer & escalation lab" }),
     );
     await user.click(screen.getByRole("button", { name: "Advance 3 days" }));
-    await screen.findByText(/Simulation clock advanced 3 days/);
+    await screen.findByText(/Test clock advanced 3 days/);
     await user.click(screen.getByRole("button", { name: "Advance 2 days" }));
     await waitFor(async () =>
       expect(

@@ -80,7 +80,7 @@ test("Operations discovers automations without executing them; deep links preser
   await expect(
     contractor
       .locator("#contractor-requirements")
-      .getByText("Simulated verification passed.", { exact: true }),
+      .getByText("Test verification passed.", { exact: true }),
   ).toHaveCount(3);
   await expect(contractor.getByTestId("eligibility-guidance")).toContainText(
     "awaiting publication",
@@ -129,7 +129,7 @@ test("Operations discovers automations without executing them; deep links preser
     monitor
       .getByTestId("automation-history-item")
       .filter({ hasText: "Publish contractor activation" }),
-  ).toContainText("Simulated integration succeeded");
+  ).toContainText("Test integration succeeded");
   await expect(
     monitor.getByRole("button", { name: "Publish contractor activation →" }),
   ).toHaveCount(0);
@@ -147,7 +147,7 @@ test("Monitor launches in automations, handles unavailable links and keeps diagn
     page.getByRole("region", { name: "Automations & Integrations" }),
   ).toBeVisible();
   await expect(
-    page.getByText("Simulation · user-triggered only."),
+    page.getByText("Demo integrations · user-triggered only."),
   ).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Correlation", exact: true }),

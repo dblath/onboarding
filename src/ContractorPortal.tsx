@@ -8,7 +8,11 @@ import {
   type OnboardingApplication,
 } from "./domain";
 import { TaskCard, type Run } from "./TaskCard";
-import { activityLabel, simulationMessage } from "./presentation";
+import {
+  businessActivityLabel,
+  businessMessage,
+  businessText,
+} from "./presentation";
 import {
   contractorJourney,
   contractorAction,
@@ -137,7 +141,7 @@ export function ContractorPortal({
             ))}
           </select>
         </label>
-        <button className="secondary" disabled={busy}>
+        <button className="primary" disabled={busy}>
           ＋ Request qualification
         </button>
       </form>
@@ -281,7 +285,7 @@ export function ContractorPortal({
             </h2>
           </div>
           <p className="contractor-section-note">
-            Simulated in-app notifications. No email or SMS is sent.
+            Demo in-app notifications. No email or SMS is sent.
           </p>
           {[...messages].reverse().map((m) => (
             <article className="contractor-message" key={m.id}>
@@ -290,7 +294,7 @@ export function ContractorPortal({
               >
                 {m.kind}
               </span>
-              <p>{simulationMessage(m.message)}</p>
+              <p>{businessMessage(m.message)}</p>
               <small>{date(m.at)}</small>
             </article>
           ))}
@@ -476,7 +480,7 @@ export function ContractorPortal({
                 >
                   {r.status}
                 </span>
-                {r.outcome && <p>{simulationMessage(r.outcome)}</p>}
+                {r.outcome && <p>{businessMessage(r.outcome)}</p>}
                 <small>
                   Review owner:{" "}
                   {r.type === "Insurance"
@@ -530,7 +534,7 @@ export function ContractorPortal({
         >
           {evidence.map((e) => (
             <div className="contractor-record-row" key={e.id}>
-              <strong>{e.description.replace(/\bdemo\b/g, "simulated")}</strong>
+              <strong>{businessText(e.description)}</strong>
               <span
                 className={`contractor-status ${e.verificationState === "Verified" ? "complete" : e.verificationState === "Correction required" ? "correction" : "waiting"}`}
               >
@@ -539,7 +543,7 @@ export function ContractorPortal({
               <small>
                 Version {e.version} · {date(e.submittedAt)}
               </small>
-              <p>{e.fixture.replace(/\bdemo\b/g, "simulated")}</p>
+              <p>{businessText(e.fixture)}</p>
             </div>
           ))}
           {!evidence.length && <p>No evidence submitted yet.</p>}
@@ -578,7 +582,7 @@ export function ContractorPortal({
             .filter((t) => t.companyId === c.id)
             .map((t) => (
               <div className="contractor-record-row" key={t.id}>
-                <strong>{activityLabel(t.activity)}</strong>
+                <strong>{businessActivityLabel(t.activity)}</strong>
                 <span
                   className={`contractor-status ${t.status === "Completed" ? "complete" : t.status === "Cancelled" ? "upcoming" : "waiting"}`}
                 >
@@ -588,7 +592,7 @@ export function ContractorPortal({
                   {contractorOwner(t.owner)} ·{" "}
                   {date(t.completedAt ?? t.cancelledAt ?? t.createdAt)}
                 </small>
-                {t.outcome && <p>{simulationMessage(t.outcome)}</p>}
+                {t.outcome && <p>{businessMessage(t.outcome)}</p>}
               </div>
             ))}
         </Disclosure>

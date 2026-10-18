@@ -34,10 +34,10 @@ import {
 import { EligibilityGuidance } from "./EligibilityGuidance";
 import { AutomationQueue, pendingAutomations } from "./AutomationQueue";
 import {
-  activityLabel,
+  businessActivityLabel,
   automationLink,
   monitorContext,
-  simulationMessage,
+  businessMessage,
 } from "./presentation";
 import "./style.css";
 import "./theme.css";
@@ -466,7 +466,7 @@ export function App({
         </nav>
         <div className="aside-bottom">
           <span className="live-dot" /> Browser-local workspace
-          <p>Iteration 3.10 · Operations first</p>
+          <p>Iteration 3.11 · Onboarding polish</p>
         </div>
       </aside>
       <div className="main">
@@ -564,33 +564,15 @@ export function App({
                       ? "One company. Independent skills. A clear path to your first job."
                       : persona === "Workflow Monitor"
                         ? view === "Automations & Integrations"
-                          ? "Run simulated integrations and review actions that need attention."
+                          ? "Run test integrations and review actions that need attention."
                           : "Watch business events resume durable waits and schedule the next activity."
                         : view === "Work queue"
                           ? `${participantName(queueParticipant)} work. Review outstanding actions across companies.`
                           : `Your ${persona.toLowerCase()} workspace. Complete an action and see the process move.`}
                   </p>
                 </div>
-                {persona === "Contractor" && (
-                  <button
-                    className="primary"
-                    disabled={writeDisabled || loading}
-                    onClick={() => setCreating(true)}
-                  >
-                    ＋ New application
-                  </button>
-                )}
               </div>
             )}
-          {experience !== "contractor" && (
-            <div className="demo-banner">
-              <span>
-                <b>SIMULATION</b> Fictional documents and integrations only. No
-                real financial or identity data.
-              </span>
-              {synchronizationStatus}
-            </div>
-          )}
           {!anonymous && experience !== "contractor" && (
             <div className="stats">
               <div>
@@ -646,7 +628,7 @@ export function App({
           )}
           {error && (
             <div role="alert" className="alert">
-              {simulationMessage(error)}
+              {businessMessage(error)}
             </div>
           )}
           {notice && (
@@ -740,6 +722,7 @@ export function App({
                 setCreating(true);
                 setNotice("");
               }}
+              applicationDisabled={writeDisabled || loading}
               loading={loading}
               onSignIn={(companyId) => {
                 contractorSession.signIn(companyId);
@@ -1158,9 +1141,7 @@ export function App({
                                     {r.status}
                                   </span>
                                   {r.outcome && (
-                                    <small>
-                                      {simulationMessage(r.outcome)}
-                                    </small>
+                                    <small>{businessMessage(r.outcome)}</small>
                                   )}
                                 </div>
                               ))}
@@ -1291,7 +1272,9 @@ export function App({
                               <div key={t.id}>
                                 <span className="work-symbol">○</span>
                                 <div>
-                                  <strong>{activityLabel(t.activity)}</strong>
+                                  <strong>
+                                    {businessActivityLabel(t.activity)}
+                                  </strong>
                                   <small>
                                     {experience === "contractor"
                                       ? "Action needed from you"
@@ -1398,7 +1381,7 @@ export function App({
                           </span>
                         </div>
                         <p className="muted">
-                          Simulated notifications only. No email or SMS is sent.
+                          Demo notifications only. No email or SMS is sent.
                         </p>
                         {[...messages].reverse().map((m) => (
                           <div className="outbox-message" key={m.id}>
@@ -1410,8 +1393,13 @@ export function App({
                             >
                               {m.kind}
                             </span>
-                            <strong>To {m.recipient}</strong>
-                            <p>{m.message}</p>
+                            <strong>
+                              To{" "}
+                              {m.recipient === "Simulation"
+                                ? "Operations"
+                                : m.recipient}
+                            </strong>
+                            <p>{businessMessage(m.message)}</p>
                             <small>
                               {new Date(m.at).toLocaleString()}
                               {m.workItemId
@@ -1426,13 +1414,13 @@ export function App({
                       view === "Workflow monitor" && (
                         <DiagnosticPanel title="Timer & escalation lab">
                           <p>
-                            Current simulation time:{" "}
+                            Current test time:{" "}
                             {new Date(state.clock).toLocaleString()}
                           </p>
                           <p>
-                            Human work is due after 2 simulation days. A
-                            reminder fires when due; escalation follows 2 days
-                            later. Advancing time does not complete work.
+                            Human work is due after 2 test days. A reminder
+                            fires when due; escalation follows 2 days later.
+                            Advancing time does not complete work.
                           </p>
                           <div className="button-row">
                             <button
@@ -1441,7 +1429,7 @@ export function App({
                               onClick={() =>
                                 run(
                                   () => service.advanceTime(3),
-                                  "Simulation clock advanced 3 days. Due reminders recorded in the outbox.",
+                                  "Test clock advanced 3 days. Due reminders recorded in the outbox.",
                                 )
                               }
                             >
@@ -1453,7 +1441,7 @@ export function App({
                               onClick={() =>
                                 run(
                                   () => service.advanceTime(2),
-                                  "Simulation clock advanced 2 days. Eligible escalations recorded in the outbox.",
+                                  "Test clock advanced 2 days. Eligible escalations recorded in the outbox.",
                                 )
                               }
                             >
@@ -1514,25 +1502,11 @@ export function App({
             </div>
           )}
           <footer>
-            {experience === "contractor" ? (
-              <>
-                <span>
-                  Fictional data · Simulated sign-in and integrations. No real
-                  authentication or external services.
-                </span>
-                {synchronizationStatus}
-              </>
-            ) : (
-              <>
-                <span>
-                  <span className="live-dot" /> Saved in this browser · Live
-                  across tabs
-                </span>
-                <span>
-                  Educational Temporal-style simulation · No external services
-                </span>
-              </>
-            )}
+            <span>
+              Demo environment · Sample data only · No real authentication or
+              external services.
+            </span>
+            {synchronizationStatus}
           </footer>
         </main>
       </div>

@@ -140,10 +140,10 @@ test("grouped activity counts reconcile with correction loops, failures and immu
   );
   await role(ops, "Compliance");
   const t = card(ops, "Review insurance");
-  await t.getByText("Simulation options", { exact: true }).click();
+  await t.getByText("Test outcomes", { exact: true }).click();
   await t.getByRole("checkbox").check();
   await t
-    .getByRole("button", { name: "Run simulated verification →", exact: true })
+    .getByRole("button", { name: "Run test verification →", exact: true })
     .click();
   await expect(t).toContainText("Verification failed — retry available");
   await expect(monitor.getByTestId("remaining-Insurance")).toHaveText(

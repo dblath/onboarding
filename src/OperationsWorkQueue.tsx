@@ -3,7 +3,11 @@ import { type Role, type State, type WorkItem } from "./domain";
 import { internalPersonas } from "./experiences";
 import { TaskCard, type Run } from "./TaskCard";
 
-import { activityLabel, automationLink } from "./presentation";
+import {
+  businessActivityLabel,
+  businessMessage,
+  automationLink,
+} from "./presentation";
 
 export const queueParticipants: Role[] = [
   ...internalPersonas,
@@ -147,11 +151,10 @@ export function OperationsWorkQueue({
         </div>
         {task.owner === "Simulation" ? (
           <article className="task-card">
-            <span className="pill neutral">Simulation</span>
-            <h3>{activityLabel(task.activity)}</h3>
+            <span className="pill neutral">Automation</span>
+            <h3>{businessActivityLabel(task.activity)}</h3>
             <p>
-              Pending simulated integration. Run this action in Workflow
-              Monitor.
+              Pending test integration. Run this action in Workflow Monitor.
             </p>
             <a href={automationLink(task.companyId, task.id)}>
               Open automation action
@@ -160,8 +163,8 @@ export function OperationsWorkQueue({
         ) : task.owner === "Contractor" ? (
           <article className="task-card">
             <span className="pill neutral">Contractor action</span>
-            <h3>{activityLabel(task.activity)}</h3>
-            <p>{task.instructions.replace(/\bdemo\b/g, "simulated")}</p>
+            <h3>{businessActivityLabel(task.activity)}</h3>
+            <p>{businessMessage(task.instructions)}</p>
             <p className="muted">
               The contractor completes this action in their signed-in company
               portal.
@@ -173,7 +176,7 @@ export function OperationsWorkQueue({
         ) : task.owner !== executionRole ? (
           <article className="task-card">
             <span className="pill neutral">{task.owner}</span>
-            <h3>{activityLabel(task.activity)}</h3>
+            <h3>{businessActivityLabel(task.activity)}</h3>
             <p>
               Owned by {task.owner}. Select that role to complete this work.
             </p>

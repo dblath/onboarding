@@ -76,7 +76,7 @@ test("three simultaneous experiences complete correction, independent branches a
   for (const name of [
     "Submit insurance evidence",
     "Submit fictional tax / banking pack",
-    "Submit simulated agreement",
+    "Submit contractor agreement",
   ])
     await evidence(contractor, name);
   await role(operations, "Compliance");
@@ -84,7 +84,7 @@ test("three simultaneous experiences complete correction, independent branches a
   await role(operations, "Finance");
   await verify(operations, "Verify fictional financial pack");
   await role(operations, "Contractor Relations");
-  await verify(operations, "Execute simulated agreement");
+  await verify(operations, "Review contractor agreement");
   // The contractor must never see worker controls even when shared state contains pending system work.
   await systemActivities(operations);
   await expect(card(operations, "Create vendor record")).toBeVisible();
@@ -99,7 +99,7 @@ test("three simultaneous experiences complete correction, independent branches a
     .click();
   await completion(
     contractor,
-    "Complete simulated portal setup",
+    "Complete company profile",
     "Complete portal setup →",
   );
   await completion(
@@ -282,11 +282,9 @@ test("failed activities retry from Monitor, persist on refresh and resume every 
   await evidence(contractor, "Submit license evidence");
   await role(operations, "Compliance");
   const task = card(operations, "Verify license");
-  await task.getByText("Simulation options", { exact: true }).click();
+  await task.getByText("Test outcomes", { exact: true }).click();
   await task.getByRole("checkbox").check();
-  await task
-    .getByRole("button", { name: "Run simulated verification →" })
-    .click();
+  await task.getByRole("button", { name: "Run test verification →" }).click();
   await nav(monitor, "Automations & Integrations");
   await expect(card(monitor, "Verify license")).toContainText(
     "Technical failure",

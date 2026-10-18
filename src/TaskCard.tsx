@@ -7,7 +7,12 @@ import {
   type State,
   type WorkItem,
 } from "./domain";
-import { activityLabel, automationLink } from "./presentation";
+import {
+  businessActivityLabel,
+  businessMessage,
+  businessText,
+  automationLink,
+} from "./presentation";
 export type Run = (
   action: () => Promise<unknown>,
   message: string,
@@ -78,7 +83,7 @@ export function TaskCard({
         checked={fail}
         onChange={(event) => setFail(event.target.checked)}
       />{" "}
-      Inject a simulated timeout on this attempt
+      Test a timeout on this attempt
     </label>
   );
   function form(
@@ -103,10 +108,8 @@ export function TaskCard({
           {t.owner === "Simulation" ? "Automations & Integrations" : t.owner}
         </span>
       </div>
-      <h3>{activityLabel(t.activity)}</h3>
-      <p className="task-instructions">
-        {t.instructions.replace(/\bdemo\b/g, "simulated")}
-      </p>
+      <h3>{businessActivityLabel(t.activity)}</h3>
+      <p className="task-instructions">{businessMessage(t.instructions)}</p>
       <div className="task-due">
         Due {new Date(t.dueAt).toLocaleDateString()}{" "}
         {t.escalatedAt ? (
@@ -117,7 +120,7 @@ export function TaskCard({
       </div>
       {evidence && (
         <div className="evidence-chip">
-          ▤ {evidence.fixture.replace(/\bdemo\b/g, "simulated")}{" "}
+          ▤ {businessText(evidence.fixture)}{" "}
           <small>
             v{evidence.version} · {evidence.verificationState}
           </small>
@@ -194,20 +197,18 @@ export function TaskCard({
               value={fixture}
               onChange={(e) => setFixture(e.target.value as EvidenceFixture)}
             >
-              <option value="Valid demo document">
-                Valid simulated document
-              </option>
+              <option value="Valid demo document">Valid sample document</option>
               <option value="Expired demo document">
-                Expired simulated document
+                Expired sample document
               </option>
               <option value="Incomplete demo document">
-                Incomplete simulated document
+                Incomplete sample document
               </option>
             </select>
           </label>
           <p className="muted">
-            Simulated document submission. No files or real financial details
-            are collected.
+            Sample document submission. No files or real financial details are
+            collected.
           </p>
           <button
             disabled={busy}
@@ -240,7 +241,9 @@ export function TaskCard({
                   <strong>
                     Technical failure · attempt {attempts.at(-1)!.attempt}
                   </strong>
-                  <p>{attempts.at(-1)!.technicalError}</p>
+                  <p>
+                    {businessMessage(attempts.at(-1)!.technicalError ?? "")}
+                  </p>
                   <p>
                     The work item remains open. Completed work is preserved.
                   </p>
@@ -249,7 +252,7 @@ export function TaskCard({
             </div>
           ) : operationsView ? (
             <details className="ops-simulation-options">
-              <summary>Simulation options</summary>
+              <summary>Test outcomes</summary>
               {timeoutControl}
             </details>
           ) : (
@@ -273,7 +276,7 @@ export function TaskCard({
                     ? "Retry completed. See the activity result and next work."
                     : fail
                       ? "Timeout recorded. The workflow is waiting for a retry."
-                      : "Simulated outcome delivered to the workflow.",
+                      : "Test outcome recorded. See the result and next action.",
                 )
               }
             >
@@ -283,7 +286,7 @@ export function TaskCard({
                   ? "Create vendor record"
                   : t.activity === "PublishActivation"
                     ? "Publish contractor activation"
-                    : "Run simulated verification"}{" "}
+                    : "Run test verification"}{" "}
               →
             </button>
           )}
@@ -340,7 +343,7 @@ export function TaskCard({
             {t.activity === "SetupPortal"
               ? "I have configured the fictional portal profile."
               : t.activity === "CompleteTraining"
-                ? "I have completed the simulated safety, job acceptance and network induction."
+                ? "I have completed the demo safety, job acceptance and network induction."
                 : "I confirm the contractor completed the initial induction."}
           </label>
           <button disabled={busy} className="primary">

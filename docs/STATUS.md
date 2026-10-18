@@ -1,14 +1,14 @@
 # Unity fieldwork implementation status and context handoff
 
-**Executive summary — Iteration 3.10: Onboarding Operations First. 2026-10-17, America/Denver. Package 0.3.11.**
+**Executive summary — Iteration 3.11: Onboarding UX Polish. 2026-10-18, America/Denver. Package 0.3.12.**
 
-Operations now leads with the selected role's companies and actual actions. My active work lists only companies with Open work owned by that role, across company and skill workflow roots. Selecting a company immediately exposes its existing forms. Completing its last owned action removes it and clears the stale selection without choosing another company. All companies remains explicit investigation; global Work queue totals still include every participant.
+The accepted 3.10 role-first Operations and Contractor design is retained. Prominent environment banners are removed. Anonymous Contractor has one main application CTA, visible Email/Password sign-in labels and the original email/123/company-selection behavior. Request qualification is a solid blue primary action near company skills, retaining the exact Ready + Active visibility rule and existing command.
 
-Six-area business progress, review decisions, evidence versions, qualifications, current readiness and business history are independently expandable below the work. Contextual automation and technical-inspection links lead to the existing Monitor. Automation execution/retries remain explicitly user-triggered there. Contractor receives only the requested eyebrow/strip removal, with discreet fictional-data/authentication and storage clarification retained in the footer.
+Normal copy across Contractor, Operations, Monitor, Automations, Viz, Recording Triggers and Demo Workspace now uses business or demo/test language. A discreet footer explains sample data, no real authentication/services and live browser storage. Test outcomes and Run test verification remain explicit and user-triggered. Raw history, event envelopes, attempts and selected recorded node JSON preserve original technical text. User-entered names and free text are not rewritten.
 
-No business policy, workflow transition, event contract, identity, persistence, synchronization, portable workspace or Viz semantics changed. Monitor/Viz layouts and the supplied Unity image/favicons remain unchanged. The accepted navy/blue/slate foundation and Unity width 95 / weight 450 are retained. Ready/Pending stays Not eligible until publication; completed onboarding never resumes and regained qualifications never remove suspension.
+New display adapters are separate from the legacy label/message helpers imported by the recorder. Thus pinned definitions, recorded explanations/causes, frames, lineage and portable state remain unchanged. No workflow, readiness/eligibility, activation, ownership, login/session, persistence/coordination, logo, wordmark or font changes. No field service, scheduling, dispatch, Iteration 4 or designer work.
 
-**Executed verification: 111/111 regression tests; 41/41 Chromium tests; production build passed; audit 0 vulnerabilities. Ready for manual Operations product acceptance.** Representative screenshots, additional mobile captures, a coherent portable review fleet and detailed Chet handoff remain local-only under `docs/chet/`. Stop for Operations product review; Monitor redesign and Iteration 4 remain deferred.
+**Executed verification: 115/115 regression tests; 44/44 Chromium tests; production build passed; audit 0 vulnerabilities. Ready for manual polish acceptance.** Three representative desktop screenshots and additional mobile evidence, acceptance steps and full Chet report remain local-only under docs/chet. Stop for review.
 
 ## 1. Implemented / Partial / Not Implemented
 
@@ -19,11 +19,12 @@ No business policy, workflow transition, event contract, identity, persistence, 
 | Discovery and global totals                                            | Implemented           | All companies, all-role sidebar total, secondary global inventory; no cross-role execution                                                        |
 | Business progress / full record                                        | Implemented           | Six parallel/prerequisite-aware areas; decisions, requirements, every evidence version, qualifications, messages/history                          |
 | Monitor handoff                                                        | Implemented           | Automation company/activity links; company-context diagnostics; internal execution/retries only in Monitor                                        |
-| Contractor cleanup                                                     | Implemented           | Requested eyebrow/strip removal only; discreet clarification/live browser-storage footer                                                          |
+| Contractor cleanup                                                     | Implemented           | One anonymous application CTA; Email/Password labels; prominent qualification action; discreet environment/storage footer                         |
 | Contractor onboarding product / simulated login                        | Implemented, retained | Next action/team, current eligibility, historical journey, later skills; anonymous apply, email + 123, duplicate-email choice, tab-local sign-out |
 | Multi-tab / portable workspace                                         | Implemented, retained | IndexedDB authority, Web Locks, revision notifications, atomic Save/Load/Reset and legacy formats                                                 |
 | Viz / observer isolation                                               | Implemented, retained | Opt-in triggers, independent recordings, exact frames/playback, group counts, compact maps and capture failure isolation                          |
 | Desktop/mobile / keyboard                                              | Implemented           | 1440/390 working layouts, native disclosures and mobile company chooser                                                                           |
+| Normal copy / raw inspection                                           | Implemented           | Business/demo/test labels in all normal views; original technical records and persisted contracts retained                                        |
 | Formal accessibility / browser matrix                                  | Partial               | Representative Chromium checks; no formal certification or Firefox/Safari acceptance                                                              |
 | Rejected initial skill / qualification-loss recovery                   | Partial               | Consistent state, documented unavailable recovery; no bypass                                                                                      |
 | Monitor/Viz redesign                                                   | Not Implemented       | Excluded; existing diagnostic/automation views reused                                                                                             |
@@ -32,15 +33,15 @@ No business policy, workflow transition, event contract, identity, persistence, 
 
 ## 2. Architecture and source boundaries
 
-- [`src/OperationsWorkspace.tsx`](../src/OperationsWorkspace.tsx): pure `operationsAttention` groups Open owned WorkItems; working company list/actions/global discovery; `CompanyRecord` exposes six-area facts/history. No persisted UI workflow projection.
-- [`src/App.tsx`](../src/App.tsx): existing authoritative hook, role/company/scope preferences, selection protection and command runner; new Operations component/header; Contractor footer indicator; company-context Monitor inspection route.
-- [`src/operations.css`](../src/operations.css): scoped Operations working geometry/forms/disclosures and 390px company list. Legacy global metrics are hidden for Operations; Monitor keeps its layout.
-- [`src/contractorJourney.ts`](../src/contractorJourney.ts): existing pure facts/prerequisite adapter reused for internal progress. [`ContractorPortal.tsx`](../src/ContractorPortal.tsx) only loses the requested eyebrow. Existing Contractor forms/navigation remain.
-- [`src/TaskCard.tsx`](../src/TaskCard.tsx): optional Operations business notices and Simulation options disclosure. Existing validation/commands unchanged; technical retry signpost goes to Monitor.
-- [`src/presentation.ts`](../src/presentation.ts): company-context `view=inspection` URL/parser beside existing automation links.
-- Unchanged business/infra: [`application.ts`](../src/application.ts), [`domain.ts`](../src/domain.ts), [`orchestration.ts`](../src/orchestration.ts), [`companyLifecycle.ts`](../src/companyLifecycle.ts), [`indexedDbRepository.ts`](../src/indexedDbRepository.ts), coordination/runtime/hook, simulated identity, `src/workspace/*` and `src/viz/*`.
+- [src/App.tsx](../src/App.tsx): accepted shell, role/company/scope/selection and command runner retained; removes title-row application button and remaining environment banners, keeps live status in the common discreet footer.
+- [src/ContractorAccess.tsx](../src/ContractorAccess.tsx): visible Email/Password labels and demo clarification. Same credential, duplicate-company and session logic. Main application CTA respects loading/unavailable state.
+- [src/ContractorPortal.tsx](../src/ContractorPortal.tsx), [contractor.css](../src/contractor.css): qualification button changes from secondary to existing primary blue, with adequate spacing/minimum height and existing responsive/hover/focus/disabled behavior. Same visibility guard/use case.
+- [src/presentation.ts](../src/presentation.ts): adds UI-only businessActivityLabel, businessMessage and businessText. Legacy activityLabel/simulationMessage outputs remain unchanged because recorded definitions/explanations depend on them. Known generated outcomes, review instructions and reminders translate; unknown free text is preserved. Controlled fixture labels/actors are adapted only when displayed.
+- [src/TaskCard.tsx](../src/TaskCard.tsx), [OperationsWorkspace.tsx](../src/OperationsWorkspace.tsx), [OperationsWorkQueue.tsx](../src/OperationsWorkQueue.tsx), [EligibilityGuidance.tsx](../src/EligibilityGuidance.tsx): display adapters, Test outcomes, sample document labels, existing action handlers. Stored option values, role IDs, CSS abstractions and test IDs retained.
+- [AutomationQueue.tsx](../src/AutomationQueue.tsx), [WorkflowMonitor.tsx](../src/WorkflowMonitor.tsx), [viz/JourneyMap.tsx](../src/viz/JourneyMap.tsx), [viz/TriggerManager.tsx](../src/viz/TriggerManager.tsx), [workspace/DemoWorkspace.tsx](../src/workspace/DemoWorkspace.tsx): normal copy/tooltip/accessible label updates. Explicit raw technical records stay verbatim; selected Viz node definition/state gains inspectable raw JSON. No Monitor layout redesign.
+- Unchanged business/infra: application, domain, orchestration, companyLifecycle, IndexedDB/coordination/runtime/hook, workspace format/validation/scenario generation, Viz recorder/definitions/story/trigger semantics. Contractor identity hook and authentication logic unchanged; only its UI component copy/CTA state changes.
 
-Design decisions: [`operations-experience.md`](operations-experience.md), prior [`contractor-experience.md`](contractor-experience.md). HomeItem `C:\Users\david\Documents\Repositories\homeitemV2fe`, commit `c9a357c82301275d773504fd3c9141831e03857d`, remains read-only/clean. Its accepted foundation supplies palette/control hierarchy; no business/API/editor model or font dependency copied.
+Detailed boundary/audit rationale: [presentation-language.md](presentation-language.md). Accepted design: [operations-experience.md](operations-experience.md), [contractor-experience.md](contractor-experience.md). HomeItem remains read-only; existing navy/blue/slate tokens and Unity width 95 / weight 450 retained. No dependency or font/asset changes.
 
 ### Domain, use cases, workflow and events
 
@@ -64,7 +65,7 @@ Ready/Pending has a company-level publication link. Contractor sees the responsi
 
 ## 4. Persistence and three-tab continuity
 
-No persistence/synchronization changes in 3.10. IndexedDB `fieldwork-onboarding`, database v2/business schema 4: `state/current`, `viz-control/current`, `viz-recordings`, append-only `viz-frames`. Business commits first; changed observer records/new frames persist separately, then checkpoint control. Auxiliary failures preserve valid business durability, report explicit capture gaps and isolate affected recordings; healthy captures continue. No fabricated replay/backfill or hidden retention.
+No persistence/synchronization changes in 3.11. Live storage/revision status is now in the footer across all experiences. IndexedDB `fieldwork-onboarding`, database v2/business schema 4: `state/current`, `viz-control/current`, `viz-recordings`, append-only `viz-frames`. Business commits first; changed observer records/new frames persist separately, then checkpoint control. Auxiliary failures preserve valid business durability, report explicit capture gaps and isolate affected recordings; healthy captures continue. No fabricated replay/backfill or hidden retention.
 
 Production reads/writes coordinate through `fieldwork-onboarding:commands:v1`; revision-only `fieldwork-onboarding:changes:v1` notifications follow durability/lock release. Tabs reload IndexedDB rather than executing notification events. Focus/visibility/pageshow recover missed notifications; stale reads cannot overwrite newer revisions. Role, scope, company and simulated identity remain tab-local. Missing coordination disables writes.
 
@@ -72,23 +73,21 @@ Save includes complete logical state and exact Viz frames/archives/causes/lineag
 
 ## 5. Executed verification
 
-Windows, Node 24.13.1 / npm 11.8.0. Chromium uses temporary production preview 4173; port 5173 remains untouched.
+Windows, Node 24.13.1 / npm 11.8.0. Chromium runs built production assets on temporary port 4173; port 5173 untouched.
 
-| Command/check                      | Actual result                                                                                                                                                       |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm test`                         | **111 passed, 0 failed**, 15 files; final run 26.72 s                                                                                                               |
-| `npm run test:browser`             | **41 passed, 0 failed**, 15 spec files, one worker; final full run 2.9 minutes                                                                                      |
-| New Operations Chromium acceptance | All **3 new cases passed** in the final full suite, including mobile chooser/keyboard and Contractor cleanup; initial focused run 2/2, 7.7 s                        |
-| `npm run build`                    | Passed TypeScript/Vite, 233 modules; main JS 394.73 kB / gzip 114.18; main CSS 55.01 / 11.32; lazy Viz 257.52 / 85.27, Workspace 11.11 / 3.98, Triggers 3.90 / 1.57 |
-| `npm audit --audit-level=moderate` | **0 vulnerabilities**; no dependency additions                                                                                                                      |
+| Command/check                    | Actual result                                                                                                                                                   |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| npm test                         | **115 passed, 0 failed**, 16 files; final run 28.38 s.                                                                                                          |
+| npm run test:browser             | **44 passed, 0 failed**, 16 spec files, one worker; final full run 3.0 minutes.                                                                                 |
+| New focused Chromium acceptance  | **3/3 passed**, 8.5 s; included again in full suite.                                                                                                            |
+| npm run build                    | Passed TypeScript/Vite, 233 modules; main JS 395.13 kB / gzip 114.48; CSS 55.09 / 11.33; lazy Viz 257.80 / 85.36, Workspace 11.09 / 3.97, Triggers 3.91 / 1.57. |
+| npm audit --audit-level=moderate | **0 vulnerabilities**, no dependency additions.                                                                                                                 |
 
-[`operationsWorkspace.test.ts`](../src/operationsWorkspace.test.ts) checks Open/owned grouping across company/skill roots and nonmutation. [`tests/fixtures/operationsState.ts`](../tests/fixtures/operationsState.ts) creates five coherent companies through legitimate commands: Alpha/Beta Recruitment; Gamma insurance/license across two roots; Delta insurance; Sierra Ready/Pending publication. Initial global Open count: 11.
+[src/presentation.test.ts](../src/presentation.test.ts) adds four checks: frozen legacy recorder vocabulary, current labels/case variants/wait explanations, unknown free text/source preservation, and generated reminders/timer captions. [tests/browser/onboarding-polish.spec.ts](../tests/browser/onboarding-polish.spec.ts) adds three acceptance cases: one landing application CTA and proper sign-in types/labels; blue qualification CTA keyboard/hover/real lock-blocked disabled behavior and actual request; clean Operations work/disclosures; all six Monitor destinations and load/reset dialogs. Visible text, select labels, accessible names, tooltips and placeholders are audited case-insensitively. Explicit raw record regions are exceptions and compared to original state. Inspection snapshots remain equal; qualification creates one additional independent skill while completed onboarding stays frozen. Layouts checked at 1440/390.
 
-[`operations-first.spec.ts`](../tests/browser/operations-first.spec.ts) covers all eight requested conditions: Recruitment, completion without substitution, parallel Compliance ownership, correction reason/evidence/history, empty Finance, cross-team progress, activation handed to Monitor with three-tab eligibility update, and investigation without cross-role forms. Also covers 1440/390 layouts, overflow, desktop action placement, mobile company selection, independent Enter/Space disclosures, nonmutating inspection, contextual diagnostics and Contractor cleanup.
+All prior domain, lifecycle/suspension/rejection, UI, role queues, multi-tab concurrency/duplicates/missed notifications, auth privacy, legacy portable files, exact Frame 13/archive continuation, trigger/observer failure, 25-company/50-recording scale and 37/80-node suites retained. Existing selectors use new visible wording; serialized fixture values and ownership IDs stay unchanged. Original Unity image/favicons/font assertions remain.
 
-Retained suites cover lifecycle rejection/invalidation/suspension, real cross-tab command concurrency/duplicates, missed notifications, simulated login/privacy, global counts, portable validation/atomic replacement/legacy files, exact Viz playback/continuation, triggers, observer failures, large histories and 37/80-node maps. [`branding.spec.ts`](../tests/browser/branding.spec.ts) checks intact source-logo/favicons/proportions; fishing-net retains native font width/weight checks. Business/state assertions remain; tests explicitly select companies and disclosures instead of removed tabs/scopes. No arbitrary sleeps or tests removed.
-
-**Intermediate failures:** an early JSX build edit was corrected before successful builds. First regression run **106/110** reflected old marketing/repeated-company assertions and a stale DOM query; after adaptation/new grouping test, full run **111/111**. A browser run stopped at its failure limit with **25 passed, 6 failed, 10 not run**. Failures were removed scope-dropdown lookups, Fleet 1/Fleet 10 substring ambiguity, correction tests assuming automatic company reselection, a disclosure selector matching text inside another area's history, and the newly disclosed timeout checkbox. A subsequent full run was **40 passed, 1 failed**: the alternate-outcome restore test also needed explicit company selection after its prior task disappeared and the workspace was replaced. Tests now choose exact companies/sections and open Simulation options while preserving state assertions and production selection protection. Exploratory interrupted runs are not counted as successful full-suite verification.
+Intermediate failures: first focused build caught a missing recursive-helper return annotation and an invalid Testing Library option; fixed. First new browser attempt: 0 passed / 3 failed. One text audit found a retained legacy agreement label in EligibilityGuidance, fixed through the display adapter. Other failures were test locator ambiguity (Plumbing option versus record) and a shrinking aria-expanded=false collection; corrected to exact record/stable disclosure controls. Next focused run passed 3/3. No arbitrary sleeps, removed tests or production rule changes.
 
 ## 6. Scale, limits and technical debt
 
@@ -101,42 +100,41 @@ The 3.10 readable local review file is **523,278 bytes** (about 511 KiB): 5 comp
 - **Implemented rules:** historical/current/operational separation, approved skill prerequisite, explicit activation, Ready AND Active, no completed-root resumption/automatic unsuspension. Unchanged.
 - **Presentation decisions:** role work first; records below actions; global inventory secondary; mobile company list collapses; native independent disclosures; actual due/escalation facts determine urgency.
 - **Provisional assumptions:** company identity, sample HVAC/Plumbing, fictional evidence, current administration/vendor/profile/training sequence, reminder/escalation policies. No policy expansion.
-- **Architecture choices:** pure display grouping/model reuse over existing service/repository; no new state store, queue or workflow. Technical links select company diagnostics rather than a particular historical event.
-- **Product input:** role/company/action hierarchy, desktop/mobile density, global discovery clarity, progress/record discoverability and correction ownership wording. Review Operations before Monitor design work.
+- **Architecture choices:** display-only vocabulary separate from immutable recording helpers; faithful explicit raw records; known generated messages adapted without rewriting unknown free text. No new state store, queue or workflow.
+- **Product input:** qualification CTA prominence, single application entry, clearer sign-in, demo/test language and discreet disclosure at both widths. 3.10 design is accepted; stop for focused polish review.
 - **Business questions:** initial-skill rejection recovery, suspension-removal request/approval/audit, ongoing compliance/expiry/grace, post-activation administrative requests. No Iteration 4 work.
 - **Untested/manual:** formal screen-reader/browser matrix, Firefox/Safari, non-Windows fonts, actual OS save picker, near-limit quota/crash boundaries. Representative checks are not exhaustive certification.
-- **Known defects:** no remaining confirmed defect in executed acceptance paths. Manual/browser/accessibility and lifecycle-recovery limits above remain explicit. No business/lifecycle change used to resolve presentation issues.
+- **Known defects:** none confirmed in executed acceptance paths. Existing manual/browser/accessibility and lifecycle recovery limits remain explicit. Raw historical wording and user-entered text intentionally retain original language.
 
 ## 8. Repository and publication
 
-- `onboarding`, `C:\Users\david\Documents\Repositories\onboarding`; `main`, upstream `origin/main`; origin fetch/push `https://github.com/dblath/onboarding.git`.
-- Starting published tip `192fbbef28771425e69d8332fbbe7cc4ae22efb3`; previous 3.9 implementation `640f394cdb66a6e54b5e4fd49871a52561081ee4`.
-- **3.10 implementation `c559f3c0717abca69d30c90d465208edef8908e3` committed and pushed on 2026-10-17.** Local HEAD matched `git ls-remote origin refs/heads/main`; tree was clean and branch/upstream `main...origin/main`. This publication record is a documentation-only follow-up; its final tip is reported in delivery and the local Chet handoff. Changes: UI/styles, presentation links, tests/fixtures, package version, README/docs. No force-push/reset/reinitialization, secrets or deployment.
-- Prettier, staged/working diff checks passed. Protected business/lifecycle/workflow, login, synchronization, IndexedDB, portable state, Viz and logo/favicon sources have no diff from the starting tip. HomeItem remains clean/read-only. No listener remained on 4173/5174; port 5173 was untouched. Chet is excluded via `.git/info/exclude` and no Chet files are tracked.
-- Original Unity PNG SHA256 `88ef0146e47c4f25fbb95372945eca19b65e6598c7a8a43a8eb39a5af337d1a1`; no image/favicon/font edits.
-- Docs: README, STATUS, Operations/Contractor design notes, observer/workspace/recording/shared-browser and domain/process/event/rule catalogs. Detailed handoff/materials local-only under `docs/chet/`.
+- Repository onboarding, C:\Users\david\Documents\Repositories\onboarding; branch main/upstream origin/main; fetch/push https://github.com/dblath/onboarding.git.
+- Starting published tip: 21470f980260dcbe8bedf30d28d6459dcc84230f. Previous 3.10 implementation: c559f3c0717abca69d30c90d465208edef8908e3.
+- 3.11 commit/push pending final checks. No reset, force-push, reinitialization, credentials or deployment.
+- Current changes are presentation components/helpers, narrow CTA CSS, tests, package version and docs. Domain/use cases/workflow transitions, persistence, recorder/pinned definitions and original branding assets remain untouched. Session/credential matching behavior unchanged despite UI copy changes in ContractorAccess.
+- Chet material is excluded through .git/info/exclude and never tracked. Verify clean tree/local-remote SHA agreement and stopped temporary server after publication.
+- Original Unity PNG SHA256: 88ef0146e47c4f25fbb95372945eca19b65e6598c7a8a43a8eb39a5af337d1a1. Logo, wordmark, fonts, theme and favicons unchanged.
+- Docs: current STATUS/README, presentation-language, Operations/Contractor design notes, observer/workspace/recording/shared-browser and domain/process/event/rule catalogs. Detailed report/screenshots/acceptance remain local-only under docs/chet.
 
 ## 9. Manual acceptance and next work
 
-Run **`npm run dev -- --port 5174 --strictPort`**. Same Chrome profile/exact origin:
+Run **npm run dev -- --port 5174 --strictPort**. Same Chrome profile/exact origin:
 
-| View                | URL                                              |
-| ------------------- | ------------------------------------------------ |
-| Operations          | http://127.0.0.1:5174/#/operations               |
-| Contractor          | http://127.0.0.1:5174/#/contractor               |
-| Monitor automations | http://127.0.0.1:5174/#/monitor?view=automations |
-| Demo Workspace      | http://127.0.0.1:5174/#/monitor?view=workspace   |
+| Experience | URL                                            |
+| ---------- | ---------------------------------------------- |
+| Contractor | http://127.0.0.1:5174/#/contractor             |
+| Operations | http://127.0.0.1:5174/#/operations             |
+| Monitor    | http://127.0.0.1:5174/#/monitor                |
+| Workspace  | http://127.0.0.1:5174/#/monitor?view=workspace |
 
-Back up existing state. Demo Workspace → Load/preview/confirm local `docs/chet/iteration-3.10-operations-review.json`. This is a normal-command review fixture, not an additional product scenario catalog. Fresh Operations shows Alpha/Beta Recruitment; existing tabs may retain an explicit role/scope—choose Recruitment / My active work.
+1. Anonymous Contractor: one main Start a new application CTA; no upper-right duplicate. Visible Email/Password labels and proper input types. Wrong password establishes no session; existing application/email/123 and duplicate-company behavior remain. Footer is discreet and truthful.
+2. Qualification: back up state, load local docs/chet/iteration-3.9-scenarios/contractor-eligible.json through Workspace preview/confirmation, then sign in alex@example.com / 123. Alternatively complete the built-in Ready for activation scenario by explicitly publishing in Monitor. The company must be Ready + Active. Near company skills, Request qualification is solid blue, responsive and keyboard-focused. Choose Plumbing and request: one new qualification starts; completed onboarding remains closed. Suspended/not-ready companies still cannot request.
+3. Operations: use existing local docs/chet/iteration-3.10-operations-review.json if useful. Recruitment shows Alpha/Beta; role-owned actions/counts/All companies behave as accepted. No environment banner. Compliance Gamma shows real insurance/license work, with Test outcomes and Run test verification. Complete work normally; cross-tab updates/global totals preserved.
+4. Monitor: inspect Automations, Workflow monitor, Outbox, Journey Map, Recording Triggers and Demo Workspace/load/reset dialogs. Normal copy is business/demo/test wording. No external services or automatic integration execution. Expand raw history/envelopes/attempts or node execution references to verify original record text; these are deliberate technical exceptions.
+5. At 1440/390 check button hierarchy, forms, visible labels/focus, footer, no horizontal overflow and unchanged Unity lettering/proportions. Review three desktop captures (landing, company skills, Operations); mobile evidence stays local. Detailed guide/screenshots in docs/chet/iteration-3.11-review.md.
 
-1. Recruitment: only Alpha/Beta, one review each; global badge initially 11. Select Alpha, Proceed. Alpha leaves Recruitment, no replacement selected; next participants receive real work. Beta remains.
-2. Compliance: Gamma has insurance/license reviews across two roots; Delta has insurance. Only owned forms appear. Verify Gamma's expired insurance: correction goes to Contractor, Gamma retains license review. Expand Company documents for reason, evidence/version and work ownership/history.
-3. Finance/Training: no work in review fleet; useful empty state. All companies permits Gamma inspection without Compliance forms. Inspect progress, readiness, qualifications, messages/history; technical link opens existing Monitor for that company.
-4. Sierra: All companies → Sierra. Ready with publication outstanding, Not eligible. Sign into Contractor `sierra@example.com` / `123`; same blocker. Follow automation link; publish explicitly in Monitor. Eligibility updates in all three tabs. No automatic publication.
-5. At 1440/390 review inline forms, company chooser, role controls, independent keyboard disclosures, complete Unity image and global navigation. Anonymous/signed-in Contractor lacks eyebrow/prominent strip; footer still clarifies simulation/storage. Existing forms/sign-in remain functional.
+Run npm test, npm run test:browser, npm run build and npm audit --audit-level=moderate. Static output dist/; no backend/environment setup. No persistent server included; leave 5173 untouched.
 
-Representative screenshots: Recruitment, Compliance, expanded business details and empty Finance; additional mobile captures remain local. Detailed manual steps/index under `docs/chet/`. Checks: `npm test`, `npm run test:browser`, `npm run build`, `npm audit --audit-level=moderate`; install Chromium once with `npx playwright install chromium`. Static output `dist/`; no backend/environment setup.
+**Next: manual onboarding polish review only.** No field service, scheduling, dispatch, Iteration 4, backend/auth, workflow designer or Monitor redesign. Continue only with agreed acceptance feedback.
 
-**Next: manual Operations product review only.** Apply acceptance-driven polish, then agree any Monitor design slice separately. Do not start Monitor/Viz redesign, Iteration 4 or a workflow designer. No persistent server is part of delivery; leave port 5173 untouched.
-
-Continuity: update this report from actual code/results each iteration, commit/push, verify remote/local/clean tree, deliver detailed Chet materials locally only.
+Continuity: update STATUS from actual code/tests each iteration, commit/push, verify remote/local/clean tree, deliver detailed Chet materials locally only.

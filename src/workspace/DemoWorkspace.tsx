@@ -191,7 +191,7 @@ export default function DemoWorkspace({
           <div className="eyebrow">WORKFLOW MONITOR</div>
           <h2>Demo Workspace</h2>
         </div>
-        <span className="pill neutral">Simulation · browser workspace</span>
+        <span className="pill neutral">Local browser workspace</span>
       </div>
       <p>
         Bring a saved business story to your next meeting. Save all company
@@ -313,7 +313,7 @@ export default function DemoWorkspace({
       </div>
       <p className="muted">
         Prepared scenarios use Summit Field Services. Contractor sign-in:
-        alex@example.com with simulation password 123.
+        alex@example.com with demo password 123.
       </p>
       <p className="muted">
         Save a JSON file to keep this workspace for another meeting. Supported
@@ -358,7 +358,7 @@ export default function DemoWorkspace({
                 </p>
                 <p>
                   {summary!.recordings} Viz recordings · {summary!.frames}{" "}
-                  recorded frames · simulation clock{" "}
+                  recorded frames · test clock{" "}
                   {new Date(preview.file.state.clock).toLocaleString()}.
                 </p>
                 <p>

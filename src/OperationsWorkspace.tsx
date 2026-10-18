@@ -21,9 +21,10 @@ import {
 import { LifecycleStatus } from "./LifecycleStatus";
 import { EligibilityGuidance } from "./EligibilityGuidance";
 import {
-  activityLabel,
+  businessActivityLabel,
   automationLink,
-  simulationMessage,
+  businessMessage,
+  businessText,
   workflowMonitorLink,
 } from "./presentation";
 
@@ -112,11 +113,11 @@ function CompanyRecord({
       .filter((e) => ids.includes(e.id))
       .map((e) => (
         <div className="ops-evidence" key={e.id}>
-          <strong>{e.description.replace(/\bdemo\b/g, "simulated")}</strong>
+          <strong>{businessText(e.description)}</strong>
           <span>
             Version {e.version} · {e.verificationState} · {date(e.submittedAt)}
           </span>
-          <p>{e.fixture.replace(/\bdemo\b/g, "simulated")}</p>
+          <p>{businessText(e.fixture)}</p>
         </div>
       ));
   return (
@@ -214,7 +215,7 @@ function CompanyRecord({
                           : r.type}{" "}
                         · {r.status}
                       </strong>
-                      {r.outcome && <p>{simulationMessage(r.outcome)}</p>}
+                      {r.outcome && <p>{businessMessage(r.outcome)}</p>}
                       {evidence(r.evidenceIds)}
                     </div>
                   ))}
@@ -302,13 +303,13 @@ function CompanyRecord({
                     .map((t) => (
                       <div className="ops-record-row" key={t.id}>
                         <strong>
-                          {activityLabel(t.activity)} · {t.status}
+                          {businessActivityLabel(t.activity)} · {t.status}
                         </strong>
                         <small>
                           {contractorOwner(t.owner)} ·{" "}
                           {date(t.completedAt ?? t.cancelledAt ?? t.createdAt)}
                         </small>
-                        {t.outcome && <p>{simulationMessage(t.outcome)}</p>}
+                        {t.outcome && <p>{businessMessage(t.outcome)}</p>}
                       </div>
                     ))}
                 </div>
@@ -338,7 +339,7 @@ function CompanyRecord({
         meta="Business notifications, ownership and completed work"
         open={showMessages}
       >
-        <p>Simulated in-app notifications. No email or SMS is sent.</p>
+        <p>Demo in-app notifications. No email or SMS is sent.</p>
         {[...state.outbox]
           .filter((m) => m.companyId === c.id)
           .reverse()
@@ -348,7 +349,7 @@ function CompanyRecord({
                 {m.kind} ·{" "}
                 {m.recipient === "Simulation" ? "Operations" : m.recipient}
               </strong>
-              <p>{simulationMessage(m.message)}</p>
+              <p>{businessMessage(m.message)}</p>
               <small>{date(m.at)}</small>
             </div>
           ))}
@@ -359,13 +360,13 @@ function CompanyRecord({
           .map((t) => (
             <div className="ops-record-row" key={t.id}>
               <strong>
-                {activityLabel(t.activity)} · {t.status}
+                {businessActivityLabel(t.activity)} · {t.status}
               </strong>
               <small>
                 {contractorOwner(t.owner)} ·{" "}
                 {date(t.completedAt ?? t.cancelledAt ?? t.createdAt)}
               </small>
-              {t.outcome && <p>{simulationMessage(t.outcome)}</p>}
+              {t.outcome && <p>{businessMessage(t.outcome)}</p>}
             </div>
           ))}
       </Records>
@@ -520,7 +521,7 @@ export function OperationsWorkspace({
                     </span>
                     <span className="ops-company-task">
                       {first
-                        ? activityLabel(first.activity)
+                        ? businessActivityLabel(first.activity)
                         : `No open ${role} work`}
                     </span>
                     <small>
@@ -650,7 +651,7 @@ export function OperationsWorkspace({
                     <p>
                       {model.ready
                         ? "All requirements are complete. Contractor activation is awaiting publication by Operations."
-                        : "Company setup includes a pending simulated integration. Execution is in Workflow Monitor."}
+                        : "Company setup includes a pending test integration. Execution is in Workflow Monitor."}
                     </p>
                     <a
                       href={automationLink(

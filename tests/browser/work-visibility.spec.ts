@@ -116,7 +116,7 @@ test("vendor and activation are discovered in Operations and executed in Monitor
   for (const label of [
     "Submit insurance evidence",
     "Submit fictional tax / banking pack",
-    "Submit simulated agreement",
+    "Submit contractor agreement",
     "Submit license evidence",
   ])
     await evidence(contractor, label);
@@ -126,7 +126,7 @@ test("vendor and activation are discovered in Operations and executed in Monitor
   await role(operations, "Finance");
   await verify(operations, "Verify fictional financial pack");
   await role(operations, "Contractor Relations");
-  await verify(operations, "Execute simulated agreement");
+  await verify(operations, "Review contractor agreement");
   await expect(
     operations.getByText("No active work for Contractor Relations.", {
       exact: true,
@@ -167,7 +167,7 @@ test("vendor and activation are discovered in Operations and executed in Monitor
   await nav(contractor, "Required actions");
   await completion(
     contractor,
-    "Complete simulated portal setup",
+    "Complete company profile",
     "Complete portal setup →",
   );
   await completion(

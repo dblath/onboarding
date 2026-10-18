@@ -52,7 +52,7 @@ export default function TriggerManager({
         when the Monitor is closed.
       </p>
       <p className="muted">
-        Opt-in recording · browser simulation · commands run only while the
+        Opt-in recording · local browser workspace · commands run only while the
         application is open. Disabling or removing a trigger leaves existing
         recordings running.
       </p>

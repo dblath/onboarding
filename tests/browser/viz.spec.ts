@@ -143,7 +143,7 @@ test("Viz records a real 37-step journey across tabs, failure, joins and immutab
   await nav(monitor, "Automations & Integrations");
   for (const label of [
     "Submit fictional tax / banking pack",
-    "Submit simulated agreement",
+    "Submit contractor agreement",
     "Submit license evidence",
   ])
     await evidence(contractor, label);
@@ -163,10 +163,10 @@ test("Viz records a real 37-step journey across tabs, failure, joins and immutab
   ]).toEqual(["waiting", "waiting", "waiting"]);
   await role(operations, "Compliance");
   const insurance = card(operations, "Review insurance");
-  await insurance.getByText("Simulation options", { exact: true }).click();
+  await insurance.getByText("Test outcomes", { exact: true }).click();
   await insurance.getByRole("checkbox").check();
   await insurance
-    .getByRole("button", { name: "Run simulated verification →" })
+    .getByRole("button", { name: "Run test verification →" })
     .click();
   await expect(monitor.getByTestId("viz-node-group:Insurance")).toHaveAttribute(
     "data-status",
@@ -195,7 +195,7 @@ test("Viz records a real 37-step journey across tabs, failure, joins and immutab
   await role(operations, "Finance");
   await verify(operations, "Verify fictional financial pack");
   await role(operations, "Contractor Relations");
-  await verify(operations, "Execute simulated agreement");
+  await verify(operations, "Review contractor agreement");
   await role(operations, "Compliance");
   await verify(operations, "Verify license");
   await role(operations, "Field Manager");
@@ -208,7 +208,7 @@ test("Viz records a real 37-step journey across tabs, failure, joins and immutab
   await expect(card(monitor, "Create vendor record")).toHaveCount(0);
   await completion(
     contractor,
-    "Complete simulated portal setup",
+    "Complete company profile",
     "Complete portal setup →",
   );
   await completion(

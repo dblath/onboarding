@@ -6,7 +6,11 @@ import {
   type WorkflowInstance,
 } from "./domain";
 import type { OnboardingService } from "./application";
-import { activityLabel } from "./presentation";
+import {
+  businessActivityLabel,
+  businessText,
+  businessMessage,
+} from "./presentation";
 import type { Run } from "./TaskCard";
 export function WorkflowMonitor({
   state: s,
@@ -46,7 +50,7 @@ export function WorkflowMonitor({
           <div className="eyebrow">ORCHESTRATION OBSERVATORY</div>
           <h2>Watch the work move.</h2>
         </div>
-        <span className="pill">Browser-local simulation</span>
+        <span className="pill">Local browser workspace</span>
       </div>
       <label className="workflow-picker">
         Workflow instance
@@ -82,7 +86,7 @@ export function WorkflowMonitor({
       <div className="event-path">
         <div>
           <small>01 · PARTICIPANT</small>
-          <strong>{last?.actor ?? "Waiting"}</strong>
+          <strong>{businessText(last?.actor ?? "Waiting")}</strong>
         </div>
         <span>→</span>
         <div>
@@ -95,7 +99,11 @@ export function WorkflowMonitor({
           <strong>
             {tasks
               .filter((t) => t.status === "Open")
-              .map((t) => t.owner)
+              .map((t) =>
+                t.owner === "Simulation"
+                  ? "Automations & Integrations"
+                  : t.owner,
+              )
               .filter((v, i, a) => a.indexOf(v) === i)
               .join(" + ") || "No human work outstanding"}
           </strong>
@@ -125,7 +133,7 @@ export function WorkflowMonitor({
           ))}
         </select>
       </div>
-      <ol className="timeline">
+      <ol className="timeline" data-raw-records="Execution history">
         {w.history
           .filter((h) => filter === "All" || h.kind === filter)
           .map((h, i) => (
@@ -148,7 +156,9 @@ export function WorkflowMonitor({
               {e.eventId.slice(0, 8)} · v{e.eventVersion}
             </small>
           </summary>
-          <pre>{JSON.stringify(e, null, 2)}</pre>
+          <pre data-raw-records="Event envelope">
+            {JSON.stringify(e, null, 2)}
+          </pre>
         </details>
       ))}
       <section
@@ -174,7 +184,9 @@ export function WorkflowMonitor({
                   : "Not ready"
                 : "Suspended"}
             </summary>
-            <pre>{JSON.stringify(event, null, 2)}</pre>
+            <pre data-raw-records="Event envelope">
+              {JSON.stringify(event, null, 2)}
+            </pre>
           </details>
         ))}
       </section>
@@ -191,7 +203,7 @@ export function WorkflowMonitor({
                     <strong>{wait.eventType}</strong>
                     <small>
                       {t
-                        ? `${activityLabel(t.activity)} → ${t.owner}`
+                        ? `${businessActivityLabel(t.activity)} → ${t.owner === "Simulation" ? "Automations & Integrations" : t.owner}`
                         : "Readiness policy waits for company and skill facts"}
                     </small>
                   </div>
@@ -222,17 +234,19 @@ export function WorkflowMonitor({
           {attempts.length ? (
             attempts.map((a) => (
               <div className={"attempt " + a.status} key={a.id}>
-                <strong>{activityLabel(a.activity)}</strong>
+                <strong>{businessActivityLabel(a.activity)}</strong>
                 <span className="pill neutral">
                   Attempt {a.attempt} · {a.status}
                 </span>
-                <p>{a.technicalError ?? a.businessOutcome}</p>
+                <p data-raw-records="Activity attempt">
+                  {a.technicalError ?? a.businessOutcome}
+                </p>
               </div>
             ))
           ) : (
             <p className="muted">
-              Simulated integration attempts appear here. Human work completion
-              is recorded separately below.
+              Test integration attempts appear here. Human work completion is
+              recorded separately below.
             </p>
           )}
         </DiagnosticPanel>
@@ -244,9 +258,12 @@ export function WorkflowMonitor({
                   {t.status === "Completed" ? "✓" : "○"}
                 </span>
                 <div>
-                  <strong>{activityLabel(t.activity)}</strong>
+                  <strong>{businessActivityLabel(t.activity)}</strong>
                   <small>
-                    {t.owner} · {t.outcome ?? t.expectedOutcome}
+                    {t.owner === "Simulation"
+                      ? "Automations & Integrations"
+                      : t.owner}{" "}
+                    · {businessMessage(t.outcome ?? t.expectedOutcome)}
                   </small>
                 </div>
                 <span className="pill neutral">{t.status}</span>
