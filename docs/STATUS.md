@@ -125,9 +125,9 @@ Business state is still a snapshot; per-tab full caches, observer metadata/proce
 
 - Repository onboarding: C:\Users\david\Documents\Repositories\onboarding; main/upstream origin/main; origin fetch/push https://github.com/dblath/onboarding.git.
 - Starting published tip: c49e298fafaed4ebda21528db8121913a7cef8ec. Previous 3.11 implementation: 0a88ce4a0b22b52ebdcf5889f935f9b905817ac1.
-- 3.12 implementation prepared after all final checks; commit/push verification follows in the publication record. Current work: bounded presentation/context changes, tests, package version and documentation. No domain/workflow/persistence/observer contracts or original branding asset changes.
+- **3.12 implementation 546e17c0c17425b0db68debe8626ef6488c9a053 committed and pushed on 2026-10-18.** Local HEAD, origin/main and GitHub refs/heads/main matched; working tree was clean. This publication record is a documentation-only follow-up; final tip is reported in delivery and the local Chet handoff. Changes are bounded presentation/context, tests, package version and documentation. No domain/workflow/persistence/observer contracts or original branding asset changes.
 - docs/chet is excluded through .git/info/exclude; no Chet files are tracked. Detailed handoff/scenarios/screenshots remain local-only. No force-push, history replacement, credentials, deployment or persistent server.
-- Prettier and working diff checks passed. Final SHA/remote equality/clean tree and listener checks are verified after publication. Port 5173 remains reserved for the user; manual app commands use 5174 --strictPort.
+- Prettier and staged/working diff checks passed. Temporary Chromium preview stopped; no listener on 4173 or 5174. Port 5173 remains reserved for the user and was untouched; manual app commands use 5174 --strictPort. Final SHA/remote equality/clean tree are rechecked after this publication record.
 - Current docs: STATUS/README, Monitor/Operations/Contractor experience notes, presentation language, observer/workspace/Viz/shared-browser and domain/process/event/rule catalogs.
 
 ## 9. Manual acceptance and next work
