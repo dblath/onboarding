@@ -18,12 +18,14 @@ export async function workspace(
   route: "contractor" | "operations" | "monitor",
 ) {
   const page = await context.newPage();
-  await page.goto(`/#/${route}`);
+  // Legacy execution suites explicitly request the inspection view. Product default is business-first.
+  await page.goto(
+    `/#/${route}${route === "monitor" ? "?view=inspection" : ""}`,
+  );
   await expect(page.getByTestId("sync-status")).toContainText("Live");
   await expect(
     page.getByText("Restoring your browser-local workspace…"),
   ).toHaveCount(0);
-  if (route === "monitor") await nav(page, "Workflow monitor");
   return page;
 }
 export async function nav(page: Page, name: string) {
@@ -45,6 +47,14 @@ export async function nav(page: Page, name: string) {
     .getByRole("navigation")
     .getByRole("button", { name, exact: true })
     .click();
+  if (page.url().includes("#/monitor") && name === "Workflow monitor") {
+    await page.evaluate(() => {
+      const query = new URLSearchParams(location.hash.split("?")[1]);
+      query.set("view", "inspection");
+      location.hash = `/monitor?${query}`;
+    });
+    await expect(page.locator(".monitor-workspace")).toBeVisible();
+  }
 }
 export async function role(page: Page, name: string) {
   if (!page.url().includes("#/operations")) await page.goto("/#/operations");

@@ -58,6 +58,14 @@ async function go(name: string) {
       : name;
   if (!(name === "Overview" && window.location.hash === "#/operations"))
     await user.click(screen.getAllByRole("button", { name: mapped })[0]);
+  if (name === "Workflow monitor") {
+    await act(async () => {
+      const query = new URLSearchParams(window.location.hash.split("?")[1]);
+      query.set("view", "inspection");
+      window.location.hash = `/monitor?${query}`;
+      window.dispatchEvent(new HashChangeEvent("hashchange"));
+    });
+  }
   if (name === "Overview" && window.location.hash === "#/operations") {
     await user.click(screen.getByRole("button", { name: "All companies" }));
     await user.click(

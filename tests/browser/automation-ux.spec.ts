@@ -139,10 +139,14 @@ test("Operations discovers automations without executing them; deep links preser
   ).toHaveLength(1);
 });
 
-test("Monitor launches in automations, handles unavailable links and keeps diagnostics separate", async ({
+test("Monitor launches in onboarding, links to explicit automations and handles unavailable links", async ({
   page,
 }) => {
   await page.goto("/#/monitor");
+  await expect(
+    page.getByRole("region", { name: "Onboarding overview" }),
+  ).toBeVisible();
+  await nav(page, "Automations & Integrations");
   await expect(
     page.getByRole("region", { name: "Automations & Integrations" }),
   ).toBeVisible();

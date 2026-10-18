@@ -110,6 +110,15 @@ test("file round trip restores exact Frame 13 and archive across tabs, resets in
     ),
   ).toBeVisible();
   await expect(operations.getByTestId("lifecycle-eligibility")).toHaveCount(0);
+  // The old company's contextual URL must not silently select a different company.
+  await expect(
+    viz.getByText("The linked recording is unavailable for this journey.", {
+      exact: false,
+    }),
+  ).toBeVisible();
+  await viz
+    .getByLabel("Recording", { exact: true })
+    .selectOption(fixture.state.viz!.activeRecordingId);
   await expect(viz.getByTestId("viz-frame-number")).toHaveText("Frame 13 / 13");
   await viz
     .getByRole("button", { name: "Presentation view", exact: true })

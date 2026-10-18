@@ -234,6 +234,9 @@ test("automatic journeys capture with Monitor closed, synchronize, filter, stop 
   expect(state.viz).toEqual(file.state.viz);
   await monitor.reload();
   await nav(monitor, "Journey Map");
+  // Contextual Monitor navigation now starts with the selected company's recordings.
+  // This assertion deliberately checks the complete restored recording fleet.
+  await monitor.getByLabel("Recording company").selectOption("");
   await monitor.getByLabel("Show recordings").selectOption("history");
   await expect(monitor.locator(".recording-table tbody tr")).toHaveCount(1);
   await monitor.getByLabel("Show recordings").selectOption("current");
@@ -305,6 +308,7 @@ test("twelve simultaneous company and skill captures measure real IndexedDB writ
   ).toHaveLength(2);
   expect(state.viz!.triggers!.map((t) => t.fireCount)).toEqual([10, 2]);
   await nav(monitor, "Journey Map");
+  await monitor.getByLabel("Recording company").selectOption("");
   await expect(monitor.locator(".recording-table tbody tr")).toHaveCount(12);
   await monitor.screenshot({
     path: info.outputPath("twelve-live-recordings.png"),

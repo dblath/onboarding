@@ -18,17 +18,22 @@ export function WorkflowMonitor({
   service,
   run,
   busy,
+  workflowId = "",
+  onWorkflowChange,
 }: {
   state: State;
   companyId: string;
   service: OnboardingService;
   run: Run;
   busy: boolean;
+  workflowId?: string;
+  onWorkflowChange?: (id: string) => void;
 }) {
   const [selected, setSelected] = useState(""),
     [filter, setFilter] = useState("All");
   const workflows = s.workflows.filter((w) => w.companyId === companyId),
-    w = workflows.find((w) => w.id === selected) ?? workflows[0];
+    w =
+      workflows.find((w) => w.id === (workflowId || selected)) ?? workflows[0];
   if (!w) return <p className="muted">No workflow instances yet.</p>;
   const tasks = s.workItems.filter((t) => t.workflowId === w.id),
     events = s.events.filter((e) => e.correlationId === w.correlationId),
@@ -54,7 +59,14 @@ export function WorkflowMonitor({
       </div>
       <label className="workflow-picker">
         Workflow instance
-        <select value={w.id} onChange={(e) => setSelected(e.target.value)}>
+        <select
+          value={w.id}
+          onChange={(e) =>
+            onWorkflowChange
+              ? onWorkflowChange(e.target.value)
+              : setSelected(e.target.value)
+          }
+        >
           {workflows.map((x) => (
             <option key={x.id} value={x.id}>
               {name(x)} · {x.status} · {x.id.slice(0, 8)}

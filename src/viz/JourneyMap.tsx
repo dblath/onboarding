@@ -486,11 +486,23 @@ export default function JourneyMap({
   service,
   run,
   busy,
+  companyId = "",
+  workflowId = "",
+  recordingId = "",
+  onContext,
 }: {
   state: State;
   service: OnboardingService;
   run: Run;
   busy: boolean;
+  companyId?: string;
+  workflowId?: string;
+  recordingId?: string;
+  onContext?: (
+    companyId: string,
+    workflowId: string,
+    recordingId: string,
+  ) => void;
 }) {
   const [originChoice, setOriginChoice] = useState("");
   const [viewedId, setViewedId] = useState("");
@@ -502,11 +514,45 @@ export default function JourneyMap({
   const [playing, setPlaying] = useState(false);
   const [pace, setPace] = useState(1600);
   const recordings = state.viz?.recordings ?? [];
+  const resolvedRequest = useRef("");
+  const requested = recordingId
+    ? recordings.find(
+        (r) =>
+          r.id === recordingId &&
+          (!companyId || r.companyId === companyId) &&
+          (!workflowId || r.workflowId === workflowId),
+      )
+    : companyId
+      ? recordings
+          .filter(
+            (r) =>
+              r.companyId === companyId &&
+              (!workflowId || r.workflowId === workflowId),
+          )
+          .at(-1)
+      : undefined;
+  useEffect(() => {
+    if (companyId || recordingId) {
+      const key = `${state.workspaceEpoch ?? "original"}:${companyId}:${workflowId}:${recordingId}`;
+      if (resolvedRequest.current === key) return;
+      setViewedId(requested?.id ?? "__unavailable_recording__");
+      setIndex(null);
+      setSelected("");
+      setPlaying(false);
+      if (requested) resolvedRequest.current = key;
+    }
+  }, [companyId, workflowId, recordingId, requested?.id, state.workspaceEpoch]);
   useEffect(() => {
     // Bind the initial view once. A manual start in another tab must not move it.
-    if (!viewedId && recordings.length)
+    if (!companyId && !recordingId && !viewedId && recordings.length)
       setViewedId(state.viz?.activeRecordingId || recordings[0].id);
-  }, [viewedId, recordings, state.viz?.activeRecordingId]);
+  }, [
+    viewedId,
+    recordings,
+    state.viz?.activeRecordingId,
+    companyId,
+    recordingId,
+  ]);
   const recording = recordings.find(
     (r) => r.id === (viewedId || state.viz?.activeRecordingId),
   );
@@ -533,7 +579,9 @@ export default function JourneyMap({
     setPlaying(false);
     setIndex(next);
   }
-  const sources = originatingEvents(state);
+  const sources = originatingEvents(state).filter(
+    (e) => !companyId || e.companyId === companyId,
+  );
   const selectedModel = recording?.definition.nodes.find(
     (n) => n.id === selected,
   );
@@ -550,6 +598,8 @@ export default function JourneyMap({
     setViewedId(id);
     setIndex(null);
     setSelected("");
+    const next = recordings.find((r) => r.id === id);
+    if (next) onContext?.(next.companyId, next.workflowId, next.id);
   }
   function toggle(group: string) {
     setCollapsed((previous) => {
@@ -563,6 +613,13 @@ export default function JourneyMap({
       className={`viz-workspace${large ? " viz-presentation" : ""}`}
       aria-label="Journey Map"
     >
+      {(companyId || recordingId) && !requested && (
+        <p role="status">
+          The linked recording is unavailable for this journey. Choose an
+          existing recording or capture point below; no recording was created or
+          substituted.
+        </p>
+      )}
       {large && (
         <div className="viz-presentation-brand">
           <img
@@ -633,6 +690,14 @@ export default function JourneyMap({
             void run(async () => {
               const id = await service.startVizRecording(originChoice);
               chooseRecording(id);
+              // The new recording arrives with the command refresh. Its source
+              // already supplies the context needed for a durable presentation URL.
+              const origin = sources.find(
+                (event) => event.eventId === originChoice,
+              );
+              const workflow = origin && originWorkflow(state, origin);
+              if (origin && workflow)
+                onContext?.(origin.companyId, workflow.id, id);
             }, "Journey tracking started at Frame 0. Earlier visual history has not been reconstructed.")
           }
         >
@@ -661,6 +726,7 @@ export default function JourneyMap({
         state={state}
         selected={recording?.id}
         onSelect={chooseRecording}
+        companyId={companyId}
       />
       {(recording?.captureError ?? state.viz?.captureError) && (
         <p className="alert" role="alert">
@@ -1029,7 +1095,11 @@ export default function JourneyMap({
                           state.attempts
                             .filter((a) => a.workItemId === task.id)
                             .at(-1)?.status === "Failed"
-                            ? automationLink(task.companyId, task.id)
+                            ? automationLink(
+                                task.companyId,
+                                task.id,
+                                task.workflowId,
+                              )
                             : task.owner === "Contractor"
                               ? "#/contractor"
                               : "#/operations"

@@ -2,12 +2,12 @@ import { useState, type ReactNode } from "react";
 import type { OnboardingService } from "./application";
 import {
   isReady,
-  skillCatalog,
   type State,
   type ContractorCompany,
   type OnboardingApplication,
 } from "./domain";
 import { TaskCard, type Run } from "./TaskCard";
+import { qualificationChoices } from "./qualificationChoices";
 import {
   businessActivityLabel,
   businessMessage,
@@ -120,6 +120,8 @@ export function ContractorPortal({
     disclosure?.querySelector("summary")?.focus({ preventScroll: true });
     disclosure?.scrollIntoView?.({ block: "start" });
   };
+  const choices = qualificationChoices(state, c.id);
+  const availableSkills = choices.filter((choice) => choice.available);
   const skillRequest = isReady(c, state.qualifications) &&
     c.activationStatus === "Active" && (
       <form
@@ -135,13 +137,24 @@ export function ContractorPortal({
       >
         <label>
           Add another company skill
-          <select name="skill">
-            {skillCatalog.map((skill) => (
-              <option key={skill}>{skill}</option>
+          <select
+            name="skill"
+            key={availableSkills.map((choice) => choice.skill).join(",")}
+            defaultValue={availableSkills[0]?.skill ?? ""}
+            disabled={!availableSkills.length}
+          >
+            {!availableSkills.length && (
+              <option value="">No additional skills available</option>
+            )}
+            {choices.map(({ skill, available, reason }) => (
+              <option key={skill} value={skill} disabled={!available}>
+                {skill}
+                {reason ? ` — ${reason}` : ""}
+              </option>
             ))}
           </select>
         </label>
-        <button className="primary" disabled={busy}>
+        <button className="primary" disabled={busy || !availableSkills.length}>
           ＋ Request qualification
         </button>
       </form>

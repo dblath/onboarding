@@ -113,6 +113,8 @@ test("large real workspace measures observer durability, history, import/export 
     ),
   );
   await nav(monitor, "Automations & Integrations");
+  // Fleet benchmark deliberately executes across companies, beyond Monitor's contextual company.
+  await monitor.getByLabel("Automations company").selectOption("");
   const actionMs: number[] = [];
   for (let i = 0; i < 13; i++) {
     const task = card(monitor, "Publish contractor activation").first();

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { State } from "../domain";
 import { recordingStatus } from "./triggers";
 
@@ -6,13 +6,16 @@ export function RecordingBrowser({
   state,
   selected,
   onSelect,
+  companyId = "",
 }: {
   state: State;
   selected?: string;
   onSelect: (id: string) => void;
+  companyId?: string;
 }) {
   const [status, setStatus] = useState("all");
-  const [company, setCompany] = useState("");
+  const [company, setCompany] = useState(companyId);
+  useEffect(() => setCompany(companyId), [companyId]);
   const [trigger, setTrigger] = useState("");
   const recordings = state.viz?.recordings ?? [];
   const triggers = new Map(

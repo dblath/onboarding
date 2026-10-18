@@ -75,21 +75,44 @@ export function businessMessage(message: string): string {
   return message;
 }
 
-export function automationLink(companyId = "", activityId = "") {
+export function automationLink(
+  companyId = "",
+  activityId = "",
+  workflowId = "",
+) {
   const query = new URLSearchParams({ view: "automations" });
   if (companyId) query.set("company", companyId);
   if (activityId) query.set("activity", activityId);
+  if (workflowId) query.set("workflow", workflowId);
   return `#/monitor?${query}`;
 }
 
-export function workflowMonitorLink(companyId: string) {
-  return `#/monitor?${new URLSearchParams({ view: "inspection", company: companyId })}`;
+export function workflowMonitorLink(companyId: string, workflowId = "") {
+  const query = new URLSearchParams({ view: "inspection", company: companyId });
+  if (workflowId) query.set("workflow", workflowId);
+  return `#/monitor?${query}`;
+}
+
+export function journeyMapLink(
+  companyId = "",
+  workflowId = "",
+  recordingId = "",
+) {
+  const query = new URLSearchParams({ view: "journey" });
+  if (companyId) query.set("company", companyId);
+  if (workflowId) query.set("workflow", workflowId);
+  if (recordingId) query.set("recording", recordingId);
+  return `#/monitor?${query}`;
 }
 
 export function monitorContext() {
   const [path, query] = window.location.hash.slice(1).split("?");
   const params = new URLSearchParams(query);
   return {
+    landing:
+      path === "/monitor" &&
+      (!params.get("view") || params.get("view") === "onboarding"),
+    messages: path === "/monitor" && params.get("view") === "messages",
     inspection: path === "/monitor" && params.get("view") === "inspection",
     automation: path === "/monitor" && params.get("view") === "automations",
     journey: path === "/monitor" && params.get("view") === "journey",
@@ -97,5 +120,7 @@ export function monitorContext() {
     triggers: path === "/monitor" && params.get("view") === "triggers",
     companyId: params.get("company") ?? "",
     activityId: params.get("activity") ?? "",
+    workflowId: params.get("workflow") ?? "",
+    recordingId: params.get("recording") ?? "",
   };
 }
