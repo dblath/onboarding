@@ -98,7 +98,7 @@ The full 54-case Chromium suite passed, including retained lifecycle rejection/s
 
 Repository onboarding: C:\Users\david\Documents\Repositories\onboarding. Branch main/upstream origin/main. Origin fetch/push https://github.com/dblath/onboarding.git. Starting accepted/published tip 502a762810eee91dc566fdb0dc8d476a9cb0a4ba (3.13 publication); previous implementation a02b719ac36906013730338eb64fca6b67c48f65. Tree was clean at start.
 
-Changes: bounded Operations presentation/participant navigation, TaskCard reuse, tests/fixture, Operations guide, STATUS and package version. Commit/push and final synchronization pending final checks. No domain/workflow/event/persistence/observer/workspace contract or original asset changes. docs/chet is excluded by .git/info/exclude and has zero tracked files; report/scenario/screenshots stay local-only. No force-push, history replacement, credentials or deployment.
+**3.14 implementation f250a897f1a84e910377a396782fe1b403426df8 committed and pushed on 2026-10-18.** Local HEAD, origin/main and GitHub refs/heads/main matched; working tree was clean. This publication record is a documentation-only follow-up; final tip is reported in delivery and the local Chet handoff. Changes: bounded Operations presentation/participant navigation, TaskCard reuse, tests/fixture, Operations guide, STATUS and package version. No domain/workflow/event/persistence/observer/workspace contract or original asset changes. docs/chet is excluded by .git/info/exclude and has zero tracked files; report/scenario/screenshots stay local-only. No force-push, history replacement, credentials or deployment.
 
 ## 7. Manual acceptance and next work
 
