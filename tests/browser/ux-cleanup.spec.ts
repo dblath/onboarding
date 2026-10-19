@@ -54,8 +54,10 @@ test("cleanup hierarchy, landing spacing, navigation and cool surfaces at deskto
         exact: true,
       }),
     ).toHaveCount(0);
-    // Measured on the accepted 3.12 build at the same viewport (local before capture).
-    expect(landingY).toBeCloseTo(266.625, 0);
+    // Preserve the accepted introduction gap relative to the header. Its absolute
+    // screen coordinate changes with the neutral mark and native platform fonts.
+    const header = (await portal.locator(".main > header").boundingBox())!;
+    expect(landingY - header.y - header.height).toBeCloseTo(93, 0);
   } else {
     const fs = await import("node:fs/promises");
     await fs.mkdir("docs/chet/iteration-3.13", { recursive: true });

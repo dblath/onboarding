@@ -370,7 +370,7 @@ test("twelve simultaneous company and skill captures measure real IndexedDB writ
   });
 });
 
-test("anonymous application CTA leads on desktop and mobile; native condensed branding is rendered beside the intact source logo", async ({
+test("anonymous application CTA leads on desktop and mobile; portable bold branding is rendered beside the neutral mark", async ({
   context,
 }, info) => {
   const page = await workspace(context, "contractor");
@@ -412,38 +412,16 @@ test("anonymous application CTA leads on desktop and mobile; native condensed br
   const fonts = await cdp.send("CSS.getPlatformFontsForNode", {
     nodeId: node.nodeId,
   });
-  expect(fonts.fonts.some((f) => /Bahnschrift/i.test(f.familyName))).toBe(true);
+  expect(fonts.fonts.some((f) => f.glyphCount > 0)).toBe(true);
   const style = await page.locator(".brand-caption strong").evaluate((e) => ({
+    family: getComputedStyle(e).fontFamily,
     weight: getComputedStyle(e).fontWeight,
-    variation: getComputedStyle(e).fontVariationSettings,
     transform: getComputedStyle(e).transform,
   }));
-  expect(style.weight).toBe("450");
-  expect(style.variation).toContain("95");
+  expect(style.family).toContain("system-ui");
+  expect(style.family).toContain("sans-serif");
+  expect(style.weight).toBe("700");
   expect(style.transform).toBe("none");
-  const widths = await page
-    .locator(".brand-caption strong")
-    .evaluate((element) => {
-      const sample = document.createElement("span");
-      const style = getComputedStyle(element);
-      Object.assign(sample.style, {
-        fontFamily: style.fontFamily,
-        fontSize: style.fontSize,
-        fontWeight: style.fontWeight,
-        fontStretch: "95%",
-        position: "absolute",
-        visibility: "hidden",
-      });
-      sample.textContent = "Unity";
-      document.body.append(sample);
-      sample.style.fontVariationSettings = '"wdth" 75, "wght" 450';
-      const narrow = sample.getBoundingClientRect().width;
-      sample.style.fontVariationSettings = '"wdth" 95, "wght" 450';
-      const wider = sample.getBoundingClientRect().width;
-      sample.remove();
-      return { narrow, wider };
-    });
-  expect(widths.wider).toBeGreaterThan(widths.narrow * 1.1);
   await page
     .getByRole("button", { name: "Start a new application", exact: false })
     .click();

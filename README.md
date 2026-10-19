@@ -1,8 +1,8 @@
-# Unity fieldwork - Contractor onboarding, Iteration 3.13
+# Unity fieldwork - Contractor onboarding, Portable workspace
 
 End-to-end product discovery prototype: contractor application, screening, administrative approvals, independent skill qualification, vendor provisioning, portal, training, readiness and activation. Browser-only persistence and simulated integrations. Simulated company sign-in uses the application email and password 123. No backend, real authentication or live services.
 
-Unity branding uses the complete original logo across all three experiences. The square favicons add transparent padding and preserve its proportions. See [asset derivations](public/assets/README.md) and [branding acceptance](docs/acceptance-branding.md). Current verification, including the corrected asynchronous count-test wait, is recorded in [STATUS](docs/STATUS.md).
+Unity branding uses one neutral, scalable mark across all three experiences and the browser tab. See [branding acceptance](docs/acceptance-branding.md) and [Mac setup](docs/mac-setup.md). Current verification, including the corrected asynchronous count-test wait, is recorded in [STATUS](docs/STATUS.md).
 
 Iteration 3.13 cleans up recording availability and view continuity, aligns Monitor navigation and labels its existing workspace entry Workspace, puts Contractor skill growth before completed history, and removes the duplicate anonymous introduction while retaining its spacing/application heading. Decorative washes are cool blue/slate; genuine success/warning/failure colors and Unity branding remain. No business, workflow, recorder, persistence or authentication contracts change. See [Monitor design](docs/monitor-experience.md), [current results](docs/STATUS.md) and [presentation boundaries](docs/presentation-language.md).
 
@@ -10,7 +10,7 @@ Historical onboarding completion, current readiness and operational status are s
 
 ## Contractor experience
 
-Signed-in Contractor leads with company identity, a clear next action or next team, job eligibility, and a compact business onboarding journey. Documents and qualification run alongside one another; setup, training and activation explain their prerequisites. Readiness/operational facts, reviews, evidence versions, qualification decisions and activity history are independently expandable. Completed onboarding remains historical; additional skills are separate company activities. Existing actions, simulated login and shared workspace behavior are preserved. Iteration 3.10 removes only the YOUR COMPANY eyebrow and prominent simulation strip; fictional-data/authentication clarification and browser-storage status remain in the footer. Unity retains wider native lettering and slim strokes; original logo/favicons remain unchanged. See [Contractor design](docs/contractor-experience.md).
+Signed-in Contractor leads with company identity, a clear next action or next team, job eligibility, and a compact business onboarding journey. Documents and qualification run alongside one another; setup, training and activation explain their prerequisites. Readiness/operational facts, reviews, evidence versions, qualification decisions and activity history are independently expandable. Completed onboarding remains historical; additional skills are separate company activities. Existing actions, simulated login and shared workspace behavior are preserved. Iteration 3.10 removes only the YOUR COMPANY eyebrow and prominent simulation strip; fictional-data/authentication clarification and browser-storage status remain in the footer. Current branding uses a bold system wordmark and neutral square mark. See [Contractor design](docs/contractor-experience.md).
 
 ## Operations experience
 
@@ -32,7 +32,7 @@ Workflow Monitor includes Recording Triggers (`#/monitor?view=triggers`): name a
 
 Journey Map supports independent simultaneous recordings, a filterable company/trigger/state browser, manual capture, individual Stop and automatic completion when the tracked root completes. Viewing and playback are local presentation state and never stop other captures. Group/expand real company and initial-skill lanes, inspect blockers, pan/zoom, or use presentation view. The v2 company adapter has 37 map nodes, including 16 activity types and their decisions/joins/routes; a standalone skill map has 9. No earlier visual history is synthesized. No commands run when every application tab is closed.
 
-Shared Unity wordmark text uses a native sans-serif with wider lettering and slim strokes; the original logo/favicons are unchanged. The anonymous portal leads with Start a new application; sign-in remains secondary. The logical State.viz contract is unchanged; IndexedDB now stores business facts separately from incremental observer metadata and append-only frames. Auxiliary capture-storage failure reports a gap while valid business work and healthy recordings continue. Load/Reset remain atomic across all stores. See [observer storage](docs/observer-storage.md) and [STATUS](docs/STATUS.md) for actual results and limits. React Flow and Dagre remain presentation/layout dependencies. Chet review instructions/screenshots remain local-only in docs/chet.
+Shared Unity wordmark text uses a bold system sans-serif and a neutral square SVG mark. The anonymous portal leads with Start a new application; sign-in remains secondary. The logical State.viz contract is unchanged; IndexedDB now stores business facts separately from incremental observer metadata and append-only frames. Auxiliary capture-storage failure reports a gap while valid business work and healthy recordings continue. Load/Reset remain atomic across all stores. See [observer storage](docs/observer-storage.md) and [STATUS](docs/STATUS.md) for actual results and limits. React Flow and Dagre remain presentation/layout dependencies. Chet review instructions/screenshots remain local-only in docs/chet.
 
 Operations Contractor network defaults to **My active work**: companies with Open WorkItems owned by the selected role, with that role's count. **All companies** supports discovery without allowing another role's execution. Finishing the last owned task removes the company and clears its stale detail selection. Global work totals still include all participants. Collapsed Viz groups show unfinished applicable activity stages from the selected historical frame; correction loops, conditional routes and prerequisite join counts remain distinct. The 25-company/50-recording scale case starts with 650 frames and progresses across three tabs. Publication writes fell 76% in the measured sample; import remains a full-history operation.
 
@@ -40,10 +40,10 @@ Iteration 3.5.1 adds compact 154 x 44 activity nodes, independent business-area 
 
 ## Run
 
-Node.js 24 recommended (validated with 24.13.1).
+Node.js 24 or newer is required (automated checks executed with 24.13.1). See [Mac setup and portable launch](docs/mac-setup.md).
 
 ```sh
-npm install
+npm ci
 npm run dev -- --port 5174 --strictPort
 npm test
 npm run build
@@ -81,7 +81,7 @@ Use fictional names and example.com emails. Document submission uses predefined 
 4. **Compliance:** Run insurance and license verification.
 5. **Finance:** Run fictional financial verification.
 6. **Contractor Relations:** Run simulated agreement execution.
-7. In **Operations**, Work queue -> Automations & Integrations opens the Monitor automation queue. After administrative approvals, explicitly run **Create vendor record** there. Simulations make no external calls.
+7. In **Operations**, Work queue -> Automations & Integrations selects its participant queue. After administrative approvals, explicitly run **Create vendor record** there or in Monitor. Simulations make no external calls.
 8. **Field Manager:** Approve skill; this can occur before or after administration.
 9. **Contractor:** Complete portal setup, then initial training.
 10. **Training:** Confirm initial training.
@@ -148,6 +148,6 @@ Iteration 3 introduced snapshot schema 3 and a shared revision. Iteration 3.1 us
 
 Concurrent tabs on the same exact origin/profile are supported. There is no cross-browser/profile/device synchronization. Close tabs running any older release before using the latest release: old code does not understand the current schema/lifecycle rules. Browser data can be cleared/evicted. Fixtures determine verification, not real document/legal/financial rules. No live training, actual signature, portal account, external messages, automatic expiry or reinstatement journey. Timers run on simulated time advancement only. A rejected first skill leaves company onboarding waiting; recovery policy remains a discovery question.
 
-No real authentication, payments, backend, hosted persistence, C#/.NET or hosting deployment. Simulation sign-in is not a security boundary. Source is published at https://github.com/dblath/onboarding on main.
+This application uses simulated sign-in and integrations. Workspace data is stored locally in your browser. Simulation sign-in is not a security boundary.
 
-Operations Overview and Contractor Your journey explain unsatisfied requirements, next participants, pending activation and suspension. Zero work for one role does not mean all company work is complete. Ready remains Not eligible until explicit activation publication in Workflow Monitor -> Automations & Integrations. [Current status](docs/STATUS.md). Detailed Iteration 3.4 acceptance and screenshots are local-only under docs/chet; older acceptance documents retain historical UI locations.
+Operations Overview and Contractor Your journey explain unsatisfied requirements, next participants, pending activation and suspension. Zero work for one role does not mean all company work is complete. Ready remains Not eligible until explicit activation publication in Workflow Monitor -> Automations & Integrations. [Current status](docs/STATUS.md). Current acceptance and screenshots are local-only under docs/chet; older acceptance documents retain historical UI locations.

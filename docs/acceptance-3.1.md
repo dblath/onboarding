@@ -4,13 +4,13 @@
 
 ## Setup and URLs
 
-From `C:\Users\david\Documents\Repositories\onboarding`, run `npm install` if needed, then `npm run dev`. Use the existing dev server if it is already serving port 5173. Close older application tabs before opening the updated version. Do not clear IndexedDB just to upgrade; snapshot schema 4 migrates supported old data under the existing shared lock.
+From the project directory, run `npm ci` if needed, then `npm run dev -- --port 5174 --strictPort`. Use that local URL. Close older application tabs before opening the updated version. Do not clear IndexedDB just to upgrade; snapshot schema 4 migrates supported old data under the existing shared lock.
 
 Open three Chrome tabs using the **same profile and exact origin**:
 
-1. Contractor Portal: http://127.0.0.1:5173/#/contractor
-2. Operations: http://127.0.0.1:5173/#/operations
-3. Workflow Monitor: http://127.0.0.1:5173/#/monitor
+1. Contractor Portal: http://127.0.0.1:5174/#/contractor
+2. Operations: http://127.0.0.1:5174/#/operations
+3. Workflow Monitor: http://127.0.0.1:5174/#/monitor
 
 Do not mix `localhost` and `127.0.0.1`, ports or schemes. If Vite prints another port, use that same origin for every tab. The default URLs above are the acceptance target. Use fictional data and a different company name for each scenario. **Select that company in all three tabs** when existing companies are already present.
 

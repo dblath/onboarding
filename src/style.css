@@ -88,23 +88,18 @@ aside {
   font-size: 10px;
   line-height: 1.5;
 }
-@font-face {
-  font-family: "Unity Narrow";
-  src: local("Bahnschrift");
-  font-weight: 100 900;
-  font-stretch: 75% 100%;
-  font-display: swap;
-}
 .brand-caption strong {
   display: block;
   font-size: 22px;
   letter-spacing: -0.4px;
-  font-family: "Unity Narrow", "Bahnschrift", "Segoe UI", sans-serif;
-  font-stretch: 95%;
-  font-variation-settings:
-    "wdth" 95,
-    "wght" 450;
-  font-weight: 450;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-weight: 700;
 }
 .brand-caption small {
   display: block;
@@ -113,12 +108,14 @@ aside {
   color: #c3cfc4;
 }
 .product-name strong {
-  font-family: "Unity Narrow", "Bahnschrift", "Segoe UI", sans-serif;
-  font-stretch: 95%;
-  font-variation-settings:
-    "wdth" 95,
-    "wght" 450;
-  font-weight: 450;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-weight: 700;
   font-size: 1.1em;
 }
 .product-name em {

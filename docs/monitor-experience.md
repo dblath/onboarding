@@ -8,7 +8,7 @@ The 3.12 business-first structure below remains accepted. The existing Demo Work
 
 Defaults are pinned once in the presentation URL so the existing epoch-keyed renderer remount cannot adopt another workspace's recording. Explicit choices use epoch/company/workflow preferences in tab-local sessionStorage, excluded from exports. Monitor mounts a destination after matching route context arrives and gates Journey Map by its actual route; an old-context default cannot overwrite navigation. Selection does not execute capture/business commands or move another tab. Invalid previous company selection remains explicit on return to Viz.
 
-Recording-browser/information/control/history surfaces, selected rows, lanes and completed-node illumination use blue/slate. Genuine success icons/badges/completed edges remain green; waits/errors retain amber/red. Original logo/wordmark, canvas geometry and recording contracts are unchanged. See [actual evidence](STATUS.md).
+Recording-browser/information/control/history surfaces, selected rows, lanes and completed-node illumination use blue/slate. Genuine success icons/badges/completed edges remain green; waits/errors retain amber/red. Canvas geometry and recording contracts are unchanged; branding now uses the shared neutral mark and portable bold wordmark. See [actual evidence](STATUS.md).
 
 Monitor starts with an operational picture of onboarding. Contractor helps a company complete its work; Operations helps human teams act; Monitor explains progress and attention. Automations & Integrations executes explicit test integrations/retries/publication. Journey Map / Viz visualizes actual recordings. These are presentation responsibilities, not security boundaries.
 
@@ -42,7 +42,7 @@ No graph canvas, map definition, recorder, triggers, lineage, cause, frame proje
 
 ## Contractor refinements
 
-Mobile Contractor navigation wraps instead of clipping the New application entry. The original image's proportional sizing and accepted wordmark remain intact.
+Mobile Contractor navigation wraps instead of clipping the New application entry. The shared neutral mark scales proportionally beside the portable bold wordmark.
 
 `src/qualificationChoices.ts` mirrors the existing requestSkill duplicate guard. Approved or outstanding same-skill qualifications disable that choice with a reason; the first available choice is selected. When none remain, the selector and request button are disabled. Rejected/Invalidated qualifications permit a new request only through the existing Ready + Active visibility/command guard. A different approved skill must still support readiness where applicable. No recovery or suspension-removal policy is introduced.
 

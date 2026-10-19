@@ -4,11 +4,11 @@
 
 ## Setup and URLs
 
-Run `npm install` if needed, then `npm run dev`. Close older application tabs. Keep existing IndexedDB data; no migration or reset is required for 3.2. Open these in the same Chrome profile and exact origin:
+Run `npm ci` if needed, then `npm run dev -- --port 5174 --strictPort`. Close older application tabs. Keep existing IndexedDB data; no migration or reset is required for 3.2. Open these in the same Chrome profile and exact origin:
 
-- Contractor Portal: http://127.0.0.1:5173/#/contractor
-- Operations: http://127.0.0.1:5173/#/operations
-- Workflow Monitor: http://127.0.0.1:5173/#/monitor
+- Contractor Portal: http://127.0.0.1:5174/#/contractor
+- Operations: http://127.0.0.1:5174/#/operations
+- Workflow Monitor: http://127.0.0.1:5174/#/monitor
 
 If Vite prints another port, use it consistently. Do not mix localhost and 127.0.0.1. Use fictional company names and example.com emails. Existing application emails work. Legacy company selection does not automatically sign anyone in. A 3.2 demo session survives reload in that tab until Sign Out or the browser discards sessionStorage.
 

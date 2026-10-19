@@ -35,7 +35,7 @@ Ready/Pending activation remains Not eligible. Other participant views retain th
 - `src/presentation.ts`: contextual inspection URL parsing alongside existing automation links.
 - `src/ContractorPortal.tsx`: only removal of YOUR COMPANY eyebrow. App moves Contractor's prominent simulation strip into a discreet footer clarification/live-storage indicator for both anonymous and signed-in views.
 
-No domain, lifecycle, workflow definition, event contract, authentication, persistence, synchronization, portable workspace or Viz recorder changes. No dependency, font or logo asset changes. Unity retains the prior native width 95 / weight 450 treatment and the unmodified supplied image/favicons.
+No domain, lifecycle, workflow definition, event contract, authentication, persistence, synchronization, portable workspace or Viz recorder changes. Dependencies are unchanged. The later portability pass replaces branding with a neutral square mark and a bold system sans-serif wordmark; see STATUS for current evidence.
 
 ## Evidence and limits
 

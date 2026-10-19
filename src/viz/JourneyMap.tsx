@@ -654,10 +654,10 @@ export default function JourneyMap({
       {large && (
         <div className="viz-presentation-brand">
           <img
-            src="./assets/unity.png"
+            src="./assets/unity-mark.svg"
             alt="Unity logo"
-            width="267"
-            height="331"
+            width="64"
+            height="64"
           />
           <span>
             <strong>Unity</strong> fieldwork <b>/</b> Workflow Monitor <b>/</b>{" "}

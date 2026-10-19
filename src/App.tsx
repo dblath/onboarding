@@ -404,10 +404,10 @@ export function App({
         >
           <img
             className="brand-image"
-            src="./assets/unity.png"
-            alt="Unity - A Stronger Frontdoor"
-            width="267"
-            height="331"
+            src="./assets/unity-mark.svg"
+            alt="Unity"
+            width="64"
+            height="64"
           />
           <span className="brand-caption">
             <strong>Unity</strong>
@@ -549,7 +549,7 @@ export function App({
         </nav>
         <div className="aside-bottom">
           <span className="live-dot" /> Browser-local workspace
-          <p>Iteration 3.14 · Operations participants</p>
+          <p>Company onboarding</p>
         </div>
       </aside>
       <div className="main">
@@ -557,10 +557,10 @@ export function App({
           <span className="app-identity">
             <img
               className="header-brand-image"
-              src="./assets/unity.png"
+              src="./assets/unity-mark.svg"
               alt="Unity"
-              width="267"
-              height="331"
+              width="64"
+              height="64"
             />{" "}
             <span className="product-name">
               <strong>Unity</strong> <em>fieldwork</em>

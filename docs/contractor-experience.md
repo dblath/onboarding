@@ -1,19 +1,12 @@
 # Contractor experience — Iteration 3.9
 
-Iteration 3.13 retains this design and its business behavior. For completed onboarding, the existing Grow your company's skills section/form now precedes history, after company identity/current eligibility. Ready + Active visibility, skill choices and independent qualification commands remain. In-progress layout is unchanged. Anonymous landing removes the duplicate page heading/subtitle and reserves its original introductory footprint; the main-panel introduction/sign-in/CTA remain, and starting an application retains its contextual heading. Original Unity assets/wordmark and semantic status colors are unchanged. See [current evidence](STATUS.md).
+Iteration 3.13 retains this design and its business behavior. For completed onboarding, the existing Grow your company's skills section/form now precedes history, after company identity/current eligibility. Ready + Active visibility, skill choices and independent qualification commands remain. In-progress layout is unchanged. Anonymous landing removes the duplicate page heading/subtitle and reserves its original introductory footprint; the main-panel introduction/sign-in/CTA remain, and starting an application retains its contextual heading. The current neutral Unity mark and portable wordmark preserve semantic status colors. See [current evidence](STATUS.md).
 
 The signed-in Contractor Portal answers: where does my company stand, what do I need to do, and who is working next? It presents existing facts and commands; it is not a new workflow projection or a new source of truth.
 
-## HomeItem reference, read-only
+## Design principles
 
-Inspected `C:\Users\david\Documents\Repositories\homeitemV2fe`, commit `c9a357c82301275d773504fd3c9141831e03857d`. No files, dependencies or processes in that repository were changed. Source references:
-
-- `src/app/App.tsx`: compact application identity, restrained navy navigation, small contextual/status chrome.
-- `src/styles/global.css`: cool slate `#f3f6f8`, white surfaces, ink `#17222c`, blue actions `#205f98` / hover `#174a77`, border `#d8e0e6`, deliberate typography, status dots, 38px-plus controls, responsive stacking. Our muted text is slightly darker (`#526575`) for small-text contrast.
-- `src/features/catalog/CatalogPage.tsx`: clear page heading/action hierarchy and compact business statuses; discovery and inspection have distinct purposes.
-- `src/features/editor/HomeItemWorkspace.tsx` and global styles: on-demand lifecycle/version/technical menus and inspection sections, native disclosure, readable forms, narrow-screen single-column behavior.
-
-Adopted the palette, borders, working-product hierarchy, concise status-plus-symbol treatments, clear primary/secondary controls and progressive disclosure. The Contractor layout retains Unity's sidebar and its complete orange logo. It does not copy HomeItem's horizontal navigation literally, split-pane editor tree, catalog tables, Designer/Approver roles, dirty-state model, business lifecycle, API layer or component hierarchy. A contractor journey needs a business overview and actions rather than an authoring workbench.
+Cool slate surfaces, navy navigation, blue actions, readable forms, native disclosures and compact business statuses support a working application. The Contractor layout keeps the shared Unity fieldwork identity and presents company progress and available actions before detailed history.
 
 ## Three levels
 
@@ -29,13 +22,13 @@ Required actions reuses the existing TaskCard forms and service commands. Only t
 
 `src/theme.css` adds shared blue/slate tokens and foundational controls. It changes shared colors and focus/disabled treatments in Operations/Monitor, not their layouts, queues or navigation. Viz execution colors remain semantically distinct and its CSS/recording implementation is unchanged. `src/contractor.css` scopes the new layout, denser records, disclosures and mobile styles to Contractor.
 
-Unity text keeps the existing local Bahnschrift face at weight 450. Its `wdth` axis changes from 75 to **95**, with matching `font-stretch: 95%`; no `scaleX`, transformed lettering or new font dependency. Fallback is Bahnschrift/Segoe UI/sans-serif rather than a deliberately condensed fallback. The complete original PNG and transparent-padded favicons are byte-for-byte unchanged. The Contractor chrome displays the image at 62px desktop / 36px mobile width with proportional height; other experiences retain their sizing.
+Unity text uses a bold system sans-serif stack on all platforms, without transformed lettering or a downloaded font. Navigation, breadcrumbs and presentation mode share this treatment. One neutral square SVG mark supplies the application images and browser icon, with proportional sizing.
 
 ## Verification and limits
 
 `src/contractorJourney.test.ts` runs real business-command fixtures through submitted, active work, correction, waiting for teams, pending activation, eligible, separate skill and later suspension states. It verifies parallel work, historical completion/current readiness separation and nonmutation.
 
-`tests/browser/onboarding-first.spec.ts` renders the seven requested states at 1440 × 1000 and 390 × 844, checks overflow and above-fold Continue, independently expands details with Enter/Space, verifies keyboard focus and computed text/background contrast, checks no internal activation control, preserves authoritative state during inspection, and executes the existing evidence form. `tests/browser/fishing-net.spec.ts` checks actual native font selection, width-axis settings, greater rendered glyph width and absence of transforms. Existing lifecycle, multi-tab, login, branding pixel/proportion, Save/Load, observer-failure and Viz suites remain.
+`tests/browser/onboarding-first.spec.ts` renders the seven requested states at 1440 × 1000 and 390 × 844, checks overflow and above-fold Continue, independently expands details with Enter/Space, verifies keyboard focus and computed text/background contrast, checks no internal activation control, preserves authoritative state during inspection, and executes the existing evidence form. `tests/browser/fishing-net.spec.ts` checks a rendered system font, bold weight, absence of transforms and no horizontal overflow. Existing lifecycle, multi-tab, login, branding asset/proportion, Save/Load, observer-failure and Viz suites remain.
 
 This is not a formal accessibility audit. Contrast sampling covers representative body/status/action/navigation/disabled/disclosure text, not every pixel or every internal diagnostic. Native details provide keyboard behavior; labels/icons supplement color. Mobile journey sections intentionally stack and supporting history can be long when opened. Non-Windows font fallback, actual OS file-picker dialogs, assistive-technology combinations and business copy still require manual acceptance. The CSS keeps a scoped adaptation layer over the existing shared stylesheet rather than refactoring the whole application.
 

@@ -4,11 +4,11 @@ Package 0.3.3. No lifecycle, domain-rule, event-contract or synchronization chan
 
 ## Setup
 
-Run `npm run dev` in the repository; use the same Chrome profile and exact origin in all tabs:
+Run `npm run dev -- --port 5174 --strictPort` in the project directory; use the same Chrome profile and exact origin in all tabs:
 
-- Operations: http://127.0.0.1:5173/#/operations
-- Contractor: http://127.0.0.1:5173/#/contractor
-- Monitor: http://127.0.0.1:5173/#/monitor
+- Operations: http://127.0.0.1:5174/#/operations
+- Contractor: http://127.0.0.1:5174/#/contractor
+- Monitor: http://127.0.0.1:5174/#/monitor
 
 Keep existing data and close older app tabs. Sign in to Contractor with the application email and demo password 123. Duplicate-email companies require explicit selection. Company and role filters are local UI preferences; they do not perform business actions.
 
