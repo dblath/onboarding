@@ -114,7 +114,7 @@ The full 56-case Chromium suite passed, including retained lifecycle rejection/s
 
 Repository onboarding: C:\Users\david\Documents\Repositories\onboarding. Branch main/upstream origin/main. Origin fetch/push https://github.com/dblath/onboarding.git. Starting published tip cd22846174f92d2d8dfbad516f6510eaf7f90ecc (3.14 publication); implementation f250a897f1a84e910377a396782fe1b403426df8. Tree was clean at start; the copied prompt's draft-work warning no longer applied.
 
-Current changes are bounded Contractor/Viz presentation, browser acceptance tests, package version and documentation. Commit/push pending final checks. No domain/workflow/event/persistence/observer/workspace contract or original asset changes. docs/chet is excluded by .git/info/exclude and has zero tracked files; report/scenarios/screenshots stay local-only. No force-push, history replacement, credentials or deployment.
+**Cleanup implementation f5f9307ef7d51eb01b11ed302079e2aa3ff7eed3 committed and pushed on 2026-10-19.** Local HEAD, origin/main and GitHub refs/heads/main matched; working tree was clean. This publication record is a documentation-only follow-up; final tip is reported in delivery and Chet's local handoff. Changes are bounded Contractor/Viz presentation, browser tests, package version and documentation. No domain/workflow/event/persistence/observer/workspace contract or original asset changes. docs/chet is excluded by .git/info/exclude and has zero tracked files; report/scenarios/screenshots stay local-only. No force-push, history replacement, credentials or deployment.
 
 ## 7. Manual acceptance and next work
 
@@ -146,6 +146,6 @@ Retained A&I acceptance:
 5. Contractor sierra@example.com / 123: Ready/Pending/Not eligible. Operations A&I/Sierra: explicitly publish (or fail then retry). Contractor becomes Eligible; Monitor work disappears, history/Viz extend. Completed company remains in All companies/history.
 6. Reload original scenario and publish in Monitor instead: same Operations update. Automated contention coverage verifies once-only outcome/stale rejection across both surfaces.
 
-Run npm test, npm run test:browser, npm run build and npm audit --audit-level=moderate. Temporary test preview stopped; no listener remained on 4173. No new persistent app server was started; pre-existing 5173/4174 servers were untouched.
+Run npm test, npm run test:browser, npm run build and npm audit --audit-level=moderate. Temporary test preview stopped; no listener remained on 4173. No new persistent app server was started; ports 5173/4174 were not used or modified.
 
 **Next: UX review only.** Validate Contractor copy/duplicate removal, compact Viz controls, disclosed live context, pill-only expansion and reversible blocker focus on desktop/mobile. Retained lifecycle decisions remain open; no Iteration 4, designer, backend/authentication or field service. Update STATUS from actual evidence each iteration; commit/push/verify; keep Chet artifacts local-only.
