@@ -162,7 +162,7 @@
   align-items: center;
   padding: 12px;
   border: 1px solid #dde8e8;
-  border-radius: 10px 10px 0 0;
+  border-radius: 10px;
   background: #f8fbfb;
 }
 .viz-playback > button {
@@ -234,7 +234,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  padding: 16px 0;
+  padding: 10px 0;
   align-items: center;
 }
 .viz-group-controls > span {
@@ -797,6 +797,31 @@
 }
 
 /* Presentation tells the story outside the compact nodes. */
+.viz-context {
+  margin-top: 12px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  overflow: hidden;
+}
+.viz-context > summary {
+  padding: 10px 12px;
+  color: var(--accent);
+  font-size: 12px;
+  background: var(--surface-2);
+  cursor: pointer;
+}
+.viz-context .viz-frame-caption {
+  border: 0;
+  border-radius: 0;
+}
+.viz-context .viz-story {
+  border: 0;
+}
+.viz-canvas-tools button[aria-pressed="true"] {
+  background: var(--soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
 .viz-story {
   display: grid;
   grid-template-columns: 1fr 1fr;

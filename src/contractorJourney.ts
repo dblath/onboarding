@@ -215,7 +215,7 @@ export function contractorJourney(
             : initialRejected
               ? "The initial skill was rejected. No qualification recovery action is currently available. Contact Operations to discuss the next step; approval cannot be bypassed."
               : others.length
-                ? "No action needed from you right now. The next steps are with the teams below."
+                ? "No action needed from you right now. Unity is taking care of the next steps."
                 : "No action is available right now. Operations needs to review the outstanding requirements.";
   return {
     mine,

@@ -48,9 +48,9 @@ test("contractor business journey covers seven real states at desktop and mobile
       portal.getByRole("region", { name: "What matters now" }),
     ).not.toContainText(/correlation|eventId|workflow|Revision/);
     if (name === "submitted")
-      await expect(
-        portal.getByRole("list", { name: "Waiting on other teams" }),
-      ).toContainText("Recruitment");
+      await expect(portal.getByTestId("journey-application")).toContainText(
+        "With Unity",
+      );
     if (name === "active-work") {
       await expect(portal.getByTestId("journey-administration")).toContainText(
         "Waiting on you",
@@ -66,7 +66,7 @@ test("contractor business journey covers seven real states at desktop and mobile
     if (name === "waiting-team") {
       await expect(portal.locator(".contractor-next-action")).toHaveCount(0);
       await expect(
-        portal.getByRole("list", { name: "Waiting on other teams" }),
+        portal.getByRole("list", { name: "With Unity" }),
       ).toContainText("Compliance");
     }
     await expect(portal.getByTestId("lifecycle-eligibility")).toHaveText(

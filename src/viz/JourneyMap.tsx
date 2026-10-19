@@ -128,6 +128,9 @@ function JourneyNodeCard({ data }: NodeProps<JourneyNode>) {
   );
 }
 const nodeTypes = { journey: JourneyNodeCard };
+// React Flow queues fits; a fresh options object on re-render overwrites the
+// queued blocker-specific request before it runs.
+const initialFitViewOptions = { padding: 0.14, maxZoom: 1 };
 
 function diagram(
   r: VizRecording,
@@ -306,6 +309,11 @@ function Canvas({
   const container = useRef<HTMLDivElement>(null);
   const generation = useRef(0);
   const [fitting, setFitting] = useState(false);
+  const [blockerFocus, setBlockerFocus] = useState(false);
+  useEffect(
+    () => setBlockerFocus(false),
+    [recording.id, frame.number, collapsed],
+  );
   const fit = useCallback(
     async (blockers = false) => {
       const token = ++generation.current;
@@ -319,6 +327,7 @@ function Canvas({
               ),
             )
         : undefined;
+      setBlockerFocus(blockers && !!ids?.length);
       await flow.fitView({
         nodes: ids?.length ? ids : undefined,
         padding: 0.14,
@@ -400,7 +409,12 @@ function Canvas({
           </b>
         </span>
         <button onClick={() => void fit()}>Fit map</button>
-        <button onClick={() => void fit(true)}>Focus blockers</button>
+        <button
+          aria-pressed={blockerFocus}
+          onClick={() => void fit(!blockerFocus)}
+        >
+          {blockerFocus ? "Clear blocker focus" : "Focus blockers"}
+        </button>
       </div>
       <ReactFlow<JourneyNode>
         nodes={graph.nodes}
@@ -412,7 +426,7 @@ function Canvas({
         edgesReconnectable={false}
         elementsSelectable
         fitView
-        fitViewOptions={{ padding: 0.14, maxZoom: 1 }}
+        fitViewOptions={initialFitViewOptions}
         minZoom={0.12}
         maxZoom={1.7}
         deleteKeyCode={null}
@@ -472,7 +486,10 @@ function Canvas({
           </svg>
         </ViewportPortal>
         <Background color="#cdd9de" gap={24} size={1} />
-        <Controls showInteractive={false} />
+        <Controls
+          showInteractive={false}
+          onFitView={() => setBlockerFocus(false)}
+        />
         <MiniMap
           nodeColor={(n) =>
             colors[(n.data as JourneyNode["data"]).visual.status]
@@ -887,90 +904,6 @@ export default function JourneyMap({
               {active ? "Return to Live" : "Latest recorded"}
             </button>
           </div>
-          <div className="viz-frame-caption">
-            <span>{index === null ? "LATEST CAPTURE" : "RECORDED STATE"}</span>
-            <strong data-testid="viz-frame-cause">
-              {frame.causes
-                .map((c) =>
-                  c.kind === "attempt"
-                    ? businessText(c.label)
-                    : businessMessage(c.label),
-                )
-                .join(" · ")}
-            </strong>
-            <small>
-              Revision {frame.revision} ·{" "}
-              {new Date(frame.capturedAt).toLocaleTimeString()} · Playback never
-              changes live business state
-            </small>
-          </div>
-          {story && (
-            <div
-              className="viz-story"
-              role="status"
-              aria-live="polite"
-              aria-atomic="true"
-              data-testid="viz-story"
-            >
-              <div>
-                <h3>{story.title}</h3>
-                <p>{businessMessage(story.explanation)}</p>
-                {story.next.length > 0 && (
-                  <p>
-                    <strong>Next: </strong>
-                    {story.next
-                      .slice(0, 2)
-                      .map((n) => `${businessText(n.label)} — ${n.owner}`)
-                      .join("; ")}
-                    {story.next.length > 2
-                      ? `; +${story.next.length - 2} parallel actions`
-                      : ""}
-                  </p>
-                )}
-                <div className="viz-changed-list" aria-label="Changed steps">
-                  {story.changed.map((n) => (
-                    <button key={n.id} onClick={() => setSelected(n.id)}>
-                      {icons[frame.nodes[n.id].status]} {compactLabel(n)}
-                    </button>
-                  ))}
-                </div>
-                {index !== null &&
-                  active &&
-                  recording.frames.length - 1 > currentIndex && (
-                    <span
-                      className="viz-new-frames"
-                      data-testid="viz-new-frames"
-                    >
-                      {recording.frames.length - 1 - currentIndex} newer frames
-                      available — recording continues
-                    </span>
-                  )}
-              </div>
-              {frame.nodes["readiness-join"] && (
-                <div
-                  className={`viz-join-story ${frame.nodes["readiness-join"].status}`}
-                  data-testid="viz-join-story"
-                >
-                  <strong>
-                    Ready for activation —{" "}
-                    {frame.nodes["readiness-join"].satisfied} of{" "}
-                    {frame.nodes["readiness-join"].total} complete
-                  </strong>
-                  <p>
-                    {frame.nodes["readiness-join"].outstanding?.length
-                      ? `Waiting on ${frame.nodes["readiness-join"].outstanding!.join("; ")}`
-                      : frame.nodes["readiness-join"].explanation}
-                  </p>
-                  <button
-                    className="text-button"
-                    onClick={() => setSelected("readiness-join")}
-                  >
-                    Inspect activation requirements
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
           <div className="viz-group-controls" aria-label="Logical groups">
             <span>DETAIL LEVEL</span>
             {groups
@@ -1030,18 +963,10 @@ export default function JourneyMap({
                       decisions may add work.
                     </p>
                     <p>
-                      Expand this group to inspect its recorded activities,
-                      conditional routes and dependencies.
+                      Use the detail-level pills above the map to expand this
+                      group. Select an activity below to inspect its recorded
+                      details.
                     </p>
-                    <button
-                      className="secondary"
-                      onClick={() => {
-                        toggle(groupName);
-                        setSelected("");
-                      }}
-                    >
-                      Expand group
-                    </button>
                     {recording.definition.nodes
                       .filter((n) => n.group === groupName)
                       .map((n) => (
@@ -1050,12 +975,6 @@ export default function JourneyMap({
                           key={n.id}
                           onClick={() => {
                             setSelected(n.id);
-                            setCollapsed(
-                              (previous) =>
-                                new Set(
-                                  [...previous].filter((g) => g !== groupName),
-                                ),
-                            );
                           }}
                         >
                           <span
@@ -1187,6 +1106,95 @@ export default function JourneyMap({
               </section>
             )}
           </div>
+          <details className="viz-context">
+            <summary>Journey context & recorded details</summary>
+            <div className="viz-frame-caption">
+              <span>
+                {index === null ? "LATEST CAPTURE" : "RECORDED STATE"}
+              </span>
+              <strong data-testid="viz-frame-cause">
+                {frame.causes
+                  .map((c) =>
+                    c.kind === "attempt"
+                      ? businessText(c.label)
+                      : businessMessage(c.label),
+                  )
+                  .join(" · ")}
+              </strong>
+              <small>
+                Revision {frame.revision} ·{" "}
+                {new Date(frame.capturedAt).toLocaleTimeString()} · Playback
+                never changes live business state
+              </small>
+            </div>
+            {story && (
+              <div
+                className="viz-story"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                data-testid="viz-story"
+              >
+                <div>
+                  <h3>{story.title}</h3>
+                  <p>{businessMessage(story.explanation)}</p>
+                  {story.next.length > 0 && (
+                    <p>
+                      <strong>Next: </strong>
+                      {story.next
+                        .slice(0, 2)
+                        .map((n) => `${businessText(n.label)} — ${n.owner}`)
+                        .join("; ")}
+                      {story.next.length > 2
+                        ? `; +${story.next.length - 2} parallel actions`
+                        : ""}
+                    </p>
+                  )}
+                  <div className="viz-changed-list" aria-label="Changed steps">
+                    {story.changed.map((n) => (
+                      <button key={n.id} onClick={() => setSelected(n.id)}>
+                        {icons[frame.nodes[n.id].status]} {compactLabel(n)}
+                      </button>
+                    ))}
+                  </div>
+                  {index !== null &&
+                    active &&
+                    recording.frames.length - 1 > currentIndex && (
+                      <span
+                        className="viz-new-frames"
+                        data-testid="viz-new-frames"
+                      >
+                        {recording.frames.length - 1 - currentIndex} newer
+                        frames available — recording continues
+                      </span>
+                    )}
+                </div>
+                {frame.nodes["readiness-join"] && (
+                  <div
+                    className={`viz-join-story ${frame.nodes["readiness-join"].status}`}
+                    data-testid="viz-join-story"
+                  >
+                    <strong>
+                      Ready for activation —{" "}
+                      {frame.nodes["readiness-join"].satisfied} of{" "}
+                      {frame.nodes["readiness-join"].total} complete
+                    </strong>
+                    <p>
+                      {frame.nodes["readiness-join"].outstanding?.length
+                        ? `Waiting on ${frame.nodes["readiness-join"].outstanding!.join("; ")}`
+                        : frame.nodes["readiness-join"].explanation}
+                    </p>
+                    <button
+                      className="text-button"
+                      onClick={() => setSelected("readiness-join")}
+                    >
+                      Inspect activation requirements
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </details>
           <div className="viz-legend">
             <small>
               Left accent: business area · symbol and fill: execution state

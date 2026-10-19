@@ -104,6 +104,10 @@ export function ContractorPortal({
   const messages = state.outbox.filter(
     (m) => m.companyId === c.id && m.recipient === "Contractor",
   );
+  // The application review is already explained in the onboarding path below.
+  const waitingActions = others.filter(
+    (task) => task.activity !== "ScreenApplication",
+  );
   function openActions(id = "") {
     setFocusedTask(id);
     onView("Work queue");
@@ -250,12 +254,9 @@ export function ContractorPortal({
                 Continue <span aria-hidden>→</span>
               </button>
             </div>
-          ) : others.length ? (
-            <ul
-              className="contractor-waiting-list"
-              aria-label="Waiting on other teams"
-            >
-              {others.map((t) => (
+          ) : waitingActions.length ? (
+            <ul className="contractor-waiting-list" aria-label="With Unity">
+              {waitingActions.map((t) => (
                 <li key={t.id}>
                   <span aria-hidden>◷</span>
                   <span>{contractorAction(t)}</span>
@@ -384,7 +385,9 @@ export function ContractorPortal({
                     <h3>{stage.title}</h3>
                   </div>
                   <span className={`contractor-status ${tone(stage.status)}`}>
-                    {stage.status}
+                    {stage.status === "Waiting on another team"
+                      ? "With Unity"
+                      : stage.status}
                   </span>
                   <p>{stage.detail}</p>
                   <button
