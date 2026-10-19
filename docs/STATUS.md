@@ -83,7 +83,7 @@ Validate the new mark, tab icon and typography on desktop/mobile and Viz present
 
 ## Publication and next work
 
-Branch main; existing repository configuration and history retained. Validation is complete; publication is pending. No force-push or history replacement. Final revision and synchronization evidence are reported separately from the portable package.
+Branch main; existing repository configuration and history retained. Implementation published and verified: local and published main matched with a clean working tree. This report records that verification; final delivery also includes this documentation follow-up. No force-push or history replacement. Final revision and synchronization evidence are reported separately from the portable package.
 
 Stop for branding and Mac UX acceptance. No Iteration 4, business policy changes or workflow designer.
 
